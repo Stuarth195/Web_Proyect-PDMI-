@@ -22,7 +22,6 @@ def Interfaz():
     feed.crear("page1")
     feed.mas_canva()
     
-    Register_button = tk.Button(feed.canva, )
 
 
 
