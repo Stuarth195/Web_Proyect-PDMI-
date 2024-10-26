@@ -1,38 +1,58 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
 
 class Seccion:
-    def __init__(self,frame,notebook, alto_canva, ancho_canva, canva, canva_color):
-        self.frame = frame
+    def __init__(self, notebook, alto_canva, ancho_canva, canva_color):
         self.notebook = notebook
-        self.ancho = ancho_canva
         self.alto = alto_canva
-        self.canva = canva
+        self.ancho = ancho_canva
         self.C_color = canva_color
-        
+        self.frame = None
+        self.canva = None
+        self.scroll = None
+        self.frame_scroll = None
 
     def crear(self, nombre):
-        # Crea un frame simple dentro del notebook
+        # Crear el frame del notebook
         self.frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.frame, text=nombre)  # nombre se usa como el texto de la pestaña
-        # Crear y colocar el Canvas
+        self.notebook.add(self.frame, text=nombre)
 
-    def mas_canva(self,):
-        self.canva = tk.Canvas(self.frame, width=self.ancho, height=self.alto, bg= self.C_color)
-        self.canva.place(x=0, y=0)
+        # Crear el canvas
+        self.canva = tk.Canvas(self.frame, width=self.ancho, height=self.alto, bg=self.C_color)
+        self.canva.grid(row=0, column=0, sticky="nsew")
 
-    def crear_si(self, arg1, arg2, ver1, ver2, nombre, mensaje_error="datos no válido"):
-        # Verifica si los argumentos coinciden antes de crear el frame
-        if arg1 == ver1 and arg2 == ver2:
-            self.crear(nombre)
-        else:
-            messagebox.showerror("Error", mensaje_error)
+        # Crear la scrollbar vertical
+        self.scroll = tk.Scrollbar(self.frame, orient="vertical", command=self.canva.yview)
+        self.scroll.grid(row=0, column=1, sticky="ns")
 
+        # Configurar el canvas
+        self.canva.configure(yscrollcommand=self.scroll.set)
 
-#class Poppop:
- #   def __init__(self, ventana):
-  #      self.ventana= ventana
-#
- #   def error(self, texto):
+        # Crear un frame dentro del canvas para contener otros widgets
+        self.frame_scroll = tk.Frame(self.canva, bg=self.C_color)
+        self.canva.create_window((0, 0), window=self.frame_scroll, anchor='nw')
 
+        # Ajustar la región de scroll del Canvas según el tamaño del contenido
+        self.frame_scroll.bind("<Configure>", lambda e: self.canva.configure(scrollregion=self.canva.bbox("all")))
+
+        # Habilitar el scroll con el ratón
+        self.canva.bind("<MouseWheel>", self.on_mouse_wheel)  # Para Windows
+        self.canva.bind("<Button-4>", self.on_mouse_wheel)  # Para Linux (scroll up)
+        self.canva.bind("<Button-5>", self.on_mouse_wheel)  # Para Linux (scroll down)
+
+        # Habilitar el desplazamiento con las teclas de flecha
+        self.canva.bind("<Up>", self.scroll_up)
+        self.canva.bind("<Down>", self.scroll_down)
+
+        # Hacer que el canvas tenga el foco
+        self.canva.focus_set()
+
+    def on_mouse_wheel(self, event):
+        # Desplazar el canvas según la rueda del ratón
+        self.canva.yview_scroll(int(-1*(event.delta/120)), "units")  # 120 es el valor estándar para la rueda
+
+    def scroll_up(self, event):
+        self.canva.yview_scroll(-1, "units")  # Desplaza hacia arriba
+
+    def scroll_down(self, event):
+        self.canva.yview_scroll(1, "units")  # Desplaza hacia abajo
