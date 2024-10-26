@@ -25,16 +25,21 @@ def Interfaz():
     bton = tk.Button(feed.frame_scroll, text="Botón en la esquina", command=lambda: print("Botón presionado"))
     bton.pack(side="top", padx=0, pady=2000)  # Botón sin espaciado
 
-    # Crear un espacio vacío para permitir el scroll (ajusta la altura según sea necesario)
-    spacer = tk.Frame(feed.frame_scroll, height=800, bg=color_fondo)
-    spacer.pack()
-    
-    espacio_config = tk.Canvas(feed.canva, width= ancho, height= 20, bg = "salmon")
+    espacio_config = tk.Canvas(feed.canva, width= ancho, height= 200, bg = "salmon")
     espacio_config.place(x=0,y=0)
 
     # Actualizar la región de scroll para incluir el contenido
     feed.frame_scroll.update_idletasks()
     feed.canva.config(scrollregion=feed.canva.bbox("all"))
+
+    feed2 = Seccion(Visual_feed, alto, ancho, "blue")
+    feed2.crear("pagina2")
+
+    bton2 = tk.Button(feed2.frame_scroll, text="Botón en la esquina", command=lambda: print("Botón presionado"))
+    bton2.pack(side="top", padx=0, pady=2000)  # Botón sin espaciado
+
+    feed2.frame_scroll.update_idletasks()
+    feed2.canva.config(scrollregion=feed.canva.bbox("all"))
 
     App.mainloop()
 

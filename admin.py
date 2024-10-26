@@ -52,7 +52,7 @@ class Seccion:
         self.canva.yview_scroll(int(-1*(event.delta/120)), "units")  # 120 es el valor estándar para la rueda
 
     def scroll_up(self, event):
-        self.canva.yview_scroll(-1, "units")  # Desplaza hacia arriba
+        self.canva.yview_scroll(1, "units")  # Desplaza hacia arriba
 
     def scroll_down(self, event):
-        self.canva.yview_scroll(1, "units")  # Desplaza hacia abajo
+        self.canva.yview_scroll(-1, "units")  # Desplaza hacia abajo
