@@ -5,6 +5,7 @@ from logic import Instacia_B
 from PIL import Image, ImageTk
 import os
 from ImageSizeAjs import AJS
+from TXTReader import LectorTXT
 
 
 def Interfaz():
@@ -33,6 +34,8 @@ def Interfaz():
     margen_altoP = alto_pantalla//50
 
     AjustadorTam = AJS(ancho_pantalla, alto_pantalla)
+
+    Lector = LectorTXT()
 
     App.title(titulo)
     App.geometry(f'{ancho_pantalla}x{alto_pantalla}')
@@ -90,8 +93,8 @@ def Interfaz():
     espacio_config = tk.Label(feed.canva, image = baner_img)
     espacio_config.place(x=0,y=0)
 
-    bton = tk.Button(feed.canva, image = producto_img, text="Botón en la esquina", command=lambda: print("Botón presionado"))
-    bton.place(x=margen_anchoP, y=margen_altoP * 12)
+    bton = tk.Button(feed.frame_scroll, image = producto_img, text="Botón en la esquina", command=lambda: print("Botón presionado"))
+    bton.pack(padx=margen_anchoP, pady=margen_altoP * 120)
 
     feed2 = Seccion(Visual_feed, alto_pantalla, ancho_pantalla, "blue")
     feed2.crear("pagina2")
@@ -99,9 +102,10 @@ def Interfaz():
     feed2.frame_scroll.update_idletasks()
     feed2.canva.config(scrollregion=feed.canva.bbox("all"))
 
+    Lector.leerTxtFile("Usuarios.txt")
 
     bton2 = tk.Button(feed2.frame_scroll, text="Botón en la esquina", command=lambda: print("Botón presionado"))
-    bton2.pack(side="top", padx=0, pady=2000)  # Botón sin espaciado
+    bton2.place(x=margen_anchoP * 20, y=margen_altoP * 12)  # Botón sin espaciado
 
 
     App.mainloop()

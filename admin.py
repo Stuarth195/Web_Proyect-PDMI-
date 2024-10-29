@@ -23,7 +23,7 @@ class Seccion:
 
         # Crear la scrollbar vertical
         self.scroll = tk.Scrollbar(self.frame, orient="vertical", command=self.canva.yview)
-        self.scroll.grid(row=0, column=1, sticky="ns")
+        self.scroll.grid(row=0, column=0, sticky="ns")
 
         # Configurar el canvas
         self.canva.configure(yscrollcommand=self.scroll.set)
