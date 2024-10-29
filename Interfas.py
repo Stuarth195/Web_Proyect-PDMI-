@@ -4,6 +4,7 @@ from admin import Seccion  # Asegúrate de importar la clase correctamente
 from logic import Instacia_B
 from PIL import Image, ImageTk
 import os
+from ImageSizeAjs import AJS
 
 
 def Interfaz():
@@ -16,8 +17,6 @@ def Interfaz():
     #    Esta ruta es relativa al directorio actual
     icono_c= os.path.join("Imagenes", "Logo_AU.ico")
 
-    alto = 1000
-    ancho = 1800
     titulo = "AgroAPP"
     Rojo = "#B90519"
     verde= "#17820E"
@@ -26,9 +25,18 @@ def Interfaz():
 
     color_fondo = "#dcdcdc"
     App = tk.Tk()
+
+    ancho_pantalla = App.winfo_screenwidth()
+    alto_pantalla = App.winfo_screenheight()
+
+    margen_anchoP = ancho_pantalla//50
+    margen_altoP = alto_pantalla//50
+
+    AjustadorTam = AJS(ancho_pantalla, alto_pantalla)
+
     App.title(titulo)
-    App.geometry(f'{ancho}x{alto}')
-    App.resizable(0, 0)
+    App.geometry(f'{ancho_pantalla}x{alto_pantalla}')
+    App.resizable(False, False)
     App.iconbitmap(icono_c)
 
 
@@ -49,9 +57,13 @@ def Interfaz():
 
 
     baner = Image.open(os.path.join("Imagenes", "Baner.png"))
+
+    baner = AjustadorTam.ajustarIMG(baner, 1)
+
     baner_img = ImageTk.PhotoImage(baner)
 
     producto1 = Image.open(os.path.join("Imagenes", "productos", "papas_dibujo.png"))
+    producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
     producto_img= ImageTk.PhotoImage(producto1)
 
 
@@ -61,7 +73,7 @@ def Interfaz():
     Visual_feed.pack(fill="both", expand=True)
 
     # Crear una sección y añadirla como pestaña en el notebook
-    feed = Seccion(Visual_feed, alto, ancho, color_fondo)
+    feed = Seccion(Visual_feed, alto_pantalla, ancho_pantalla, color_fondo)
     feed.crear("Corporacion De Agricultores Unidos")
 
 
@@ -71,15 +83,17 @@ def Interfaz():
 
     # Crear un botón en la esquina superior izquierda del Frame
     # Crear un botón con imagen en la esquina superior izquierda del Frame
-    bton = tk.Button(feed.frame_scroll, image=producto_img, text="Botón en la esquina", command=lambda: print("Botón presionado"))
-    bton.pack(side="top", padx= 100, pady=1000)  # Ajuste del botón sin espaciado
+    # Ajuste del botón sin espaciado
 
 
 
-    espacio_config = tk.Label(feed.canva, image= baner_img)
+    espacio_config = tk.Label(feed.canva, image = baner_img)
     espacio_config.place(x=0,y=0)
 
-    feed2 = Seccion(Visual_feed, alto, ancho, "blue")
+    bton = tk.Button(feed.canva, image = producto_img, text="Botón en la esquina", command=lambda: print("Botón presionado"))
+    bton.place(x=margen_anchoP, y=margen_altoP * 12)
+
+    feed2 = Seccion(Visual_feed, alto_pantalla, ancho_pantalla, "blue")
     feed2.crear("pagina2")
 
     feed2.frame_scroll.update_idletasks()
