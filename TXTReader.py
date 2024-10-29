@@ -11,4 +11,4 @@ class LectorTXT:
                 for palabra in palabras:
                     lista.append(palabra)
                 matriz.append(lista)
-        print(matriz)
+        return matriz

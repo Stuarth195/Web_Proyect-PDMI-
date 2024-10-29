@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import os
 from ImageSizeAjs import AJS
 from TXTReader import LectorTXT
+from RevUsuarios import revUsuarios
 
 
 def Interfaz():
@@ -99,14 +100,32 @@ def Interfaz():
     feed2 = Seccion(Visual_feed, alto_pantalla, ancho_pantalla, "blue")
     feed2.crear("pagina2")
 
+    feed3 = Seccion(Visual_feed, alto_pantalla, ancho_pantalla, naraja)
+    feed3.crear("Log in")
+
     feed2.frame_scroll.update_idletasks()
     feed2.canva.config(scrollregion=feed.canva.bbox("all"))
 
-    Lector.leerTxtFile("Usuarios.txt")
+    MatrizUsuarios = Lector.leerTxtFile("Usuarios.txt")
+    RevisorUsuarios = revUsuarios(MatrizUsuarios)
 
     bton2 = tk.Button(feed2.frame_scroll, text="Botón en la esquina", command=lambda: print("Botón presionado"))
-    bton2.place(x=margen_anchoP * 20, y=margen_altoP * 12)  # Botón sin espaciado
+    bton2.pack(padx=margen_anchoP * 20, pady=margen_altoP * 12)  # Botón sin espaciado
 
+    label = tk.Label(feed3.canva, text="Ingrese Usuario", font=("Helvetica"), bg=Rojo)
+    label.pack(padx=margen_anchoP * 20, pady=margen_altoP//2)
+
+    UsuerE = tk.Entry(feed3.canva, width=margen_anchoP*2, justify=tk.CENTER)
+    UsuerE.pack(padx=margen_anchoP * 20, pady=margen_altoP//4)
+
+    label = tk.Label(feed3.canva, text="Ingrese Contraseña", font=("Helvetica"), bg=Rojo)
+    label.pack(padx=margen_anchoP * 20, pady=margen_altoP // 2)
+
+    PassE = tk.Entry(feed3.canva, width=margen_anchoP * 2, justify=tk.CENTER)
+    PassE.pack(padx=margen_anchoP * 20, pady=margen_altoP//4)
+
+    Rev_Usuarios = tk.Button(feed3.canva, text="Log In", command=lambda: RevisorUsuarios.RevisarUsuarioExistente(UsuerE.get(), PassE.get()))
+    Rev_Usuarios.pack(padx=margen_anchoP * 20, pady=margen_altoP * 2)
 
     App.mainloop()
 
