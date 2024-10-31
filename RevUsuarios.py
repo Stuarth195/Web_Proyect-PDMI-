@@ -7,5 +7,4 @@ class revUsuarios:
         for Usuario in self.listaUsuarios:
             if Usuario[0] == nombreUsuario and Usuario[1] == contrasenaUsuario:
                 Exite = True
-        print(Exite, nombreUsuario, contrasenaUsuario)
         return Exite
