@@ -2,11 +2,13 @@ import tkinter as tk
 from tkinter import messagebox
 from RevUsuarios import revUsuarios
 from TXTReader import LectorTXT
+from WriterEnDocumento import Writer
 
 Lector = LectorTXT()
 
 MatrizUsuarios = Lector.leerTxtFile("Usuarios.txt")
 Revisor = revUsuarios(MatrizUsuarios)
+Escritor = Writer()
 
 
 class Emergente:
@@ -103,8 +105,7 @@ class Emergente:
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()
-            with open("Usuarios.txt", 'a', encoding='utf-8') as archivo:
-                archivo.write(username + " " + password + "\n")
+            Escritor.write("Usuarios.txt", username + " " + password + "\n")
             self.Etiqueta_Logado.config(text=username)
 
         else:
