@@ -12,7 +12,7 @@ class AJS:
         relacion_aspecto = ancho_original / alto_original
 
         # Calcular el nuevo tamaño manteniendo la proporción
-        nuevo_ancho = int(self.Ancho_ventana * dimensiones)  # 50% del ancho de la pantalla
+        nuevo_ancho = int(self.Ancho_ventana * dimensiones)
         nuevo_alto = int(nuevo_ancho / relacion_aspecto)
 
         # Redimensionar la imagen

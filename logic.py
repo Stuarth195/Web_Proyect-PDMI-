@@ -15,14 +15,14 @@ class Instacia_B:
             messagebox.showerror("Error", f"No se pudo conectar: {e}")
 
     def download_A(self, id_archivo, nombre_archivo):
-        """Descargar el archivo usando el ID y el nombre del objeto."""
+        #Descargar el archivo usando el ID y el nombre del objeto.
         # Define la ruta de destino para el archivo descargado
         ruta_destino = f"{nombre_archivo}.txt"
         # Llama al método descarga de Base_Obj para descargar el archivo
         self.Base_Obj.descarga(id_archivo, ruta_destino)
 
     def upload_A(self, ruta_archivo, nombre_archivo):
-        """Subir un archivo a Google Drive."""
+        #Subir un archivo a Google Drive.
         # Llama al método subir_archivo de Base_Obj para cargar el archivo
         self.Base_Obj.subir_archivo(ruta_archivo, nombre_archivo)
 
