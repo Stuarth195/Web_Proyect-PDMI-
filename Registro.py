@@ -3,24 +3,30 @@ from tkinter import messagebox
 from RevUsuarios import revUsuarios
 from TXTReader import LectorTXT
 from WriterEnDocumento import Writer
-
-Lector = LectorTXT()
-
-MatrizUsuarios = Lector.leerTxtFile("Usuarios.txt")
-Revisor = revUsuarios(MatrizUsuarios)
-Escritor = Writer()
+from Pantallas import Pantalla_add
 
 
 class Emergente:
-    def __init__(self, vtkinter, xMargen, yMargen):
+    def __init__(self, vtkinter, xMargen, yMargen, notebook):
         self.vtkinter = vtkinter
         self.xMargen = xMargen
         self.yMargen = yMargen
+        self.notebook = notebook
         self.register = None
         self.win = 0  # 0 = sin registro, 1 = logeado
         self.username = None
         self.Etiqueta_Logado = tk.Label(self.vtkinter, text="")
         self.Etiqueta_Logado.place(x=self.xMargen * 48, y=self.yMargen * 1.5)
+
+    
+        self.Lector = LectorTXT()
+        self.MatrizUsuarios = self.Lector.leerTxtFile("Usuarios.txt")
+        self.Revisor = revUsuarios(self.MatrizUsuarios)
+        self.Escritor = Writer()
+
+        self.Math_admin=self.Lector.leerTxtFile("admins.txt")
+        self.Revisor_ad = revUsuarios(self.Math_admin)
+
 
     def registro(self):
         # Muestra la ventana de registro con opciones para Log In y Sign In.
@@ -85,10 +91,20 @@ class Emergente:
             tk.Button(self.register, text="Atrás", command=self.registro).place(x=200, y=200)
 
     def Login(self, username, password):
-        # Proceso de Log In.
-        if Revisor.RevisarUsuarioExistente(username, password)==True:
+        if self.Revisor_ad.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
             self.username = username
+            self.register.destroy()
+            self.register = None
+            self.mostrar_menu_logout()
+            self.Etiqueta_Logado.config(text=username)
+            self.admin_win =Pantalla_add(self.vtkinter,self.notebook,None , None)
+            self.admin_win.pantalla_oculta("pantalla")
+            
+        # Proceso de Log In.
+        elif self.Revisor.RevisarUsuarioExistente(username, password)==True:
+            self.win = 1
+            self.username = self.username
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()
@@ -105,7 +121,7 @@ class Emergente:
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()
-            Escritor.write("Usuarios.txt", username + " " + password + "\n")
+            self.Escritor.write("Usuarios.txt", username + " " + password + "\n")
             self.Etiqueta_Logado.config(text=username)
 
         else:
