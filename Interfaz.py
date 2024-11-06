@@ -21,7 +21,12 @@ def Interfaz():
     naraja = "#DC8002"
     amarillo = "#FCC509"
     color_fondo = "#dcdcdc"
-    
+
+    try:
+        instancia_base.conecting()
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
+
     App = tk.Tk()
     ancho_pantalla = App.winfo_screenwidth()
     alto_pantalla = App.winfo_screenheight()
@@ -35,10 +40,7 @@ def Interfaz():
     App.resizable(False, False)
     App.iconbitmap(icono_c)
 
-    try:
-        instancia_base.conecting()
-    except Exception as e:
-        messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
+
 
     # Imagen de banner para la interfaz
     baner = Image.open(os.path.join("Imagenes", "Baner.png"))
@@ -71,8 +73,17 @@ def Interfaz():
 
     # Crear un botón con imagen en la esquina superior izquierda del Frame
     REGIST = Emergente(App, margen_anchoP, margen_altoP, Visual_feed)
-    Btn_Register = tk.Button(feed.canva, text="Log In", bg= amarillo, width= margen_anchoP, height= margen_altoP // 3 , command=lambda: REGIST.registro())
+
+    # Construir la ruta de la imagen usando os.path.join
+    ruta_imagen = os.path.join("imagenes", "boton_register.png")
+
+    # Cargar la imagen
+    boton_register_img = PhotoImage(file=ruta_imagen)
+
+    # Crear el botón con la imagen
+    Btn_Register = tk.Button(feed.canva, image=boton_register_img, command=lambda: REGIST.registro())
     Btn_Register.place(x=1600, y=20)
+
 
 
 
