@@ -16,38 +16,41 @@ class Pantalla_add:
         self.ancho = self.ventana.winfo_screenwidth()
         self.alto = self.ventana.winfo_screenheight()
         
-        # Crear el menú principal en self.ventana
-        self.crear_menu()
-
     def crear_menu(self):
         # Crear el menú principal en la ventana
         self.menu_bar = tk.Menu(self.ventana)
-        
-        # Submenú Archivo
-        archivo_menu = tk.Menu(self.menu_bar, tearoff=0)
-        archivo_menu.add_command(label="Abrir", command=self.abrir_archivo)
-        archivo_menu.add_command(label="Guardar", command=self.guardar_archivo)
-        archivo_menu.add_separator()
-        archivo_menu.add_command(label="Salir", command=self.ventana.quit)
-        
-        # Submenú Edición
-        edicion_menu = tk.Menu(self.menu_bar, tearoff=0)
-        edicion_menu.add_command(label="Copiar")
-        edicion_menu.add_command(label="Pegar")
-        
-        # Submenú Ayuda
-        ayuda_menu = tk.Menu(self.menu_bar, tearoff=0)
-        ayuda_menu.add_command(label="Acerca de")
-        
-        # Añadir submenús al menú principal
-        self.menu_bar.add_cascade(label="Archivo", menu=archivo_menu)
-        self.menu_bar.add_cascade(label="Edición", menu=edicion_menu)
-        self.menu_bar.add_cascade(label="Ayuda", menu=ayuda_menu)
-        
+
+        # Submenú para los productos (solo dentro de "Ventas")
+        productos_menu = tk.Menu(self.menu_bar, tearoff=0)
+        productos_menu.add_command(label="Crear Producto")
+        productos_menu.add_command(label="Quitar Producto")
+        productos_menu.add_command(label="Modificar Producto")
+        productos_menu.add_command(label="crear descueto")
+
+        # Submenú Ventas
+        ventas_menu = tk.Menu(self.menu_bar, tearoff=0)
+        ventas_menu.add_cascade(label="Productos", menu=productos_menu)  # Agregar "Productos"
+
+        # Submenú Administrativo dentro de Opciones de Admin
+        administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
+        administrativo_menu.add_command(label="Historiales")  # Solo "Historiales" en Administrativo
+        administrativo_menu.add_command(label="Almacén")
+        administrativo_menu.add_command(label="Facturas")
+
+        # Crear el menú "Opciones de Admin" y añadir los submenús
+        opciones_admin_menu = tk.Menu(self.menu_bar, tearoff=0)
+        opciones_admin_menu.add_cascade(label="Ventas", menu=ventas_menu)  # Agregar "Ventas"
+        opciones_admin_menu.add_cascade(label="Administrativo", menu=administrativo_menu)  # Agregar "Administrativo"
+
+        # Añadir "Opciones de Admin" al menú principal
+        self.menu_bar.add_cascade(label="Opciones de Admin", menu=opciones_admin_menu)
+
         # Configurar el menú en la ventana principal
         self.ventana.config(menu=self.menu_bar)
 
+
     def pantalla_oculta(self, nombre):
+        self.crear_menu()
         # Crear una sección y su contenido en la pantalla oculta
         self.admin = Seccion(self.notebook, self.alto, self.ancho, "black")
         self.admin.crear(nombre)
@@ -62,6 +65,8 @@ class Pantalla_add:
         
         entrada = tk.Entry(self.admin.frame_scroll)
         entrada.pack(pady=10)
+
+        
 
     def accion_boton(self):
         print("Botón de ejemplo presionado.")
