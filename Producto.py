@@ -19,7 +19,7 @@ class Product:
 
         TempP.pack(in_=self.current_row, side=tk.LEFT, padx=x, pady=y)
 
-        bton = tk.Label(TempP, image=imagen)
+        bton = tk.Button(TempP, image=imagen)
         bton.place(x=5, y = 5)
         Nombre = tk.Label(TempP, text=nombre, bg="white", font=("Verdana", self.margenx//2, "bold"))
         Nombre.place(x=5, y=self.margeny * 5)

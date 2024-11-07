@@ -5,9 +5,6 @@ from TXTReader import LectorTXT
 from WriterEnDocumento import Writer
 
 Lector = LectorTXT()
-
-MatrizUsuarios = Lector.leerTxtFile("Usuarios.txt")
-Revisor = revUsuarios(MatrizUsuarios)
 Escritor = Writer()
 
 
@@ -86,6 +83,8 @@ class Emergente:
 
     def Login(self, username, password):
         # Proceso de Log In.
+        MatrizUsuarios = Lector.leerTxtFile("Usuarios.txt")
+        Revisor = revUsuarios(MatrizUsuarios)
         if Revisor.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
             self.username = username
@@ -126,5 +125,6 @@ class Emergente:
     def logout(self, ventana):
         # Cierra sesión, destruye la ventana actual y permite volver a registrarse.
         ventana.destroy()
+        self.Etiqueta_Logado.config(text="")
         self.win = 0  # Cambia el estado a sin registro
         self.registro()

@@ -117,7 +117,7 @@ def Interfaz():
     canvas_count = 0
     frame = tk.Frame(feed.frame_scroll)
     frame.pack(padx=margen_anchoP//2, pady=margen_altoP*12)
-    while i < 30:
+    while i < 12:
         i = i + 1
         PrecioR = random.randrange(1, 100)
         P1.mostrarImagen(producto_img, "Papa", str(PrecioR), xP, yP, frame, canvas_count)
