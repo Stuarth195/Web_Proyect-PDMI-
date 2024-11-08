@@ -16,7 +16,7 @@ class Emergente:
         self.register = None
         self.win = 0  # 0 = sin registro, 1 = logeado
         self.username = None
-        self.Etiqueta_Logado = tk.Label(self.vtkinter, text="")
+        self.Etiqueta_Logado = tk.Label(self.vtkinter, text="", font=("Helvetica", 10, "bold"), bg="white")
         self.Etiqueta_Logado.place(x=self.xMargen * 48, y=self.yMargen * 1.5)
 
         self.Lector = LectorTXT()
@@ -147,6 +147,7 @@ class Emergente:
         boton_logout.place(x=75, y=100)
 
     def logout(self, ventana):
+        self.Etiqueta_Logado.config(text="")
         ventana.destroy()
         self.win = 0
         self.registro()

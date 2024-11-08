@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 import os
 from ImageSizeAjs import AJS
 from TXTReader import LectorTXT
-from RevUsuarios import revUsuarios
+from Carrito import MCarrito
 from Registro import Emergente
 from Producto import Product
 import random
@@ -47,6 +47,9 @@ def Interfaz():
     baner = AjustadorTam.ajustarIMG(baner, 1)
     baner_img = ImageTk.PhotoImage(baner)
 
+
+    p1 = "Imagenes/productos/papas_dibujo.png"
+
     producto1 = Image.open(os.path.join("Imagenes", "productos", "papas_dibujo.png"))
     producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
     producto_img = ImageTk.PhotoImage(producto1)
@@ -82,10 +85,12 @@ def Interfaz():
 
     # Crear el botón con la imagen
     Btn_Register = tk.Button(feed.canva, image=boton_register_img, command=lambda: REGIST.registro())
-    Btn_Register.place(x=1600, y=20)
+    Btn_Register.place(x=margen_anchoP*45, y=margen_altoP*2)
 
+    Car = MCarrito()
 
-
+    Btn_Carrito = tk.Button(feed.canva, text="Carrito", command=lambda:Car.Mostrar_Carrito())
+    Btn_Carrito.place(x=margen_anchoP * 45, y=margen_altoP * 6)
 
     # Crear productos en el frame de scroll
     P1 = Product(feed.frame_scroll, margen_anchoP, margen_altoP)
@@ -95,14 +100,16 @@ def Interfaz():
     canvas_count = 0
     frame = tk.Frame(feed.frame_scroll)
     frame.pack(padx=margen_anchoP//2, pady=margen_altoP*12)
-    
-    while i < 30:
+
+    while i < 12:
         i += 1
         PrecioR = random.randrange(1, 100)
-        P1.mostrarImagen(producto_img, "Papa", str(PrecioR), xP, yP, frame, canvas_count)
+        P1.mostrarImagen(producto_img, "Papa", str(PrecioR), xP, yP, frame, canvas_count, str(32), "PA0000", "asdadsa", p1)
         canvas_count += 1
-        if canvas_count == 6:
+        if canvas_count == 7:
             canvas_count = 0
+
+
 
     App.mainloop()
 

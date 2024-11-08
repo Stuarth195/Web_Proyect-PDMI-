@@ -1,17 +1,19 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, PhotoImage
+from ProductInf import InfProducto
 class Product:
     def __init__(self, canva, margenx, margeny):
         self.canva = canva
         self.margenx = margenx
         self.margeny = margeny
         self.current_row = None
-    def mostrarImagen(self, imagen, nombre, precio, x, y, fila, canvas_count):
+    def mostrarImagen(self, imagen, nombre, precio, x, y, fila, canvas_count, unidades, codigo, descripcion, productopath):
 
         TempP = tk.Canvas(self.canva, width=self.margenx * 5, height=self.margeny * 10, bg="white")
+        Inf = InfProducto()
 
         # Colocar el Canvas
-        if canvas_count == 0 or canvas_count == 6:
+        if canvas_count == 0 or canvas_count == 7:
             # Crear una nueva fila
             self.current_row = tk.Frame(fila)
             self.current_row.pack(anchor='w')
@@ -19,9 +21,12 @@ class Product:
 
         TempP.pack(in_=self.current_row, side=tk.LEFT, padx=x, pady=y)
 
-        bton = tk.Button(TempP, image=imagen)
+
+        bton = tk.Button(TempP, image=imagen, command=lambda:Inf.ventanaProducto(productopath, nombre, precio, unidades, codigo, descripcion))
         bton.place(x=5, y = 5)
         Nombre = tk.Label(TempP, text=nombre, bg="white", font=("Verdana", self.margenx//2, "bold"))
-        Nombre.place(x=5, y=self.margeny * 5)
+        Nombre.place(x=5, y=self.margeny * 6)
         Precio = tk.Label(TempP, text=precio + "$", bg="white", font=("Verdana", self.margenx//2, "bold"))
-        Precio.place(x= 5, y= self.margeny*7)
+        Precio.place(x= 5, y= self.margeny*8)
+        Unidades = tk.Label(TempP, text="U: " + unidades, bg="white", font=("Verdana", self.margenx // 3, "bold"))
+        Unidades.place(x=self.margenx*3, y=self.margeny//2)
