@@ -151,3 +151,4 @@ class Emergente:
         ventana.destroy()
         self.win = 0
         self.registro()
+        self.admin_win.reiniciar_pantalla()

@@ -15,6 +15,7 @@ class Pantalla_add:
         self.admin = None
         self.ancho = self.ventana.winfo_screenwidth()
         self.alto = self.ventana.winfo_screenheight()
+        self.historial_open = False
         
     def crear_menu(self):
         # Crear el menú principal en la ventana
@@ -33,7 +34,7 @@ class Pantalla_add:
 
         # Submenú Administrativo dentro de Opciones de Admin
         administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
-        administrativo_menu.add_command(label="Historiales")  # Solo "Historiales" en Administrativo
+        administrativo_menu.add_command(label="Historiales" , command=lambda:self.crear_vista_Historial(500,self.admin.frame_scroll, 0,0))  # Solo "Historiales" en Administrativo
         administrativo_menu.add_command(label="Almacén")
         administrativo_menu.add_command(label="Facturas")
 
@@ -55,18 +56,78 @@ class Pantalla_add:
         self.admin = Seccion(self.notebook, self.alto, self.ancho, "black")
         self.admin.crear(nombre)
 
-        # Crear un botón en el frame de desplazamiento de la sección
-        self.diego = tk.Button(self.admin.frame_scroll, text="Botón de ejemplo", command=self.accion_boton)
-        self.diego.pack(padx=10, pady=1000)
 
-        # Crear otros elementos en el frame según tus necesidades
-        etiqueta = tk.Label(self.admin.frame_scroll, text="Etiqueta en pantalla oculta", bg="lightgray")
-        etiqueta.pack(pady=20)
-        
-        entrada = tk.Entry(self.admin.frame_scroll)
-        entrada.pack(pady=10)
 
+    def crear_vista_Historial(self, lado, lugar, padx=0, pady=0):
+        if self.historial_open == False:
+            # Crear el canvas y configurarlo para llenarse dentro del lugar especificado
+            self.canvas = tk.Canvas(lugar, bg="lightblue", width=lado, height=lado)
+            self.canvas.pack(fill=tk.BOTH, expand=True, side=tk.LEFT, padx=padx, pady=pady)
+
+            # Configurar el canvas para que use el desplazamiento con el ratón
+            self.canvas.config(scrollregion=(0, 0, lado, lado * 2))  # Ajustar la altura del scroll para simular más espacio hacia abajo
+
+            # Crear un frame interno para colocar los botones dentro del canvas
+            self.frame_interno = tk.Frame(self.canvas, bg="lightblue")
+            self.canvas.create_window((0, 0), window=self.frame_interno, anchor="nw")
+
+            # Agregar botones en el frame_interno para probar el scroll vertical
+            for i in range(50):  # Agregar 50 botones verticalmente
+                boton = tk.Button(self.frame_interno, text=f"{i+1}) usuario ", width=lado // 10)
+                boton.pack(fill=tk.X, pady=5, padx=5)
+
+            # Actualizar la región desplazable según el tamaño del frame_interno
+            self.frame_interno.update_idletasks()
+            self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
+            # Función para mover el canvas con el ratón
+            def scroll_canvas(event):
+                self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+            # Vincular el evento de desplazamiento del ratón al canvas
+            self.canvas.bind_all("<MouseWheel>", scroll_canvas)  # Para sistemas Windows
+            # self.canvas.bind_all("<Button-4>", scroll_canvas)  # Para sistemas Linux (si es necesario)
+            # self.canvas.bind_all("<Button-5>", scroll_canvas)  # Para sistemas Linux (si es necesario)
+
+            self.historial_open = True
+        else:
+            # Si historial_open es True, eliminar la vista de historial actual
+            if hasattr(self, 'canvas'):
+                self.canvas.destroy()  # Elimina el Canvas
+            if hasattr(self, 'frame_interno'):
+                self.frame_interno.destroy()  # Elimina el Frame interno
+
+            self.historial_open = False  # Cambiar el estado para indicar que la vista ha sido cerrada
+
+    def reiniciar_pantalla(self):
+        self.eliminar_menu()
+        # Eliminar el menú principal de la ventana
+        if hasattr(self, 'menu_bar'):  # Verificar si existe el menú
+            self.ventana.config(menu=None)  # Eliminar el menú asociado a la ventana
+            
+            # Eliminar la referencia al menu_bar (ya no hay más menú)
+            del self.menu_bar  
+
+        # Eliminar la sección de la pestaña creada (frame)
+        if hasattr(self, 'admin'):
+            self.admin.frame.destroy()  # Destruir el frame de la sección
+            del self.admin  # Eliminar la referencia a la pestaña oculta
+
+        # Restablecer el historial si es necesario
+        self.historial_open = False
         
+
+    def eliminar_menu(self):
+        # Destruir el objeto del menú si ya existe
+        if self.menu_bar:
+            self.menu_bar.destroy()  # Elimina el menú de la ventana
+
+        # Reconfigurar la ventana sin menú
+        self.ventana.config(menu=None)
+
+
+
+
 
     def accion_boton(self):
         print("Botón de ejemplo presionado.")

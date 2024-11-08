@@ -48,7 +48,7 @@ def Interfaz():
     baner_img = ImageTk.PhotoImage(baner)
 
 
-    p1 = "Imagenes/productos/papas_dibujo.png"
+    p1 =os.path.join("Imagenes", "productos", "papas_dibujo.png")
 
     producto1 = Image.open(os.path.join("Imagenes", "productos", "papas_dibujo.png"))
     producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
@@ -93,7 +93,7 @@ def Interfaz():
     Btn_Carrito.place(x=margen_anchoP * 45, y=margen_altoP * 6)
 
     # Crear productos en el frame de scroll
-    P1 = Product(feed.frame_scroll, margen_anchoP, margen_altoP)
+    P1 = Product(App, feed.frame_scroll, margen_anchoP, margen_altoP)
     i = 0
     xP = margen_anchoP
     yP = margen_altoP
