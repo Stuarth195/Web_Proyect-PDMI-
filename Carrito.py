@@ -1,11 +1,13 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from TXTReader import LectorTXT  # Suponiendo que esta clase está definida correctamente
+from WriterEnDocumento import Writer
 
 class MCarrito:
     def __init__(self):
         self.Lector = LectorTXT()  # Inicializa el lector de archivos
         self.matriz = []
+        self.Escritor = Writer()
 
     def Mostrar_Carrito(self):
         # Crear la ventana principal
@@ -27,23 +29,38 @@ class MCarrito:
         for item in self.matriz:
             # Convertir cada fila de la matriz a una cadena de texto
             tempI = " | ".join(item)  # Usar " | " para separar cada elemento de la fila
+            mensaje = " ".join(item)
 
-            # Crear una etiqueta con el texto y ubicarla en el canvas
-            label = tk.Label(canva, text=tempI, font=("Verdana", 10), bg="white", anchor="w")
-            label.place(x=5, y=fila)
+            # Crear el botón primero
+            label_button = tk.Button(canva, text=tempI, font=("Verdana", 10), bg="white", anchor="w")
+
+            # Luego, asociamos la función eliminar con el botón usando lambda
+            label_button.config(command=lambda label=label_button: eliminar(label, mensaje))
+
+            # Ubicar el botón en el canvas
+            label_button.place(x=5, y=fila)
 
             # Incrementar la fila para la siguiente etiqueta
             fila += 30
 
-        boton = tk.Button(root, text="Cerrar", font=("Verdana", 12), bg="white", command=lambda:cerrar_ventana())
+        # Botón para cerrar la ventana
+        boton = tk.Button(root, text="Cerrar", font=("Verdana", 12), bg="white", command=lambda: cerrar_ventana())
         boton.place(x=180, y=460)
 
-        boton = tk.Button(root, text="Finalizar Compra", font=("Verdana", 12), bg="white", command=lambda: cerrar_ventana())
+        # Botón para finalizar la compra
+        boton = tk.Button(root, text="Finalizar Compra", font=("Verdana", 12), bg="white",
+                          command=lambda: cerrar_ventana())
         boton.place(x=5, y=460)
 
+        # Función para cerrar la ventana
         def cerrar_ventana():
             root.destroy()
 
+        # Función para eliminar un botón
+        def eliminar(labelE, mensaje):
+            labelE.destroy()
+            self.Escritor.reemplazar_linea_en_archivo("Carrito.txt", mensaje)
+
+
         # Iniciar el ciclo principal de la ventana Tkinter
         root.mainloop()
-
