@@ -1,13 +1,15 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from TXTReader import LectorTXT  # Suponiendo que esta clase está definida correctamente
+from TXTReader import LectorTXT
 from WriterEnDocumento import Writer
+from Pagar import Pagos
 
 class MCarrito:
     def __init__(self):
         self.Lector = LectorTXT()  # Inicializa el lector de archivos
         self.matriz = []
         self.Escritor = Writer()
+        self.Pagos = Pagos()
 
     def Mostrar_Carrito(self):
         # Crear la ventana principal
@@ -49,12 +51,16 @@ class MCarrito:
 
         # Botón para finalizar la compra
         boton = tk.Button(root, text="Finalizar Compra", font=("Verdana", 12), bg="white",
-                          command=lambda: cerrar_ventana())
+                          command=lambda: confirmarCompra())
         boton.place(x=5, y=460)
 
         # Función para cerrar la ventana
         def cerrar_ventana():
             root.destroy()
+
+        def confirmarCompra():
+            root.destroy()
+            self.Pagos.menu_compra()
 
         # Función para eliminar un botón
         def eliminar(labelE, mensaje):

@@ -53,7 +53,7 @@ class InfProducto:
         entrada.place(x=250, y=1)
 
         # Botón para agregar al carrito
-        boton = tk.Button(window, text="Agregar al carrito", command=lambda: (escritor.write("Carrito.txt", f"{nombre} {entrada.get()}"), destruir_ventana()))
+        boton = tk.Button(window, text="Agregar al carrito", command=lambda: (escritor.write("Carrito.txt", f"{nombre} {entrada.get()} {precio}"), destruir_ventana()))
         boton.place(x=250, y=40)
 
         def destruir_ventana():
