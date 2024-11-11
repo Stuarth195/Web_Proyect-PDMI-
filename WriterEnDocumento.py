@@ -1,8 +1,11 @@
 
 class Writer():
     def write(self, Filepath, mensaje):
-        with open(Filepath, 'a', encoding='utf-8') as archivo:
-            archivo.write("\n" + mensaje)
+        try:
+            with open(Filepath, 'a', encoding='utf-8') as archivo:
+                archivo.write("\n" + mensaje)
+        except FileNotFoundError:
+            print("No existe el archivo")
 
     def reemplazar_linea_en_archivo(self, nombre_archivo, mensaje_buscar):
         try:

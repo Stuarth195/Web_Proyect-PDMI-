@@ -30,7 +30,7 @@ class MCarrito:
         User = tk.Label(canva, text=usuario, font=("Verdana", 16), bg="White")
         User.place(x=125, y=5)
 
-        fila = 30  # Posición inicial de las etiquetas
+        fila = 40  # Posición inicial de las etiquetas
         for item in self.matriz:
             # Convertir cada fila de la matriz a una cadena de texto
             tempI = " | ".join(item)  # Usar " | " para separar cada elemento de la fila
