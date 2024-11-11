@@ -15,9 +15,9 @@ class Emergente:
         self.notebook = notebook
         self.register = None
         self.win = 0  # 0 = sin registro, 1 = logeado
-        self.username = None
-        self.Etiqueta_Logado = tk.Label(self.vtkinter, text="", font=("Helvetica", 10, "bold"), bg="white")
-        self.Etiqueta_Logado.place(x=self.xMargen * 48, y=self.yMargen * 1.5)
+        self.username = "User0000"
+        self.Etiqueta_Logado = tk.Label(self.vtkinter, text="User0000", font=("Helvetica", 10, "bold"), bg="white")
+        self.Etiqueta_Logado.place(x=self.xMargen * 48, y=self.yMargen * 1.8)
 
         self.Lector = LectorTXT()
         self.MatrizUsuarios = self.Lector.leerTxtFile("Usuarios.txt")
@@ -147,8 +147,15 @@ class Emergente:
         boton_logout.place(x=75, y=100)
 
     def logout(self, ventana):
-        self.Etiqueta_Logado.config(text="")
+        self.Etiqueta_Logado.config(text="User0000")
+        self.username = "User0000"
         ventana.destroy()
         self.win = 0
         self.registro()
-        self.admin_win.reiniciar_pantalla()
+        try:
+            self.admin_win.reiniciar_pantalla()
+        except:
+            print("No se pudo reiniciar")
+
+    def getUsername(self):
+        return self.username

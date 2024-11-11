@@ -11,7 +11,7 @@ class MCarrito:
         self.Escritor = Writer()
         self.Pagos = Pagos()
 
-    def Mostrar_Carrito(self):
+    def Mostrar_Carrito(self, usuario):
         # Crear la ventana principal
         root = tk.Tk()
         root.title("Carrito de Compras")
@@ -25,7 +25,10 @@ class MCarrito:
 
         # Título de la ventana
         label = tk.Label(canva, text="Carrito", font=("Verdana", 16), bg="white")
-        label.place(x=5, y=0)
+        label.place(x=5, y=5)
+
+        User = tk.Label(canva, text=usuario, font=("Verdana", 16), bg="White")
+        User.place(x=125, y=5)
 
         fila = 30  # Posición inicial de las etiquetas
         for item in self.matriz:
@@ -60,7 +63,7 @@ class MCarrito:
 
         def confirmarCompra():
             root.destroy()
-            self.Pagos.menu_compra()
+            self.Pagos.menu_compra(usuario)
 
         # Función para eliminar un botón
         def eliminar(labelE, mensaje):

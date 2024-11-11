@@ -89,7 +89,7 @@ def Interfaz():
 
     Car = MCarrito()
 
-    Btn_Carrito = tk.Button(feed.canva, text="Carrito", command=lambda:Car.Mostrar_Carrito())
+    Btn_Carrito = tk.Button(feed.canva, text="Carrito", command=lambda:Car.Mostrar_Carrito(REGIST.getUsername()))
     Btn_Carrito.place(x=margen_anchoP * 45, y=margen_altoP * 6)
 
     # Crear productos en el frame de scroll
