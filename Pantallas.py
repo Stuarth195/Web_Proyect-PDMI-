@@ -22,6 +22,7 @@ class Pantalla_add:
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         
     def crear_menu(self):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Crear el menú principal en la ventana
         self.menu_bar = tk.Menu(self.ventana)
 
@@ -204,6 +205,7 @@ class Pantalla_add:
 
 
     def mostrar_historial_usuario(self,):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         alto = 800
         ancho = 1000
         # Crear una subventana solo para el usuario logueado
@@ -272,6 +274,7 @@ class Pantalla_add:
 # Dentro de la clase Pantalla_add, en algún método de configuración o en el __init__
 
     def crear_boton_historial_usuario(self, donde, valx , valy):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Crear el botón en la ventana principal o en un frame específico
         self.boton_historial_usuario = tk.Button(donde, text="Ver mi Historial", command=self.mostrar_historial_usuario)
         
@@ -290,6 +293,7 @@ class Pantalla_add:
 
 
     def reiniciar_pantalla(self):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.eliminar_menu()
         # Eliminar el menú principal de la ventana
         if hasattr(self, 'menu_bar'):  # Verificar si existe el menú

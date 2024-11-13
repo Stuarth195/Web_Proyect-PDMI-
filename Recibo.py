@@ -87,7 +87,7 @@ class Reb:
         fecha = fecha_actual.strftime('%Y-%m-%d')
 
         while i < len(self.Productos):
-            StrProductos += "[" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
+            StrProductos += " [" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
             i+=1
 
         print(self.Productos, self.Unidades, self.Precios)
