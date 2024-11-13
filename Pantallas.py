@@ -4,9 +4,9 @@ from WriterEnDocumento import Writer
 from Producto import Product
 from logic import Instacia_B
 import tkinter as tk
-
+import os
 class Pantalla_add:
-    def __init__(self, ventana, notebook, archivo_usuarios=None, archivo_recetas=None, archivo_lotes=None):
+    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None):
         self.ventana = ventana
         self.notebook = notebook
         self.archivo_usuarios = archivo_usuarios
@@ -16,6 +16,8 @@ class Pantalla_add:
         self.ancho = self.ventana.winfo_screenwidth()
         self.alto = self.ventana.winfo_screenheight()
         self.historial_open = False
+        self.lector =  LectorTXT()
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         
     def crear_menu(self):
         # Crear el menú principal en la ventana
@@ -59,6 +61,7 @@ class Pantalla_add:
 
 
     def crear_vista_Historial(self, lado, lugar, padx=0, pady=0):
+        self.lado_hiostorial = lado
         if self.historial_open == False:
             # Crear el canvas y configurarlo para llenarse dentro del lugar especificado
             self.canvas = tk.Canvas(lugar, bg="lightblue", width=lado, height=lado)
@@ -71,10 +74,6 @@ class Pantalla_add:
             self.frame_interno = tk.Frame(self.canvas, bg="lightblue")
             self.canvas.create_window((0, 0), window=self.frame_interno, anchor="nw")
 
-            # Agregar botones en el frame_interno para probar el scroll vertical
-            for i in range(50):  # Agregar 50 botones verticalmente
-                boton = tk.Button(self.frame_interno, text=f"{i+1}) usuario ", width=lado // 10)
-                boton.pack(fill=tk.X, pady=5, padx=5)
 
             # Actualizar la región desplazable según el tamaño del frame_interno
             self.frame_interno.update_idletasks()
@@ -90,6 +89,7 @@ class Pantalla_add:
             # self.canvas.bind_all("<Button-5>", scroll_canvas)  # Para sistemas Linux (si es necesario)
 
             self.historial_open = True
+            self.crear_botones_historial()
         else:
             # Si historial_open es True, eliminar la vista de historial actual
             if hasattr(self, 'canvas'):
@@ -98,6 +98,108 @@ class Pantalla_add:
                 self.frame_interno.destroy()  # Elimina el Frame interno
 
             self.historial_open = False  # Cambiar el estado para indicar que la vista ha sido cerrada
+
+    def crear_botones_historial(self):
+        # Asegúrate de que la matriz está cargada y no está vacía
+        if self.Us_math:
+            nombres_agregados = set()  # Conjunto para almacenar nombres únicos
+
+            # Recorrer cada línea en la matriz
+            for linea in self.Us_math:
+                # Verificar si el nombre (primer elemento) ya fue agregado
+                nombre = linea[0]  # Asumimos que el nombre está en la posición 0
+                if nombre not in nombres_agregados:
+                    # Agregar el nombre al conjunto para evitar duplicados
+                    nombres_agregados.add(nombre)
+                    
+                    # Crear el botón con el nombre único
+                    # Cambia esta línea en la función crear_botones_historial
+                    boton = tk.Button(self.frame_interno, text=f"{nombre}", width=self.lado_hiostorial // 10, command=lambda nombre=nombre: self.comando_botones_historial(nombre))
+
+                    boton.pack(fill=tk.X, pady=5, padx=5)
+        else:
+            pass
+    def extraer_historial(self, linea):
+        # Busca las sublistas delimitadas por [ y ]
+        historial = []
+        contenido = ''.join(linea)  # Convierte la línea en una cadena única para simplificar la búsqueda
+        
+        # Encuentra los fragmentos entre los delimitadores
+        inicio = contenido.find('[')
+        while inicio != -1:
+            fin = contenido.find(']', inicio)
+            if fin != -1:
+                # Extraer el contenido entre los delimitadores y dividirlo por comas
+                sublista = contenido[inicio+1:fin].split(',')
+                # Limpiar espacios en blanco de cada elemento
+                historial.extend([item.strip() for item in sublista])
+                inicio = contenido.find('[', fin)  # Buscar la siguiente sublista
+            else:
+                break  # Salir si no se encuentra el delimitador de cierre
+        
+        return historial
+
+    def comando_botones_historial(self, nombre):
+        alto = 800
+        ancho = 1000
+        # Crear la subventana
+        subventana = tk.Toplevel(self.ventana, width=ancho, height=alto)
+        subventana.title(nombre)
+        subventana.resizable(0, 0)
+
+        # Crear un Canvas para manejar el scroll
+        canvas = tk.Canvas(subventana, width=ancho, height=alto)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Agregar Scrollbar al Canvas
+        scrollbar = tk.Scrollbar(subventana, command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.config(yscrollcommand=scrollbar.set)
+
+        # Crear un frame dentro del Canvas
+        frame_contenedor = tk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame_contenedor, anchor="nw")
+
+        # Función para actualizar la región desplazable del Canvas
+        def actualizar_scroll(event=None):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        # Vincular el ajuste del tamaño del frame para actualizar el scroll
+        frame_contenedor.bind("<Configure>", actualizar_scroll)
+
+        # Permitir desplazamiento con la rueda del ratón
+        def scroll_con_rueda(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        canvas.bind_all("<MouseWheel>", scroll_con_rueda)
+
+        # Verifica si hay datos en Us_math
+        if self.Us_math:
+            for linea in self.Us_math:
+                if linea[0] == nombre:
+                    # Extrae las sublistas del historial
+                    historial = self.extraer_historial(linea)
+                    
+                    # Crear un encabezado
+                    encabezado = tk.Label(frame_contenedor, text="Fecha     Producto     Cantidad     Precio Unidad     Total", font=("Arial", 10, "bold"))
+                    encabezado.pack(fill=tk.X, pady=5, padx=5)
+                    
+                    # Crear un Label para cada entrada en el historial formateada
+                    for entrada in historial:
+                        # Separar los datos en variables: asumiendo que la entrada tiene fecha, producto, cantidad, precio por unidad y total
+                        try:
+                            # Separa los elementos de entrada (ajusta según el formato real de tus datos)
+                            fecha, producto, cantidad, precio_unidad, total = entrada.split(';')  # Ajusta si el delimitador es diferente
+                            
+                            # Formatear el texto
+                            texto = f"Fecha: {fecha.strip()}     Producto: {producto.strip()}     Cantidad: {cantidad.strip()}     Precio Unidad: {precio_unidad.strip()}     Total: {total.strip()}"
+                        except ValueError:
+                            texto = "Datos incompletos o incorrectos en el historial"
+                        
+                        # Crear un Label para cada entrada formateada
+                        label = tk.Label(frame_contenedor, text=texto, anchor="w")
+                        label.pack(fill=tk.X, pady=2, padx=5)
+
 
     def reiniciar_pantalla(self):
         self.eliminar_menu()

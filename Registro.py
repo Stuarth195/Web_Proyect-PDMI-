@@ -8,7 +8,7 @@ from Pantallas import Pantalla_add
 
 
 class Emergente:
-    def __init__(self, vtkinter, xMargen, yMargen, notebook):
+    def __init__(self, vtkinter = None, xMargen= None, yMargen= None, notebook= None):
         self.vtkinter = vtkinter
         self.xMargen = xMargen
         self.yMargen = yMargen
@@ -104,6 +104,7 @@ class Emergente:
             tk.Button(self.register, image=self.boton_atras_img, command=self.registro).place(x=290, y=280)
 
     def Login(self, username, password):
+        self.archivo_compras_path = os.path.join("RegistroCompras.txt")
         if self.Revisor_ad.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
             self.username = username
@@ -111,7 +112,7 @@ class Emergente:
             self.register = None
             self.mostrar_menu_logout()
             self.Etiqueta_Logado.config(text=username)
-            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, None, None)
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None)
             self.admin_win.pantalla_oculta("pantalla")
             
         elif self.Revisor.RevisarUsuarioExistente(username, password)==True:
@@ -159,3 +160,6 @@ class Emergente:
 
     def getUsername(self):
         return self.username
+    
+
+
