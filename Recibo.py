@@ -1,13 +1,22 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from WriterEnDocumento import Writer
+import os
+from TXTReader import LectorTXT
 
 class Reb:
     def __init__(self, user, total):
-        self.user = user
+        self.user = user + ";"
         self.total = total * 1.03  # Agregar un pequeño incremento al total (1%)
         self.escritor = Writer()
-        self.imagen = Image.open("Imagenes/logotipo.png")
+        self.imagen = os.path.join("Imagenes", "logotipo.png")
+        self.lector = LectorTXT()
+        self.Carrito = self.lector.leerTxtFile("Carrito.txt")
+        self.Productos = []
+        self.Unidades = []
+        for item in self.Carrito:
+            self.Productos.append(item[0])
+            self.Unidades.append(item[1])
 
     def deliverReb(self, direccion, tiempo_espera, metodo_pago, Tipo_entrega):
         # Crear la ventana
@@ -56,16 +65,22 @@ class Reb:
 
         try:
             # Asegúrate de que la imagen esté en la carpeta 'images'
-            self.imagen = self.imagen.resize((200, 200))  # Redimensiona la imagen si es necesario
-            logo_tk = ImageTk.PhotoImage(self.imagen)
+
+            logo_tk = Image.open(self.imagen)
+            logo_tk_img = ImageTk.PhotoImage(logo_tk)
 
             # Mostrar la imagen en un Label
-            label_logo = tk.Label(Rev, image=logo_tk, bg="lightgray")
+            label_logo = tk.Label(Fondo, image=logo_tk_img, bg="lightgray")
             label_logo.image = logo_tk  # Mantener una referencia a la imagen para que no se pierda
-            label_logo.place(x=150, y=320)  # Coloca la imagen en la posición deseada
+            label_logo.pack(padx=10, pady=10)  # Coloca la imagen en la posición deseada
 
         except Exception as e:
             print(f"Error al cargar la imagen: {e}")
+
+        StrProductos = ""
+        i = 0
+
+        print(self.Productos, self.Unidades)
 
         self.escritor.write("RegistroCompras.txt", self.user + " " + str(self.total))
 
