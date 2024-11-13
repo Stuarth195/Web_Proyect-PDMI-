@@ -1,6 +1,7 @@
 import tkinter as tk
 from TXTReader import LectorTXT
 from Recibo import Reb
+from WriterEnDocumento import Writer
 
 
 class Pagos:
@@ -8,6 +9,7 @@ class Pagos:
         self.lector = LectorTXT()
         self.total = 0
         self.metodoPago = "No seleccionado"
+        self.escritor = Writer()
 
     def menu_compra(self, user):
         ventana_Compra = tk.Tk()
@@ -148,6 +150,8 @@ class Pagos:
             ConfirmarDireccion.place(x=5, y=530)
 
         def confirmarCompra(Tipo):
+            self.escritor.limpiartxt("Carrito.txt")
+
             info_Correcta = False
 
             if self.metodoPago == "Pago Tarjeta":
