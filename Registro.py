@@ -119,6 +119,7 @@ class Emergente:
             
         elif self.Revisor.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
             self.username = username
             self.register.destroy()
             self.register = None

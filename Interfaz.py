@@ -13,6 +13,17 @@ import random
 
 def Interfaz():
     instancia_base = Instacia_B()
+    #rutas de descarga
+    ruta_defecto= os.path.join("Web_Proyect-PDMI-")
+    #ids de los archivos
+    id_usuarios= "1VC7trYLyHziTpeFfH5K8gsSW3k8xKSLh"
+    id_admins= "1j--oyLkPszHwCyUqV4H-ySb_XNxzP2Dz"
+    id_carrito="1D-Vm_10a2UtLsARG0ZA5sLi7Q2KXMFnn"
+    id_productos="18k2JcSh1Q2gZj065ASOeNLrBTLQSOv5n"
+    id_registroC = "1B0YTc-MnKXk9pKNfOzuLgRotYtmEpD23"
+    id_receta = None
+
+
 
     icono_c = os.path.join("Imagenes", "Logo_AU.ico")
     titulo = "AgroAPP"
@@ -26,6 +37,12 @@ def Interfaz():
         instancia_base.conecting()
     except Exception as e:
         messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
+    
+    instancia_base.download_A(id_admins , ruta_defecto)
+    instancia_base.download_A(id_carrito , ruta_defecto)
+    instancia_base.download_A(id_productos, ruta_defecto)
+    instancia_base.download_A(id_usuarios , ruta_defecto)
+    instancia_base.download_A(id_registroC , ruta_defecto)
 
     App = tk.Tk()
     ancho_pantalla = App.winfo_screenwidth()
