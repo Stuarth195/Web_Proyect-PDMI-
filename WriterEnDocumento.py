@@ -53,3 +53,13 @@ class Writer():
         except Exception as e:
             print(f"Error: {e}")
 
+    def limpiartxt(self, nombre_archivo):
+        try:
+            # Abrimos el archivo en modo escritura, lo que borra todo su contenido
+            with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+                pass  # No escribimos nada, solo cerramos el archivo vacío
+            print(f"El contenido del archivo '{nombre_archivo}' ha sido borrado.")
+        except FileNotFoundError:
+            print(f"Error: El archivo '{nombre_archivo}' no se encontró.")
+        except Exception as e:
+            print(f"Error: {e}")

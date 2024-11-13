@@ -108,6 +108,9 @@ class Emergente:
             tk.Button(self.register, image=self.boton_atras_img, command=self.registro).place(x=290, y=280)
 
     def Login(self, username, password):
+
+        self.Escritor.limpiartxt("Carrito.txt")
+
         self.archivo_compras_path = os.path.join("RegistroCompras.txt")
         if self.Revisor_ad.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
@@ -133,6 +136,7 @@ class Emergente:
             messagebox.showerror("Error", "Credenciales incorrectas")
 
     def SignIn(self, username, password, confirm_password):
+        self.Escritor.limpiartxt("Carrito.txt")
         if password == confirm_password:
             self.win = 1
             self.username = username
