@@ -6,7 +6,8 @@ from logic import Instacia_B
 import tkinter as tk
 import os
 class Pantalla_add:
-    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None):
+    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
+        self. usuario_log = usuario_log
         self.ventana = ventana
         self.notebook = notebook
         self.archivo_usuarios = archivo_usuarios
@@ -201,6 +202,92 @@ class Pantalla_add:
                         label.pack(fill=tk.X, pady=2, padx=5)
 
 
+    def mostrar_historial_usuario(self,):
+        alto = 800
+        ancho = 1000
+        # Crear una subventana solo para el usuario logueado
+        subventana = tk.Toplevel(self.ventana, width=ancho, height=alto)
+        subventana.title(f"Historial de {self.usuario_log}")
+        subventana.resizable(0, 0)
+
+        # Crear un Canvas para manejar el scroll
+        canvas = tk.Canvas(subventana, width=ancho, height=alto)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Agregar Scrollbar al Canvas
+        scrollbar = tk.Scrollbar(subventana, command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.config(yscrollcommand=scrollbar.set)
+
+        # Crear un frame dentro del Canvas
+        frame_contenedor = tk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame_contenedor, anchor="nw")
+
+        # Función para actualizar la región desplazable del Canvas
+        def actualizar_scroll(event=None):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        # Vincular el ajuste del tamaño del frame para actualizar el scroll
+        frame_contenedor.bind("<Configure>", actualizar_scroll)
+
+        # Permitir desplazamiento con la rueda del ratón
+        def scroll_con_rueda(event):
+            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+        canvas.bind_all("<MouseWheel>", scroll_con_rueda)
+
+        # Verifica si hay datos en Us_math
+        if self.Us_math:
+            for linea in self.Us_math:
+                # Filtrar el historial del usuario logueado
+                if linea[0] == self.usuario_log:
+                    # Extrae las sublistas del historial
+                    historial = self.extraer_historial(linea)
+
+                    # Crear un encabezado
+                    encabezado = tk.Label(frame_contenedor, text="Fecha     Producto     Cantidad     Precio Unidad     Total", font=("Arial", 10, "bold"))
+                    encabezado.pack(fill=tk.X, pady=5, padx=5)
+
+                    # Crear un Label para cada entrada en el historial formateada
+                    for entrada in historial:
+                        # Separar los datos en variables: asumiendo que la entrada tiene fecha, producto, cantidad, precio por unidad y total
+                        try:
+                            # Separa los elementos de entrada (ajusta según el formato real de tus datos)
+                            fecha, producto, cantidad, precio_unidad, total = entrada.split(';')
+                            
+                            # Formatear el texto
+                            texto = f"Fecha: {fecha.strip()}     Producto: {producto.strip()}     Cantidad: {cantidad.strip()}     Precio Unidad: {precio_unidad.strip()}     Total: {total.strip()}"
+                        except ValueError:
+                            texto = "Datos incompletos o incorrectos en el historial"
+                        
+                        # Crear un Label para cada entrada formateada
+                        label = tk.Label(frame_contenedor, text=texto, anchor="w")
+                        label.pack(fill=tk.X, pady=2, padx=5)
+        else:
+            label = tk.Label(frame_contenedor, text="No hay historial disponible para el usuario.")
+            label.pack(fill=tk.X, pady=5, padx=5)
+
+
+# Dentro de la clase Pantalla_add, en algún método de configuración o en el __init__
+
+    def crear_boton_historial_usuario(self, donde, valx , valy):
+        # Crear el botón en la ventana principal o en un frame específico
+        self.boton_historial_usuario = tk.Button(donde, text="Ver mi Historial", command=self.mostrar_historial_usuario)
+        
+        # Empaquetar el botón en la ventana (puedes usar .pack(), .grid() o .place() según tu diseño)
+        self.boton_historial_usuario.place(x=valx, y=valy)
+
+        donde.tag_raise("boton_historial")
+
+    def destruir_boton_usuario(self):
+        if self.boton_historial_usuario != None:
+            self.boton_historial_usuario.destroy()
+            self.boton_historial_usuario=None
+        else:
+            pass
+
+
+
     def reiniciar_pantalla(self):
         self.eliminar_menu()
         # Eliminar el menú principal de la ventana
@@ -226,8 +313,6 @@ class Pantalla_add:
 
         # Reconfigurar la ventana sin menú
         self.ventana.config(menu=None)
-
-
 
 
 

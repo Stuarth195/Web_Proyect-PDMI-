@@ -75,7 +75,7 @@ def Interfaz():
     espacio_config.place(x=0, y=0)
 
     # Crear un botón con imagen en la esquina superior izquierda del Frame
-    REGIST = Emergente(App, margen_anchoP, margen_altoP, Visual_feed)
+    REGIST = Emergente(App,feed.canva, margen_anchoP, margen_altoP, Visual_feed)
 
     # Construir la ruta de la imagen usando os.path.join
     ruta_imagen = os.path.join("imagenes", "boton_register.png")
@@ -86,7 +86,7 @@ def Interfaz():
     # Crear el botón con la imagen
     Btn_Register = tk.Button(feed.canva, image=boton_register_img, command=lambda: REGIST.registro())
     Btn_Register.place(x=margen_anchoP*45, y=margen_altoP*2)
-
+    
     Car = MCarrito()
 
     Btn_Carrito = tk.Button(feed.canva, text="Carrito", command=lambda:Car.Mostrar_Carrito(REGIST.getUsername()))

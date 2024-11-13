@@ -8,8 +8,9 @@ from Pantallas import Pantalla_add
 
 
 class Emergente:
-    def __init__(self, vtkinter = None, xMargen= None, yMargen= None, notebook= None):
+    def __init__(self, vtkinter = None,canva = None, xMargen= None, yMargen= None, notebook= None):
         self.vtkinter = vtkinter
+        self.canva =canva
         self.xMargen = xMargen
         self.yMargen = yMargen
         self.notebook = notebook
@@ -112,8 +113,9 @@ class Emergente:
             self.register = None
             self.mostrar_menu_logout()
             self.Etiqueta_Logado.config(text=username)
-            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None)
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
             self.admin_win.pantalla_oculta("pantalla")
+            self.admin_win.crear_boton_historial_usuario(self.canva,self.xMargen*47, self.yMargen*6)
             
         elif self.Revisor.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
@@ -122,6 +124,7 @@ class Emergente:
             self.register = None
             self.mostrar_menu_logout()
             self.Etiqueta_Logado.config(text=username)
+            self.admin_win.crear_boton_historial_usuario(self.canva,self.xMargen*47, self.yMargen*6)
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
 
@@ -153,6 +156,7 @@ class Emergente:
         ventana.destroy()
         self.win = 0
         self.registro()
+        self.admin_win.destruir_boton_usuario()
         try:
             self.admin_win.reiniciar_pantalla()
         except:
