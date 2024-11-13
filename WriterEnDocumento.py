@@ -37,8 +37,8 @@ class Writer():
             with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
                 for linea in lineas:
                     if mensaje_buscar in linea:
-                        # Si encontramos el mensaje a buscar, modificamos la línea
-                        archivo.write(linea + " " + mensaje + "\n")
+                        # Si encontramos el mensaje a buscar, agregamos el mensaje al final de la línea
+                        archivo.write(linea.strip() + mensaje + "\n")
                         encontrado = True
                     else:
                         # Si no es la línea que buscamos, escribimos la línea original

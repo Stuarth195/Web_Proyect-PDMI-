@@ -17,10 +17,14 @@ class Reb:
         self.Productos = []
         self.Unidades = []
         self.Precios = []
-        for item in self.Carrito:
-            self.Productos.append(item[0])
-            self.Unidades.append(item[1])
-            self.Precios.append(item[2])
+        try:
+            for item in self.Carrito:
+                if len(item)>2:
+                    self.Productos.append(item[0])
+                    self.Unidades.append(item[1])
+                    self.Precios.append(item[2])
+        except Exception as e:
+            print(f"El error es: {e}")
 
     def deliverReb(self, direccion, tiempo_espera, metodo_pago, Tipo_entrega):
         # Crear la ventana
