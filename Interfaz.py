@@ -44,6 +44,7 @@ def Interfaz():
     instancia_base.download_A(id_usuarios , ruta_defecto)
     instancia_base.download_A(id_registroC , ruta_defecto)
 
+
     App = tk.Tk()
     ancho_pantalla = App.winfo_screenwidth()
     alto_pantalla = App.winfo_screenheight()

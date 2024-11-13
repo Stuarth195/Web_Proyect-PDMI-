@@ -5,6 +5,7 @@ from Producto import Product
 from logic import Instacia_B
 import tkinter as tk
 import os
+from recarga import RecargadorArchivos
 class Pantalla_add:
     def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
         self. usuario_log = usuario_log
