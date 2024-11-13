@@ -40,6 +40,7 @@ class Emergente:
         self.boton_logout_img = tk.PhotoImage(file=os.path.join("Imagenes", "boton_logout.png"))
 
     def registro(self):
+        self.MatrizUsuarios = self.Lector.leerTxtFile("Usuarios.txt")
         if self.win == 0:
             if self.register:
                 self.register.destroy()

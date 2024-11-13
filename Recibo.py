@@ -3,20 +3,24 @@ from PIL import Image, ImageTk
 from WriterEnDocumento import Writer
 import os
 from TXTReader import LectorTXT
+import datetime
 
 class Reb:
     def __init__(self, user, total):
         self.user = user + ";"
-        self.total = total * 1.03  # Agregar un pequeño incremento al total (1%)
+        self.total = total * 1.03 // 1 # Agregar un pequeño incremento al total (1%)
         self.escritor = Writer()
         self.imagen = os.path.join("Imagenes", "logotipo.png")
         self.lector = LectorTXT()
         self.Carrito = self.lector.leerTxtFile("Carrito.txt")
+        self.Users = self.lector.leerTxtFile("RegistroCompras.txt")
         self.Productos = []
         self.Unidades = []
+        self.Precios = []
         for item in self.Carrito:
             self.Productos.append(item[0])
             self.Unidades.append(item[1])
+            self.Precios.append(item[2])
 
     def deliverReb(self, direccion, tiempo_espera, metodo_pago, Tipo_entrega):
         # Crear la ventana
@@ -79,10 +83,18 @@ class Reb:
 
         StrProductos = ""
         i = 0
+        fecha_actual = datetime.date.today()
+        fecha = fecha_actual.strftime('%Y-%m-%d')
 
-        print(self.Productos, self.Unidades)
+        while i < len(self.Productos):
+            StrProductos += "[" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
+            i+=1
 
-        self.escritor.write("RegistroCompras.txt", self.user + " " + str(self.total))
+        print(self.Productos, self.Unidades, self.Precios)
+
+
+
+        self.escritor.Agregar_al_final("RegistroCompras.txt", self.user,StrProductos, self.user)
 
         # Iniciar el bucle principal
         Rev.mainloop()
