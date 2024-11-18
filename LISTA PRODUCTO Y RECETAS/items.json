@@ -1,0 +1,113 @@
+[
+    {
+      "codigoProducto": "PAP-001",
+      "descripcion": "Papa fresca (Kilogramos)",
+      "unidadMedida": "Kilogramos"
+    },
+    {
+      "codigoProducto": "TOM-001",
+      "descripcion": "Tomate fresco (Kilogramos)",
+      "unidadMedida": "Kilogramos"
+    },
+    {
+      "codigoProducto": "TOM-002",
+      "descripcion": "Tomate fresco grande (Kilogramos)",
+      "unidadMedida": "Kilogramos"
+    },
+    {
+      "codigoProducto": "TOM-003",
+      "descripcion": "Tomate fresco pequeño (Kilogramos)",
+      "unidadMedida": "Kilogramos"
+    },
+    {
+      "codigoProducto": "CHP-001",
+      "descripcion": "Chips de papa (Paquete de 200g)",
+      "unidadMedida": "Paquete (200g)"
+    },
+    {
+      "codigoProducto": "CHP-002",
+      "descripcion": "Chips de papa (Paquete de 500g)",
+      "unidadMedida": "Paquete (500g)"
+    },
+    {
+      "codigoProducto": "SAL-001",
+      "descripcion": "Salsa de tomate envasada (Botella 500ml)",
+      "unidadMedida": "Botella (500ml)"
+    },
+    {
+      "codigoProducto": "SAL-002",
+      "descripcion": "Salsa de tomate envasada (Botella 1L)",
+      "unidadMedida": "Botella (1L)"
+    },
+    {
+      "codigoProducto": "SLT-001",
+      "descripcion": "Salsa de tomate enlatada (Lata 400g)",
+      "unidadMedida": "Lata (400g)"
+    },
+    {
+      "codigoProducto": "SLT-002",
+      "descripcion": "Salsa de tomate enlatada (Lata 1kg)",
+      "unidadMedida": "Lata (1kg)"
+    },
+    {
+      "codigoProducto": "SAL-003",
+      "descripcion": "Sal (Gramos)",
+      "unidadMedida": "Gramos"
+    },
+    {
+      "codigoProducto": "OLI-001",
+      "descripcion": "Aceite vegetal (Litros)",
+      "unidadMedida": "Litros"
+    },
+    {
+      "codigoProducto": "AGU-001",
+      "descripcion": "Agua (Litros)",
+      "unidadMedida": "Litros"
+    },
+    {
+      "codigoProducto": "PRE-001",
+      "descripcion": "Preservantes (Gramos)",
+      "unidadMedida": "Gramos"
+    },
+    {
+      "codigoProducto": "EMP-001",
+      "descripcion": "Empaque para chips (Paquete 200g)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-002",
+      "descripcion": "Empaque para chips (Paquete 500g)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-003",
+      "descripcion": "Botella plástica para salsa (500ml)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-004",
+      "descripcion": "Tapa para botella plástica (500ml)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-005",
+      "descripcion": "Botella plástica para salsa (1L)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-006",
+      "descripcion": "Tapa para botella plástica (1L)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-007",
+      "descripcion": "Lata para salsa de tomate (400g)",
+      "unidadMedida": "Unidad"
+    },
+    {
+      "codigoProducto": "EMP-008",
+      "descripcion": "Lata para salsa de tomate (1kg)",
+      "unidadMedida": "Unidad"
+    }
+  ]
+  

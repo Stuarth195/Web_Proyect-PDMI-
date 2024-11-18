@@ -4,8 +4,8 @@ from WriterEnDocumento import Writer
 from Producto import Product
 from logic import Instacia_B
 import tkinter as tk
+from tkinter import messagebox
 import os
-from recarga import RecargadorArchivos
 class Pantalla_add:
     def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
         self. usuario_log = usuario_log
@@ -18,8 +18,10 @@ class Pantalla_add:
         self.ancho = self.ventana.winfo_screenwidth()
         self.alto = self.ventana.winfo_screenheight()
         self.historial_open = False
+        self.lista_productos_open =False
         self.lector =  LectorTXT()
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
+        self.someopen = False
         
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
@@ -28,7 +30,7 @@ class Pantalla_add:
 
         # Submenú para los productos (solo dentro de "Ventas")
         productos_menu = tk.Menu(self.menu_bar, tearoff=0)
-        productos_menu.add_command(label="Crear Producto")
+        productos_menu.add_command(label="Crear Producto",  command=lambda:self.crear_lista_productos(500,self.admin.frame_scroll, 5,5))
         productos_menu.add_command(label="Quitar Producto")
         productos_menu.add_command(label="Modificar Producto")
         productos_menu.add_command(label="crear descueto")
@@ -63,9 +65,9 @@ class Pantalla_add:
 
 
 
-    def crear_vista_Historial(self, lado, lugar, padx=0, pady=0):
+    def crear_vista_Historial(self, lado, lugar, padx=0, pady=0): 
         self.lado_hiostorial = lado
-        if self.historial_open == False:
+        if self.historial_open == False and self.someopen == False:
             # Crear el canvas y configurarlo para llenarse dentro del lugar especificado
             self.canvas = tk.Canvas(lugar, bg="lightblue", width=lado, height=lado)
             self.canvas.pack(fill=tk.BOTH, expand=True, side=tk.LEFT, padx=padx, pady=pady)
@@ -92,15 +94,20 @@ class Pantalla_add:
             # self.canvas.bind_all("<Button-5>", scroll_canvas)  # Para sistemas Linux (si es necesario)
 
             self.historial_open = True
+            self.someopen = True
             self.crear_botones_historial()
-        else:
+        elif self.historial_open == True:
             # Si historial_open es True, eliminar la vista de historial actual
             if hasattr(self, 'canvas'):
                 self.canvas.destroy()  # Elimina el Canvas
             if hasattr(self, 'frame_interno'):
                 self.frame_interno.destroy()  # Elimina el Frame interno
 
-            self.historial_open = False  # Cambiar el estado para indicar que la vista ha sido cerrada
+            self.historial_open = False 
+            self.someopen = False # Cambiar el estado para indicar que la vista ha sido cerrada
+        else:
+             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
 
     def crear_botones_historial(self):
         # Asegúrate de que la matriz está cargada y no está vacía
@@ -321,13 +328,45 @@ class Pantalla_add:
 
 
 
-    def accion_boton(self):
-        print("Botón de ejemplo presionado.")
+    def crear_lista_productos(self, lado, lugar, padx=0, pady=0):
+        """
+        Crea un Canvas con un Frame interno para mostrar la lista de productos.
+        Si ya se ha creado, lo elimina.
+        """
+        if self.lista_productos_open == False and self.someopen == False:
+            # Crear el canvas y configurarlo dentro del lugar especificado
+            self.canvas_productos = tk.Canvas(lugar, bg="lightblue", width=lado, height=lado)
+            self.canvas_productos.pack(fill=tk.BOTH, expand=True, side=tk.LEFT, padx=padx, pady=pady)
 
-    def abrir_archivo(self):
-        # Lógica para abrir un archivo (placeholder)
-        print("Abrir archivo seleccionado")
+            # Configurar el canvas para que use el desplazamiento con el ratón
+            self.canvas_productos.config(scrollregion=(0, 0, lado, lado * 2))  # Ajuste de scroll para simular más espacio
 
-    def guardar_archivo(self):
-        # Lógica para guardar un archivo (placeholder)
-        print("Guardar archivo seleccionado")
+            # Crear un frame interno dentro del canvas para agregar los productos
+            self.frame_productos_interno = tk.Frame(self.canvas_productos, bg="lightblue")
+            self.canvas_productos.create_window((0, 0), window=self.frame_productos_interno, anchor="nw")
+
+            # Actualizar la región desplazable según el tamaño del frame_interno
+            self.frame_productos_interno.update_idletasks()
+            self.canvas_productos.config(scrollregion=self.canvas_productos.bbox("all"))
+
+            # Función para mover el canvas con el ratón
+            def scroll_canvas(event):
+                self.canvas_productos.yview_scroll(-1 * (event.delta // 120), "units")
+
+            # Vincular el evento de desplazamiento del ratón al canvas
+            self.canvas_productos.bind_all("<MouseWheel>", scroll_canvas)  # Para sistemas Windows
+
+            self.lista_productos_open = True
+            self.someopen =  True
+        elif self.lista_productos_open ==  True:
+            # Si lista_productos_open es True, eliminar la vista actual de productos
+            if hasattr(self, 'canvas_productos'):
+                self.canvas_productos.destroy()  # Elimina el Canvas
+            if hasattr(self, 'frame_productos_interno'):
+                self.frame_productos_interno.destroy()  # Elimina el Frame interno
+
+            self.lista_productos_open = False 
+            self.someopen = False # Cambiar el estado para indicar que la vista ha sido cerrada
+        else:
+             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+

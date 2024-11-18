@@ -1,0 +1,221 @@
+{
+    "productos": [
+      {
+        "codigoProducto": "CHP-001",
+        "descripcion": "Chips de papa (Paquete de 200g)",
+        "materiales": [
+          {
+            "codigoMaterial": "PAP-001",
+            "descripcion": "Papa fresca",
+            "cantidad": 0.5,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 5,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "OLI-001",
+            "descripcion": "Aceite vegetal",
+            "cantidad": 0.1,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "EMP-001",
+            "descripcion": "Empaque para chips (200g)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      },
+      {
+        "codigoProducto": "CHP-002",
+        "descripcion": "Chips de papa (Paquete de 500g)",
+        "materiales": [
+          {
+            "codigoMaterial": "PAP-001",
+            "descripcion": "Papa fresca",
+            "cantidad": 1.2,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 10,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "OLI-001",
+            "descripcion": "Aceite vegetal",
+            "cantidad": 0.2,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "EMP-002",
+            "descripcion": "Empaque para chips (500g)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      },
+      {
+        "codigoProducto": "SAL-001",
+        "descripcion": "Salsa de tomate envasada (Botella 500ml)",
+        "materiales": [
+          {
+            "codigoMaterial": "TOM-002",
+            "descripcion": "Tomate fresco grande",
+            "cantidad": 1,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 10,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "AGU-001",
+            "descripcion": "Agua",
+            "cantidad": 0.1,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "PRE-001",
+            "descripcion": "Preservantes",
+            "cantidad": 2,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "EMP-003",
+            "descripcion": "Botella plástica para salsa (500ml)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          },
+          {
+            "codigoMaterial": "EMP-004",
+            "descripcion": "Tapa para botella plástica (500ml)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      },
+      {
+        "codigoProducto": "SAL-002",
+        "descripcion": "Salsa de tomate envasada (Botella 1L)",
+        "materiales": [
+          {
+            "codigoMaterial": "TOM-002",
+            "descripcion": "Tomate fresco grande",
+            "cantidad": 2,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 20,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "AGU-001",
+            "descripcion": "Agua",
+            "cantidad": 0.2,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "PRE-001",
+            "descripcion": "Preservantes",
+            "cantidad": 4,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "EMP-005",
+            "descripcion": "Botella plástica para salsa (1L)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          },
+          {
+            "codigoMaterial": "EMP-006",
+            "descripcion": "Tapa para botella plástica (1L)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      },
+      {
+        "codigoProducto": "SLT-001",
+        "descripcion": "Salsa de tomate enlatada (Lata 400g)",
+        "materiales": [
+          {
+            "codigoMaterial": "TOM-003",
+            "descripcion": "Tomate fresco pequeño",
+            "cantidad": 0.8,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 8,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "AGU-001",
+            "descripcion": "Agua",
+            "cantidad": 0.08,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "PRE-001",
+            "descripcion": "Preservantes",
+            "cantidad": 1.6,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "EMP-007",
+            "descripcion": "Lata para salsa de tomate (400g)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      },
+      {
+        "codigoProducto": "SLT-002",
+        "descripcion": "Salsa de tomate enlatada (Lata 1kg)",
+        "materiales": [
+          {
+            "codigoMaterial": "TOM-003",
+            "descripcion": "Tomate fresco pequeño",
+            "cantidad": 2,
+            "unidadMedida": "Kilogramos"
+          },
+          {
+            "codigoMaterial": "SAL-003",
+            "descripcion": "Sal",
+            "cantidad": 20,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "AGU-001",
+            "descripcion": "Agua",
+            "cantidad": 0.2,
+            "unidadMedida": "Litros"
+          },
+          {
+            "codigoMaterial": "PRE-001",
+            "descripcion": "Preservantes",
+            "cantidad": 4,
+            "unidadMedida": "Gramos"
+          },
+          {
+            "codigoMaterial": "EMP-008",
+            "descripcion": "Lata para salsa de tomate (1kg)",
+            "cantidad": 1,
+            "unidadMedida": "Unidad"
+          }
+        ]
+      }
+    ]
+  }
+  

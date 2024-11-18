@@ -38,11 +38,11 @@ def Interfaz():
     except Exception as e:
         messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
     
-    instancia_base.download_A(id_admins , ruta_defecto)
-    instancia_base.download_A(id_carrito , ruta_defecto)
-    instancia_base.download_A(id_productos, ruta_defecto)
-    instancia_base.download_A(id_usuarios , ruta_defecto)
-    instancia_base.download_A(id_registroC , ruta_defecto)
+#    instancia_base.download_A(id_admins , ruta_defecto)
+ #   instancia_base.download_A(id_carrito , ruta_defecto)
+  #  instancia_base.download_A(id_productos, ruta_defecto)
+   # instancia_base.download_A(id_usuarios , ruta_defecto)
+    #instancia_base.download_A(id_registroC , ruta_defecto)
 
 
     App = tk.Tk()

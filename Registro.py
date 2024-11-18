@@ -5,12 +5,10 @@ from RevUsuarios import revUsuarios
 from TXTReader import LectorTXT
 from WriterEnDocumento import Writer
 from Pantallas import Pantalla_add
-from recarga import RecargadorArchivos
 
 
 class Emergente:
     def __init__(self, vtkinter = None,canva = None, xMargen= None, yMargen= None, notebook= None):
-        self.getionar = RecargadorArchivos()
         self.vtkinter = vtkinter
         self.canva =canva
         self.xMargen = xMargen

@@ -1,0 +1,12 @@
+SAL-003 Sal Gramos
+OLI-001 Aceite_vegetal Litros
+PRE-001 Preservantes Gramos
+EMP-001 Empaque_para_chips_(200g) Unidad
+EMP-002 Empaque_para_chips_(500g) Unidad
+EMP-003 Botella_plástica_para_salsa_(500ml) Unidad
+EMP-004 Tapa_para_botella_plástica_(500ml) Unidad
+EMP-005 Botella_plástica_para_salsa_(1L) Unidad
+EMP-006 Tapa_para_botella_plástica_(1L) Unidad
+EMP-007 Lata_para_salsa_de_tomate_(400g) Unidad
+EMP-008 Lata_para_salsa_de_tomate_(1kg) Unidad
+AGU-001 Agua Litros

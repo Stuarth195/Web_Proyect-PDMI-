@@ -1,0 +1,5 @@
+PAP-001 Papa_fresca Kilogramos
+TOM-001 Tomate_fresco Kilogramos
+TOM-002 Tomate_fresco_grande Kilogramos
+TOM-003 Tomate_fresco_pequeño Kilogramos
+AGU-001 Agua Litros

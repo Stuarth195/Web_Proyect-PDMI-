@@ -7,7 +7,7 @@ import datetime
 
 class Reb:
     def __init__(self, user, total):
-        self.user = user + ";"
+        self.user = user
         self.total = total * 1.03 // 1 # Agregar un pequeño incremento al total (1%)
         self.escritor = Writer()
         self.imagen = os.path.join("Imagenes", "logotipo.png")
