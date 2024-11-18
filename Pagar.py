@@ -137,6 +137,12 @@ class Pagos:
                                         command=lambda: confirmarCompra(1))
         ConfirmarEnLocacion.place(x=5, y=380)
 
+        LabelEmail = tk.Label(ventana_Compra, text="Recoger en local o fabrica", font=("Verdana", 16), fg="black",
+                                 bg="white")
+        LabelEmail.place(x=600, y=210)
+        EmailE = tk.Entry(ventana_Compra, width=50, font=("Verdana", 16))
+        EmailE.place(x=600, y=250)
+
         if user != "User0000":
             Direccion = tk.Label(ventana_Compra, text="Ingrese la direccion", font=("Verdana", 16), fg="black",
                                  bg="white")
@@ -169,14 +175,16 @@ class Pagos:
                     info_Correcta = True
 
             if info_Correcta:
-                if Tipo == 2:
-                    Dir = DireccionUser.get()  # Usamos .get() para obtener la dirección del Entry
-                    self.Recivos.deliverReb(Dir, 40, self.metodoPago, "Entrega Domicilio")
-                elif Tipo == 1:
-                    self.Recivos.deliverReb("", 40, self.metodoPago, "Recoger en Local")
+                if EmailE.get().strip() != "":
+                    Email = EmailE.get().strip()
+                    if Tipo == 2:
+                        Dir = DireccionUser.get()  # Usamos .get() para obtener la dirección del Entry
+                        self.Recivos.deliverReb(Dir, 40, self.metodoPago, "Entrega Domicilio", Email, self.metodoPago, "Delivery")
+                    elif Tipo == 1:
+                        self.Recivos.deliverReb("", 40, self.metodoPago, "Recoger en Local", Email, self.metodoPago, "Local")
 
-                # Cerrar la ventana después de confirmar la compra
-                ventana_Compra.destroy()
+                    # Cerrar la ventana después de confirmar la compra
+                    ventana_Compra.destroy()
 
             else:
                 Error = tk.Tk()

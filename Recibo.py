@@ -4,9 +4,11 @@ from WriterEnDocumento import Writer
 import os
 from TXTReader import LectorTXT
 import datetime
+from EnviarCorreo import EmailSender
 
 class Reb:
     def __init__(self, user, total):
+        self.email = ""
         self.user = user
         self.total = total * 1.03 // 1 # Agregar un pequeño incremento al total (1%)
         self.escritor = Writer()
@@ -17,6 +19,8 @@ class Reb:
         self.Productos = []
         self.Unidades = []
         self.Precios = []
+        self.EmSender = EmailSender()
+
         try:
             for item in self.Carrito:
                 if len(item)>2:
@@ -26,7 +30,7 @@ class Reb:
         except Exception as e:
             print(f"El error es: {e}")
 
-    def deliverReb(self, direccion, tiempo_espera, metodo_pago, Tipo_entrega):
+    def deliverReb(self, direccion, tiempo_espera, metodo_pago, Tipo_entrega, email, metodo_Pago, metodo_Entrega):
         # Crear la ventana
         Rev = tk.Tk()
         Rev.title("Recibo de Compra")
@@ -86,17 +90,22 @@ class Reb:
             print(f"Error al cargar la imagen: {e}")
 
         StrProductos = ""
-        i = 0
+        StrEmail = self.user + f"\n"
         fecha_actual = datetime.date.today()
         fecha = fecha_actual.strftime('%Y-%m-%d')
+        StrFacturacion = self.user + " " + metodo_Pago + " " + str(self.total) + " " + metodo_Entrega + " " + fecha
+        i = 0
 
         while i < len(self.Productos):
             StrProductos += " [" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
+            StrEmail += "     " +self.Productos[i] + " / " + self.Unidades[i] + " / " + self.Precios[i] + " / " + str(int(self.Unidades[i]) * int(self.Precios[i])) + f"\n"
             i+=1
 
-        print(self.Productos, self.Unidades, self.Precios)
+        StrEmail = StrEmail + f"\n" + fecha + " " + f"\n \n \n Total: " + str(self.total)
 
+        self.EmSender.send_email(email, "Factura AU", StrEmail)
 
+        self.escritor.write("HistorialFacturacion.txt", StrFacturacion)
 
         self.escritor.Agregar_al_final("RegistroCompras.txt", self.user,StrProductos, self.user)
 
