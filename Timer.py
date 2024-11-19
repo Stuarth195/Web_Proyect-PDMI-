@@ -22,7 +22,7 @@ class TimerApp:
         if self.time_left > 0:
             self.time_left -= 1
             # Llamar a esta función nuevamente después de 1000 ms (1 segundo)
-            self.root.after(1000, self.update_timer)
+            self.root.after(60000, self.update_timer)
 
     def extra_action(self):
         print("Se ejecutó la acción extra.")
