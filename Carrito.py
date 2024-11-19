@@ -5,11 +5,11 @@ from WriterEnDocumento import Writer
 from Pagar import Pagos
 
 class MCarrito:
-    def __init__(self):
+    def __init__(self, window):
         self.Lector = LectorTXT()  # Inicializa el lector de archivos
         self.matriz = []
         self.Escritor = Writer()
-        self.Pagos = Pagos()
+        self.Pagos = Pagos(window)
 
     def Mostrar_Carrito(self, usuario):
         # Crear la ventana principal

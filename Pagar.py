@@ -2,14 +2,18 @@ import tkinter as tk
 from TXTReader import LectorTXT
 from Recibo import Reb
 from WriterEnDocumento import Writer
+from Timer import TimerApp
+import random
 
 
 class Pagos:
-    def __init__(self):
+    def __init__(self, root):
         self.lector = LectorTXT()
         self.total = 0
         self.metodoPago = "No seleccionado"
         self.escritor = Writer()
+        self.root = root
+        self.tiempoEntrega = random.randint(15, 60)
 
     def menu_compra(self, user):
         ventana_Compra = tk.Tk()
@@ -137,7 +141,7 @@ class Pagos:
                                         command=lambda: confirmarCompra(1))
         ConfirmarEnLocacion.place(x=5, y=380)
 
-        LabelEmail = tk.Label(ventana_Compra, text="Recoger en local o fabrica", font=("Verdana", 16), fg="black",
+        LabelEmail = tk.Label(ventana_Compra, text="Ingrese su correo electronico", font=("Verdana", 16), fg="black",
                                  bg="white")
         LabelEmail.place(x=600, y=210)
         EmailE = tk.Entry(ventana_Compra, width=50, font=("Verdana", 16))
@@ -176,12 +180,15 @@ class Pagos:
 
             if info_Correcta:
                 if EmailE.get().strip() != "":
+
+                    self.timer = TimerApp(self.root)
+                    self.timer.start_timer(self.tiempoEntrega)
                     Email = EmailE.get().strip()
                     if Tipo == 2:
                         Dir = DireccionUser.get()  # Usamos .get() para obtener la dirección del Entry
-                        self.Recivos.deliverReb(Dir, 40, self.metodoPago, "Entrega Domicilio", Email, self.metodoPago, "Delivery")
+                        self.Recivos.deliverReb(Dir, self.tiempoEntrega, self.metodoPago, "Entrega Domicilio", Email, self.metodoPago, "Delivery")
                     elif Tipo == 1:
-                        self.Recivos.deliverReb("", 40, self.metodoPago, "Recoger en Local", Email, self.metodoPago, "Local")
+                        self.Recivos.deliverReb("", self.tiempoEntrega, self.metodoPago, "Recoger en Local", Email, self.metodoPago, "Local")
 
                     # Cerrar la ventana después de confirmar la compra
                     ventana_Compra.destroy()

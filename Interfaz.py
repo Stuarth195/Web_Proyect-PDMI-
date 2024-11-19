@@ -105,7 +105,7 @@ def Interfaz():
     Btn_Register = tk.Button(feed.canva, image=boton_register_img, command=lambda: REGIST.registro())
     Btn_Register.place(x=margen_anchoP*45, y=margen_altoP*2)
     
-    Car = MCarrito()
+    Car = MCarrito(App)
 
     Btn_Carrito = tk.Button(feed.canva, text="Carrito", command=lambda:Car.Mostrar_Carrito(REGIST.getUsername()))
     Btn_Carrito.place(x=margen_anchoP * 45, y=margen_altoP * 6)
