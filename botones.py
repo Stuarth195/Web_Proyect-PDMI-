@@ -1,66 +1,82 @@
-from TXTReader import LectorTXT
 import os
 import tkinter as tk
 from tkinter import Label, Button, Toplevel
-from tkinter import Toplevel
-from tkinter import Label, Button
-from PIL import Image, ImageTk  # Importar Pillow para manejar imágenes
+from PIL import Image, ImageTk  # Manejo de imágenes
+from TXTReader import LectorTXT
 
 class Botones:
-    def __init__(self, archivo_MA=os.path.join("LISTA PRODUCTO Y RECETAS", "M_A.txt"), 
-                 archivo_PE=os.path.join("LISTA PRODUCTO Y RECETAS", "PE.txt"), 
-                 archivo_Receta=os.path.join("LISTA PRODUCTO Y RECETAS", "Receta.txt"), 
-                 archivo_cosecha=os.path.join("LISTA PRODUCTO Y RECETAS", "COSECHA.txt"), 
-                 archivo_lotes =os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt")):
+    def __init__(self, base_dir="LISTA PRODUCTO Y RECETAS"):
+        """
+        Inicializa la clase Botones con las rutas absolutas de los archivos necesarios.
+        """
+        # Base directory donde se encuentran los archivos
+        base_dir = os.path.abspath(base_dir)
+
         # Instanciamos el lector de archivos
         self.Lector = LectorTXT()
-        self.archivo_MA = archivo_MA
-        self.archivo_PE = archivo_PE
-        self.archivo_Receta = archivo_Receta
-        self.archivo_cosecha = archivo_cosecha
-        self.archivo_lotes = archivo_lotes
 
-    def actualizar_cantidades(self):
-        """
-        Actualiza las cantidades totales de productos en el archivo M_A.txt 
-        sumando las cantidades de los lotes correspondientes en el archivo Lotes.txt.
-        """
-        # Leer los datos de M_A y Lotes
-        matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
+        # Rutas absolutas de los archivos
+        self.archivo_MA = os.path.join(base_dir, "M_A.txt")
+        self.archivo_PE = os.path.join(base_dir, "PE.txt")
+        self.archivo_Receta = os.path.join(base_dir, "Receta.txt")
+        self.archivo_cosecha = os.path.join(base_dir, "COSECHA.txt")
+        self.archivo_lotes = os.path.join(base_dir, "Lotes.txt")
+
+        # Verificar existencia de archivos
+        self._verificar_archivos()
+
+    def _verificar_archivos(self):
+        """Verifica que todos los archivos necesarios existan."""
+        archivos = [self.archivo_MA, self.archivo_lotes]
+        for archivo in archivos:
+            if not os.path.exists(archivo):
+                raise FileNotFoundError(f"El archivo '{archivo}' no se encuentra.")
+
+    def leer_lotes(self):
+        """Lee el archivo Lotes.txt y suma las cantidades por código de producto."""
         matriz_lotes = self.Lector.leerTxtFilenUM(self.archivo_lotes)
-
-        # Crear un diccionario para acumular las cantidades por código de producto
         cantidades_totales = {}
 
-        # Recorrer la matriz de lotes y sumar las cantidades
         for fila in matriz_lotes:
             codigo_producto = fila[1]  # Código de producto en segunda posición
-            cantidad = int(fila[-1])   # Cantidad en la última posición
+            cantidad = int(fila[-1])  # Cantidad en la última posición
             if codigo_producto in cantidades_totales:
                 cantidades_totales[codigo_producto] += cantidad
             else:
                 cantidades_totales[codigo_producto] = cantidad
 
-        # Actualizar las cantidades en la matriz M_A
+        return cantidades_totales
+
+    def actualizar_cantidades(self):
+        """Actualiza las cantidades en el archivo M_A.txt según los datos de Lotes.txt."""
+        # Leer las cantidades de los lotes
+        cantidades_totales = self.leer_lotes()
+        matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
+
+        # Actualizar las cantidades en M_A
         for fila in matriz_MA:
             codigo_producto = fila[0]  # Código de producto en primera posición
             if codigo_producto in cantidades_totales:
-                fila[3] = str(cantidades_totales[codigo_producto])  # Actualizar la cantidad (cuarta posición)
+                fila[3] = str(cantidades_totales[codigo_producto])  # Actualizar cantidad
 
-        # Escribir la matriz actualizada en M_A.txt
-        with open(self.archivo_MA, "w") as archivo:
+        # Guardar los cambios
+        self.escribir_MA(matriz_MA)
+
+    def escribir_MA(self, matriz_MA):
+        """Escribe la matriz actualizada de productos en el archivo M_A.txt."""
+        with open(self.archivo_MA, "w", encoding="utf-8") as archivo:
             for fila in matriz_MA:
-                archivo.write(" ".join(fila) + "\n")
+                # Convertir todos los elementos de fila a cadenas antes de unirlos
+                fila_str = [str(elemento) for elemento in fila]
+                archivo.write(" ".join(fila_str) + "\n")
 
     def visualizar_productos(self, ventana):
-        """
-        Muestra un botón por cada producto en M_A. Al hacer clic, se despliega una ventana
-        con la información del producto y espacio para una imagen.
-        """
-        # Leer los productos desde el archivo M_A
+        """Muestra botones de productos en la ventana principal."""
+        # Actualizar las cantidades antes de visualizar
+        self.actualizar_cantidades()
         matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
 
-        # Crear un marco de desplazamiento para contener los botones
+        # Crear un marco de desplazamiento
         frame = tk.Frame(ventana)
         frame.pack(fill=tk.BOTH, expand=True)
         canvas = tk.Canvas(frame)
@@ -80,46 +96,53 @@ class Botones:
 
         # Crear botones para cada producto
         for producto in matriz_MA:
-            codigo = producto[0]
             nombre = producto[1]
-            descripcion = producto[2]
-            cantidad = producto[3]
-
-            # Crear botón
             boton = Button(scrollable_frame, text=f"{nombre}", command=lambda p=producto: self.mostrar_detalle_producto(p))
             boton.pack(pady=5, padx=10, fill="x")
 
     def mostrar_detalle_producto(self, producto):
-        self.actualizar_cantidades
-        """
-        Muestra una ventana con los detalles del producto y un espacio para una imagen.
-        """
-        # Desempaquetar datos del producto
-        codigo, nombre, descripcion, cantidad, unidad_medida, precio = producto
+        """Actualiza los datos y muestra una ventana con los detalles del producto."""
+        # Actualizar las cantidades en tiempo real
+        self.actualizar_cantidades()
+
+        # Leer los datos actualizados de M_A.txt
+        matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
+
+        # Buscar el producto actualizado en la matriz
+        codigo_producto = producto[0]
+        producto_actualizado = None
+        for fila in matriz_MA:
+            if fila[0] == codigo_producto:
+                producto_actualizado = fila
+                break
+
+        if not producto_actualizado:
+            raise ValueError(f"El producto con código {codigo_producto} no se encontró después de actualizar.")
+
+        # Desempaquetar datos del producto actualizado
+        codigo, nombre, descripcion, cantidad, unidad_medida, precio = producto_actualizado
 
         # Crear la ventana de detalle
         ventana_detalle = Toplevel()
         ventana_detalle.title(f"Detalles de {nombre}")
 
-        # Ruta de la imagen (se espera que las imágenes estén en 'Imagenes/Productos')
+        # Ruta de la imagen
         ruta_imagen = os.path.join("Imagenes", "Productos", f"{codigo}.png")
 
-        # Intentar cargar la imagen
+        # Cargar imagen
         try:
             imagen = Image.open(ruta_imagen)
-            imagen.thumbnail((200, 200))  # Redimensionar la imagen para que no sea demasiado grande
+            imagen.thumbnail((200, 200))
             imagen_tk = ImageTk.PhotoImage(imagen)
 
-            # Mostrar la imagen en la ventana
             label_imagen = Label(ventana_detalle, image=imagen_tk)
-            label_imagen.image = imagen_tk  # Necesario para mantener una referencia a la imagen
+            label_imagen.image = imagen_tk  # Mantener referencia
             label_imagen.pack(pady=10)
         except FileNotFoundError:
-            # Si la imagen no se encuentra, mostrar un mensaje
             label_imagen = Label(ventana_detalle, text="Imagen no disponible", bg="gray", width=50, height=20)
             label_imagen.pack(pady=10)
 
-        # Mostrar la información del producto
+        # Mostrar información del producto
         label_info = Label(
             ventana_detalle,
             text=f"Código: {codigo}\nNombre: {nombre}\nDescripción: {descripcion}\nCantidad: {cantidad}\n"
@@ -129,6 +152,6 @@ class Botones:
         )
         label_info.pack(pady=10, padx=10)
 
-        # Botón de cerrar
+        # Botón cerrar
         boton_cerrar = Button(ventana_detalle, text="Cerrar", command=ventana_detalle.destroy)
         boton_cerrar.pack(pady=10)
