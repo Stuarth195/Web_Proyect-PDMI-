@@ -155,3 +155,23 @@ class Botones:
         # Botón cerrar
         boton_cerrar = Button(ventana_detalle, text="Cerrar", command=ventana_detalle.destroy)
         boton_cerrar.pack(pady=10)
+
+#-___________________________________________________________________________________________________-
+
+    def verifica_codigo(self,codigo, fecha_str, cantidad, proveedor):
+        # Convertir la fecha a formato datetime
+        self.matriz_ac =LectorTXT.leerTxtFile(self.archivo_cosecha)
+        self.matrizMA = LectorTXT.leerTxtFile(self.archivo_MA)
+        self.matrizPE = LectorTXT.leerTxtFile(self.archivo_PE)
+
+        for linea in self.matriz_ac:
+            if linea[0] == codigo:
+                print("hola")
+        for linea in self.matrizMA:
+            if linea[0] == codigo:
+                print("hola")
+        for linea in self.matrizPE:
+            if linea[0] == codigo:
+                print("hola")
+
+    #def escribe_lote(rutatxt ,codigo, fecha, cantidad, provedor):
