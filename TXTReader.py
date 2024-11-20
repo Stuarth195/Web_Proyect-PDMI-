@@ -36,14 +36,3 @@ class LectorTXT:
                 matriz.append(lista)
         return matriz
 
-# Crear instancia de LectorTXT
-ABC = LectorTXT()
-
-# Asegúrate de que la ruta del archivo sea correcta
-ruta_archivo = os.path.join("LISTA PRODUCTO Y RECETAS", "Receta.txt")
-
-# Leer el archivo con el método adecuado
-abcmayh = ABC.leerTxtFilenUM(ruta_archivo)
-
-# Mostrar los resultados
-print((abcmayh[0][5])*2)

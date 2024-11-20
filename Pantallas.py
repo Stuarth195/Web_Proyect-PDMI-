@@ -6,6 +6,7 @@ from logic import Instacia_B
 import tkinter as tk
 from tkinter import messagebox
 import os
+from botones import Botones 
 class Pantalla_add:
     def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
         self. usuario_log = usuario_log
@@ -22,6 +23,10 @@ class Pantalla_add:
         self.lector =  LectorTXT()
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.someopen = False
+        self.frame_interno= None
+        self.almacen_open = False
+        self.sv_open = False
+        self.SV = None
         
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
@@ -30,7 +35,7 @@ class Pantalla_add:
 
         # Submenú para los productos (solo dentro de "Ventas")
         productos_menu = tk.Menu(self.menu_bar, tearoff=0)
-        productos_menu.add_command(label="Crear Producto",  command=lambda:self.crear_lista_productos(500,self.admin.frame_scroll, 5,5))
+        productos_menu.add_command(label="Crear Producto",)
         productos_menu.add_command(label="Quitar Producto")
         productos_menu.add_command(label="Modificar Producto")
         productos_menu.add_command(label="crear descueto")
@@ -42,7 +47,7 @@ class Pantalla_add:
         # Submenú Administrativo dentro de Opciones de Admin
         administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
         administrativo_menu.add_command(label="Historiales" , command=lambda:self.crear_vista_Historial(500,self.admin.frame_scroll, 0,0))  # Solo "Historiales" en Administrativo
-        administrativo_menu.add_command(label="Almacén")
+        administrativo_menu.add_command(label="Almacén", command=lambda:self.almacen(self.admin.frame_scroll, 10, 50,))
         administrativo_menu.add_command(label="Facturas")
 
         # Crear el menú "Opciones de Admin" y añadir los submenús
@@ -325,48 +330,124 @@ class Pantalla_add:
 
         # Reconfigurar la ventana sin menú
         self.ventana.config(menu=None)
+    
+    def almacen(self, donde, pad_x, pad_y):
+        if  self.almacen_open == False and self.someopen == False:
+            # Crear los botones y almacenarlos en una lista para referencia
+            self.botones = []
 
+            self.agregarlotes = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Agregar Lotes", command=lambda: self.agrega_lotes("LOTES", 500, 500))
+            self.agregarlotes.grid(row=0, column=0, padx=pad_x, pady=pad_y)
+            self.botones.append(self.agregarlotes)
 
+            self.crearMA = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Maestro de Artículos",command= self.MA_vista)
+            self.crearMA.grid(row=0, column=1, padx=pad_x, pady=pad_y)
+            self.botones.append(self.crearMA)
 
-    def crear_lista_productos(self, lado, lugar, padx=0, pady=0):
-        """
-        Crea un Canvas con un Frame interno para mostrar la lista de productos.
-        Si ya se ha creado, lo elimina.
-        """
-        if self.lista_productos_open == False and self.someopen == False:
-            # Crear el canvas y configurarlo dentro del lugar especificado
-            self.canvas_productos = tk.Canvas(lugar, bg="lightblue", width=lado, height=lado)
-            self.canvas_productos.pack(fill=tk.BOTH, expand=True, side=tk.LEFT, padx=padx, pady=pady)
+            self.craerIPC = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Productos Comprados", command= self.IPC)
+            self.craerIPC.grid(row=0, column=2, padx=pad_x, pady=pad_y)
+            self.botones.append(self.craerIPC)
 
-            # Configurar el canvas para que use el desplazamiento con el ratón
-            self.canvas_productos.config(scrollregion=(0, 0, lado, lado * 2))  # Ajuste de scroll para simular más espacio
+            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Registro de Producción", command= self.RDP)
+            self.creaRP.grid(row=0, column=3, padx=pad_x, pady=pad_y)
+            self.botones.append(self.creaRP)
 
-            # Crear un frame interno dentro del canvas para agregar los productos
-            self.frame_productos_interno = tk.Frame(self.canvas_productos, bg="lightblue")
-            self.canvas_productos.create_window((0, 0), window=self.frame_productos_interno, anchor="nw")
+            self.almacen_open = True  # Marcar que el almacén está abierto
+            self.someopen = True
 
-            # Actualizar la región desplazable según el tamaño del frame_interno
-            self.frame_productos_interno.update_idletasks()
-            self.canvas_productos.config(scrollregion=self.canvas_productos.bbox("all"))
-
-            # Función para mover el canvas con el ratón
-            def scroll_canvas(event):
-                self.canvas_productos.yview_scroll(-1 * (event.delta // 120), "units")
-
-            # Vincular el evento de desplazamiento del ratón al canvas
-            self.canvas_productos.bind_all("<MouseWheel>", scroll_canvas)  # Para sistemas Windows
-
-            self.lista_productos_open = True
-            self.someopen =  True
-        elif self.lista_productos_open ==  True:
-            # Si lista_productos_open es True, eliminar la vista actual de productos
-            if hasattr(self, 'canvas_productos'):
-                self.canvas_productos.destroy()  # Elimina el Canvas
-            if hasattr(self, 'frame_productos_interno'):
-                self.frame_productos_interno.destroy()  # Elimina el Frame interno
-
-            self.lista_productos_open = False 
-            self.someopen = False # Cambiar el estado para indicar que la vista ha sido cerrada
+        elif self.almacen_open ==  True:
+            # Eliminar los botones almacenados
+            for boton in self.botones:
+                boton.destroy()
+                boton = None
+            
+            self.botones = []  # Vaciar la lista de botones
+            self.almacen_open = False  # Marcar que el almacén está cerrado
+            self.someopen = False
         else:
              messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
+    
+    def subV_crear(self, nombre="ventana", alto=500, ancho=500):
+        self.SV = tk.Toplevel(self.ventana)
+        self.SV.geometry(f'{alto}x{ancho}')
+        self.SV.title(nombre)
+        self.SV.resizable(0, 0)
+        self.sv_open = True
+        # Vincular el cierre de la ventana al cambio de estado de sv_open
+        self.SV.protocol("WM_DELETE_WINDOW", self.subV_destruir)
+
+    def subV_destruir(self):
+        if self.SV:
+            self.SV.destroy()
+            self.SV = None
+            self.sv_open = False
+
+    def agrega_lotes(self, nombre=None, alto=None, ancho=None):
+        if not self.sv_open:
+            self.subV_crear(nombre, alto, ancho)
+            
+            # Obtener dimensiones de la ventana
+            self.SV.update_idletasks()
+            width = self.SV.winfo_width()
+            height = self.SV.winfo_height()
+
+            # Margenes y espaciado
+            margin_top = 20
+            margin_left = 20
+            spacing = 40
+            
+            # Campos para el formulario
+            tk.Label(self.SV, text="Nombre del producto:").place(
+                x=margin_left, y=margin_top)
+            Entry_nombre = tk.Entry(self.SV)
+            Entry_nombre.place(
+                x=margin_left + 200, y=margin_top)
+            
+            tk.Label(self.SV, text="Cantidad:").place(
+                x=margin_left, y=margin_top + spacing)
+            Entry_cantidad = tk.Entry(self.SV)
+            Entry_cantidad.place(
+                x=margin_left + 200, y=margin_top + spacing)
+            
+            tk.Label(self.SV, text="Fecha de caducidad (YYYY-MM-DD):").place(
+                x=margin_left, y=margin_top + spacing * 2)
+            Entry_fecha_caducidad = tk.Entry(self.SV)
+            Entry_fecha_caducidad.place(
+                x=margin_left + 250, y=margin_top + spacing * 2)
+            
+            tk.Label(self.SV, text="Proveedor:").place(
+                x=margin_left, y=margin_top + spacing * 3)
+            Entry_proveedor = tk.Entry(self.SV)
+            Entry_proveedor.place(
+                x=margin_left + 200, y=margin_top + spacing * 3)
+            
+            # Botón de "Listo"
+            tk.Button(self.SV, text="Listo").place(
+                x=(width // 2) - 40, y=margin_top + spacing * 4)
+
+
+
+        else:
+            self.subV_destruir()
+
+    def MA_vista(self,nombre=None, alto=None, ancho = None):
+        if self.sv_open ==  False:
+            self.subV_crear()
+            instancia_comando = Botones()
+            instancia_comando.visualizar_productos(self.SV)
+        else:
+            self.subV_destruir()
+
+
+    def IPC(self,nombre= None, alto=None, ancho = None):
+        if self.sv_open ==  False:
+            self.subV_crear()
+        else:
+            self.subV_destruir()
+
+    def RDP(self,nombre= None, alto=None, ancho = None):
+        if self.sv_open ==  False:
+            self.subV_crear()
+        else:
+            self.subV_destruir()
