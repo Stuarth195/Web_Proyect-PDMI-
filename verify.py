@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox, Toplevel
 import re
 import os
+from datetime import datetime, timedelta
+
 
 class FechaEntradaApp:
     def __init__(self, ventana_principal):
@@ -411,12 +413,26 @@ class FechaContador:
         # Si no se encuentra la combinación, retorna "000"
         return "000"
 
+
+    def sumar_15_dias(self, fecha):
+        """Suma 15 días a la fecha proporcionada en formato yyyymmdd."""
+        # Convertir la fecha de string 'yyyymmdd' a un objeto datetime
+        fecha_dt = datetime.strptime(fecha, "%Y%m%d")
+        
+        # Sumar 15 días
+        fecha_dt += timedelta(days=15)
+        
+        # Retornar la fecha sumada en formato 'yyyymmdd'
+        return fecha_dt.strftime("%Y%m%d")
+
     def formatear_fecha(self, fecha):
+        fecha = self.sumar_15_dias(fecha)
         """Convierte la fecha del formato yyyymmdd a yyyy_mm_dd."""
         # Asumiendo que la fecha es un string con el formato 'yyyymmdd'
         año = fecha[:4]
         mes = fecha[4:6]
         dia = fecha[6:]
-        formateada= f"{año}_{mes}_{dia}"
+        formateada = f"{año}_{mes}_{dia}"
         return formateada
+    
 

@@ -10,3 +10,4 @@ a Pago Efectivo 396.0 Delivery 2024-11-19
 User0000 Pago Efectivo 458.0 Local 2024-11-20
 User0000 Pago Efectivo 345.0 Local 2024-11-20
 User0000 Pago Efectivo 165.0 Local 2024-11-20
+a Pago Efectivo 41.0 Local 2024-11-20
