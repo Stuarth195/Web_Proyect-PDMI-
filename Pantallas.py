@@ -84,19 +84,20 @@ class Pantalla_add:
             self.frame_interno = tk.Frame(self.canvas, bg="lightblue")
             self.canvas.create_window((0, 0), window=self.frame_interno, anchor="nw")
 
-
             # Actualizar la región desplazable según el tamaño del frame_interno
             self.frame_interno.update_idletasks()
             self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
             # Función para mover el canvas con el ratón
             def scroll_canvas(event):
-                self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+                try:
+                    if self.canvas.winfo_exists():  # Verifica si el canvas sigue válido
+                        self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+                except tk.TclError:
+                    print("Canvas no válido o eliminado.")
 
             # Vincular el evento de desplazamiento del ratón al canvas
-            self.canvas.bind_all("<MouseWheel>", scroll_canvas)  # Para sistemas Windows
-            # self.canvas.bind_all("<Button-4>", scroll_canvas)  # Para sistemas Linux (si es necesario)
-            # self.canvas.bind_all("<Button-5>", scroll_canvas)  # Para sistemas Linux (si es necesario)
+            self.canvas.bind("<MouseWheel>", scroll_canvas)  # Usar bind en lugar de bind_all
 
             self.historial_open = True
             self.someopen = True
@@ -104,14 +105,15 @@ class Pantalla_add:
         elif self.historial_open == True:
             # Si historial_open es True, eliminar la vista de historial actual
             if hasattr(self, 'canvas'):
+                self.canvas.unbind("<MouseWheel>")  # Desvincula el evento
                 self.canvas.destroy()  # Elimina el Canvas
             if hasattr(self, 'frame_interno'):
                 self.frame_interno.destroy()  # Elimina el Frame interno
 
             self.historial_open = False 
-            self.someopen = False # Cambiar el estado para indicar que la vista ha sido cerrada
+            self.someopen = False  # Cambiar el estado para indicar que la vista ha sido cerrada
         else:
-             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
 
     def crear_botones_historial(self):
@@ -184,7 +186,12 @@ class Pantalla_add:
 
         # Permitir desplazamiento con la rueda del ratón
         def scroll_con_rueda(event):
-            canvas.yview_scroll(-1 * (event.delta // 120), "units")
+            try:
+                if canvas.winfo_exists():  # Comprueba si el widget aún existe
+                    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+            except tk.TclError:
+                print("Canvas no válido o eliminado.")
+
 
         canvas.bind_all("<MouseWheel>", scroll_con_rueda)
 
