@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, Toplevel
 import re
+import os
 
 class FechaEntradaApp:
     def __init__(self, ventana_principal):
@@ -180,8 +181,8 @@ class CantidadApp:
         self.ventana_principal.protocol("WM_DELETE_WINDOW", self.cerrar_ventana)
 
         self.crear_interfaz()
-
     def crear_interfaz(self):
+        """Crea la interfaz gráfica para ingresar cantidad y seleccionar unidad."""
         # Crear el Label para la cantidad dentro de la ventana principal
         label = tk.Label(self.ventana_principal, text="Ingrese la cantidad:")
         label.pack(pady=10)
@@ -193,30 +194,27 @@ class CantidadApp:
         # Asignar el evento para controlar la entrada de caracteres
         self.entrada_cantidad.bind("<KeyRelease>", self.validar_entrada)
 
-        # Crear un Frame para colocar los botones de selección de unidad
+        # Crear un Frame para los botones de selección de unidad
         frame_unidad = tk.Frame(self.ventana_principal)
         frame_unidad.pack(pady=10)
 
-        # Botón de selección para Mililitros
+        # Botones de selección de unidad
         self.var_unidad = tk.StringVar(value="Kilogramos")  # Default es Kilogramos
-        boton_ml = tk.Radiobutton(frame_unidad, text="Mililitros", variable=self.var_unidad, value="Mililitros")
-        boton_ml.pack(side=tk.LEFT, padx=10)
 
-        # Botón de selección para Litros
-        boton_litros = tk.Radiobutton(frame_unidad, text="Litros", variable=self.var_unidad, value="Litros")
-        boton_litros.pack(side=tk.LEFT, padx=10)
+        opciones = [
+            ("Mililitros", "Mililitros"),
+            ("Litros", "Litros"),
+            ("Kilogramos", "Kilogramos"),
+            ("Gramos", "Gramos"),
+            ("Unidad", "Unidad"),
+            ("Lata", "Lata"),
+            ("Botella", "Botella"),
+            ("Paquete", "Paquete")
+        ]
 
-        # Botón de selección para Kilogramos
-        boton_kg = tk.Radiobutton(frame_unidad, text="Kilogramos", variable=self.var_unidad, value="Kilogramos")
-        boton_kg.pack(side=tk.LEFT, padx=10)
-
-        # Botón de selección para Gramos
-        boton_gramos = tk.Radiobutton(frame_unidad, text="Gramos", variable=self.var_unidad, value="Gramos")
-        boton_gramos.pack(side=tk.LEFT, padx=10)
-
-        # Botón de selección para Unidad
-        boton_unidad = tk.Radiobutton(frame_unidad, text="Unidad", variable=self.var_unidad, value="Unidad")
-        boton_unidad.pack(side=tk.LEFT, padx=10)
+        for texto, valor in opciones:
+            boton = tk.Radiobutton(frame_unidad, text=texto, variable=self.var_unidad, value=valor)
+            boton.pack(side=tk.LEFT, padx=10)
 
         # Crear un Frame para los botones de Aceptar y Mostrar en horizontal
         frame_botones = tk.Frame(self.ventana_principal)
@@ -229,6 +227,7 @@ class CantidadApp:
         # Botón para mostrar la cantidad guardada
         boton_mostrar = tk.Button(frame_botones, text="Mostrar Cantidad Guardada", command=self.mostrar_cantidad)
         boton_mostrar.pack(side=tk.LEFT, padx=10)
+
 
     def validar_entrada(self, event):
         cantidad = self.entrada_cantidad.get()
@@ -345,22 +344,79 @@ class ProvedorApp:
         self.ventana_principal.destroy()  # Cerrar la ventana principal
 
 
-# Función principal para probar la clase:
-def probar_app():
-    # Crear la ventana principal de la aplicación
-    ventana = tk.Tk()
-    ventana.title("Aplicación de Cantidad y Unidad")
-    ventana.geometry("500x300")  # Tamaño de la ventana
-
-    # Crear una instancia de la aplicación con la ventana principal
-    app = CantidadApp(ventana)
-
-    # Iniciar el bucle de la interfaz gráfica
-    ventana.mainloop()
-
 # Ejecutar la prueba
-if __name__ == "__main__":
-    probar_app()
+import os
+import re
 
+class FechaContador:
+    def __init__(self, ruta=os.path.join("LISTA PRODUCTO Y RECETAS", "contador_dia.txt")):
+        self.ruta = ruta
+        # Asegurarse de que el archivo existe al inicializar
+        self._verificar_archivo()
 
+    def _verificar_archivo(self):
+        """Crea el archivo si no existe."""
+        if not os.path.exists(self.ruta):
+            with open(self.ruta, 'w') as archivo:
+                pass  # Crear archivo vacío
+
+    def procesar_fecha(self, fecha, codigo):
+        """Procesa la fecha y el código para verificar o agregar al archivo."""
+        # Validar el formato de la fecha y el código
+        if len(fecha) != 8 or not fecha.isdigit():
+            raise ValueError("La fecha debe tener el formato yyyymmdd.")
+        if not re.match(r"^[A-Z]{2,3}-\d{3}$", codigo):
+            raise ValueError("El código debe tener el formato XX-XXX.")
+
+        with open(self.ruta, 'r') as archivo:
+            lineas = archivo.readlines()
+
+        # Buscar si ya existe la combinación de fecha y código
+        nueva_linea = True
+        for i, linea in enumerate(lineas):
+            if linea.startswith(f"{fecha}") and linea.strip().endswith(codigo):
+                # Si existe, incrementar el contador
+                partes = linea.strip().split()
+                contador = int(partes[1]) + 1
+                lineas[i] = f"{fecha} {contador:03d} {codigo}\n"
+                nueva_linea = False
+                break
+
+        if nueva_linea:
+            # Si no existe, agregar una nueva línea
+            lineas.append(f"{fecha} 001 {codigo}\n")
+
+        # Guardar los cambios en el archivo
+        with open(self.ruta, 'w') as archivo:
+            archivo.writelines(lineas)
+
+        print(f"Fecha {fecha} y código {codigo} procesados con éxito.")
+
+    def obtener_contador(self, fecha, codigo):
+        """Obtiene el contador para una fecha y código específicos."""
+        # Validar el formato de la fecha y el código
+        if len(fecha) != 8 or not fecha.isdigit():
+            raise ValueError("La fecha debe tener el formato yyyymmdd.")
+        if not re.match(r"^[A-Z]{2,3}-\d{3}$", codigo):
+            raise ValueError("El código debe tener el formato XX-XXX.")
+
+        with open(self.ruta, 'r') as archivo:
+            lineas = archivo.readlines()
+
+        for linea in lineas:
+            if linea.startswith(f"{fecha}") and linea.strip().endswith(codigo):
+                _, contador, _ = linea.strip().split()
+                return f"{int(contador):03d}"
+
+        # Si no se encuentra la combinación, retorna "000"
+        return "000"
+
+    def formatear_fecha(self, fecha):
+        """Convierte la fecha del formato yyyymmdd a yyyy_mm_dd."""
+        # Asumiendo que la fecha es un string con el formato 'yyyymmdd'
+        año = fecha[:4]
+        mes = fecha[4:6]
+        dia = fecha[6:]
+        formateada= f"{año}_{mes}_{dia}"
+        return formateada
 

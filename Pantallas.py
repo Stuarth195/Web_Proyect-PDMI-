@@ -32,6 +32,7 @@ class Pantalla_add:
         self.verCOD=None
         self.verCNT = None
         self.verePRV = None
+        self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS","Lotes.txt")
 
         
         
@@ -430,13 +431,22 @@ class Pantalla_add:
         else:
             self.subV_destruir()
 
-    def verificacion_de_verificaciones(self,):
-        if self.veriFCH.fecha_guardada != None and self.verCOD.codigo_guardado!=None and self.verCNT.cantidad_guardada != None and self.verCNT.unidad != None and self.verePRV.nombre_guardado != None:
+    def verificacion_de_verificaciones(self):
+        if self.veriFCH.fecha_guardada != None and self.verCOD.codigo_guardado != None and self.verCNT.cantidad_guardada != None and self.verCNT.unidad != None and self.verePRV.nombre_guardado != None:
+            print(self.verCNT.unidad)
             instancia_comando = Botones()
-            instancia_comando.Verifca_todo(self.veriFCH.fecha_guardada, self.verCOD.codigo_guardado, self.verCNT.cantidad_guardada , self.verCNT.unidad, self.verePRV.nombre_guardado)
+            instancia_comando.escribe_lote(
+                self.SV,
+                self.veriFCH.fecha_guardada,
+                self.verCOD.codigo_guardado,
+                self.verCNT.cantidad_guardada,
+                self.verCNT.unidad,
+                self.verePRV.nombre_guardado,
+                self.rutalotes
+            )
         else:
             messagebox.showerror("Error", "Completa y Guarda todos los espacios para continuar")
-        self.SV.focus()
+        self.subV_destruir()
 
 
     def MA_vista(self,nombre=None, alto=None, ancho = None):

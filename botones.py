@@ -1,9 +1,9 @@
 import os
 import tkinter as tk
-from tkinter import Label, Button, Toplevel
+from tkinter import Label, Button, Toplevel, messagebox
 from PIL import Image, ImageTk  # Manejo de imágenes
 from TXTReader import LectorTXT
-
+import verify as vr
 class Botones:
     def __init__(self, base_dir="LISTA PRODUCTO Y RECETAS"):
         """
@@ -158,21 +158,84 @@ class Botones:
 
 #-___________________________________________________________________________________________________-
 
-    def verifica_codigo(self,codigo):
-        # Convertir la fecha a formato datetime
-        self.matriz_ac =LectorTXT.leerTxtFile(self.archivo_cosecha)
-        self.matrizMA = LectorTXT.leerTxtFile(self.archivo_MA)
-        self.matrizPE = LectorTXT.leerTxtFile(self.archivo_PE)
-        if codigo:
-            for linea in self.matriz_ac:
-                if linea[0] == codigo:
-                    print(linea[0])
-            for linea in self.matrizMA:
-                if linea[0] == codigo:
-                    print(linea[0])
-            for linea in self.matrizPE:
-                if linea[0] == codigo:
-                    print(linea[0])
+    def verifica_codigo(self, codigo):
+        """
+        Verifica si el código existe en los archivos correspondientes.
+        
+        Args:
+            codigo (str): El código a buscar.
+        
+        Returns:
+            bool: True si el código existe en alguno de los archivos, False en caso contrario.
+        """
+        # Leer los datos de los archivos usando LectorTXT
+        matriz_ac = self.Lector.leerTxtFile(self.archivo_cosecha)
+        matriz_MA = self.Lector.leerTxtFile(self.archivo_MA)
+        matriz_PE = self.Lector.leerTxtFile(self.archivo_PE)
 
-    def Verifca_todo(self, fecha, cofigo, cantidad, unidad, provedor):
-        print("HOLA")
+        # Verificar en cada archivo si el código está presente
+        for linea in matriz_ac:
+            if linea and linea[0] == codigo:
+                self.descripcion =linea[1]
+                return True  # Código encontrado en archivo_cosecha
+        for linea in matriz_MA:
+            if linea and linea[0] == codigo:
+                self.descripcion =linea[1]
+                return True  # Código encontrado en archivo_MA
+                print("se pudo")
+        for linea in matriz_PE:
+            if linea and linea[0] == codigo:
+                self.descripcion =linea[1]
+                return True
+                print("se pudo")  # Código encontrado en archivo_PE
+
+        return False
+        print("NO se pudo")  # Código no encontrado en ningún archivo
+
+
+    def escribe_lote(self, ventana_form, fecha, codigo, cantidad, unidad, proveedor, ruta_archivo):
+        """
+        Escribe la información de un lote en el archivo proporcionado por el usuario.
+
+        Args:
+            ventana_form: Ventana que activa el formulario.
+            fecha (str): Fecha del lote (formato yyyymmdd).
+            codigo (str): Código del producto.
+            cantidad (str): Cantidad del lote (validada y convertida a número).
+            unidad (str): Unidad de medida (Paquete, Litros, etc.).
+            proveedor (str): Nombre del proveedor.
+            ruta_archivo (str): Ruta donde se guardará el archivo de lotes.
+        """
+        # Verifica si el código existe y obtiene la descripción
+        if not self.verifica_codigo(codigo):
+            messagebox.showerror("Error", f"El código '{codigo}' no existe en los archivos. Vuelve a intentarlo.")
+            return False
+
+        # Validar cantidad como entero o flotante según la unidad
+        cantidad = int(cantidad) if unidad in ["Unidad", "Lata", "Botella", "Paquete"] else float(cantidad)
+
+        # Obtener el contador del lote
+        instvr = vr.FechaContador()
+        instvr.procesar_fecha(fecha, codigo)
+        contador = instvr.obtener_contador(fecha, codigo)
+
+        # Formatear la fecha
+        fecha_formateada = instvr.formatear_fecha(fecha)
+
+        # Construir el identificador del lote
+        identificador_lote = f"{codigo}_{fecha}_{contador}"
+
+        # Obtener la descripción del producto
+        descripcion = self.descripcion  # Esta es la descripción obtenida con `verifica_codigo`
+
+        # Formatear la línea del lote
+        linea_lote = f"{identificador_lote} {codigo} {descripcion} {fecha_formateada} {proveedor} {unidad} {cantidad}\n"
+
+        # Escribir la línea en el archivo de lotes en la ruta proporcionada
+        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+            archivo.write(linea_lote)
+
+        # Mostrar mensaje de éxito
+        messagebox.showinfo("Éxito", f"Lote registrado en: {ruta_archivo}\n{linea_lote.strip()}")
+
+        print(f"Lote registrado: {linea_lote.strip()} en {ruta_archivo}")  # Para depuración
