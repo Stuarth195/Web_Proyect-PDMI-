@@ -1,5 +1,5 @@
 CHP-001_20291201_001 CHP-001 Chips_de_papa_(Paquete_de_200g) 2029_12_01 papas_SA paquete 20
-CHP-001_20291202_002 CHP-001 Chips_de_papa_(Paquete_de_200g) 2029_12_02 papas_SA paquete 5
+CHP-001_20291202_002 CHP-001 Chips_de_papa_(Paquete_de_200g) 2029_12_02 papas_SA paquete 50
 CHP-002_20291201_001 CHP-002 Chips_de_papa_(Paquete_de_500g) 2029_12_01 papas_SA paquete 1000
 CHP-002_20291202_002 CHP-002 Chips_de_papa_(Paquete_de_500g) 2029_12_02 papas_SA paquete 5005
 SAL-001_20291201_001 SAL-001 Salsa_de_tomate_envasada_(Botella_500ml) 2029_12_01 tom_SA botella 200

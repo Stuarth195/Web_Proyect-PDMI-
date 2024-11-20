@@ -63,3 +63,37 @@ class Writer():
             print(f"Error: El archivo '{nombre_archivo}' no se encontró.")
         except Exception as e:
             print(f"Error: {e}")
+
+    def rebajar_Lote(self, nombre_archivo, cantidad, producto):
+        try:
+            with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+                lineas = archivo.readlines()
+
+            for linea in lineas:
+                linea = linea.strip()
+                ProductoTemp = ""
+                Tipo_producto = False
+
+                for letra in linea:
+                    if letra == "(":
+                        ProductoTemp = ""
+                        Tipo_producto = True
+                    elif Tipo_producto:
+                        if letra == ")":
+                            if ProductoTemp == producto:
+                                print(ProductoTemp)
+                        ProductoTemp += letra
+
+
+
+
+        except FileNotFoundError:
+            print(f"Error: El archivo '{nombre_archivo}' no se encontró.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    Escritor = Writer()
+
+    Escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/Lotes.txt", 10, "Botella_500ml")

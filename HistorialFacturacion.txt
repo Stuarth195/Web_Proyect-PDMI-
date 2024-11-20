@@ -6,3 +6,4 @@ User0000 Pago Efectivo 566.0 Local 2024-11-18
 User0000 Pago Efectivo 0.0 Local 2024-11-18
 User0000 Pago Efectivo 370.0 Local 2024-11-18
 User0000 Pago Efectivo 78611.0 Local 2024-11-18
+a Pago Efectivo 396.0 Delivery 2024-11-19
