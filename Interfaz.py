@@ -10,6 +10,7 @@ from Carrito import MCarrito
 from Registro import Emergente
 from Producto import Product
 import random
+import re
 
 def Interfaz():
     instancia_base = Instacia_B()
@@ -119,10 +120,15 @@ def Interfaz():
     frame = tk.Frame(feed.frame_scroll)
     frame.pack(padx=margen_anchoP//2, pady=margen_altoP*12)
 
-    while i < 12:
-        i += 1
-        PrecioR = random.randrange(1, 100)
-        P1.mostrarImagen(producto_img, "Paquete_de_200g", str(PrecioR), xP, yP, frame, canvas_count, str(32), "PA0000", "asdadsa", p1)
+    prod = Lector.leerTxtFile("LISTA PRODUCTO Y RECETAS/M_A.txt")
+    for produ in prod:
+        nombreProd = re.findall(r'\((.*?)\)', produ[1])
+        if nombreProd == []:
+            P1.mostrarImagen(producto_img, produ[1], produ[5], xP, yP, frame, canvas_count, produ[3], produ[0],
+                             produ[2], p1)
+        else:
+            P1.mostrarImagen(producto_img, nombreProd[0], produ[5], xP, yP, frame, canvas_count, produ[3], produ[0],
+                            produ[2], p1)
         canvas_count += 1
         if canvas_count == 5:
             canvas_count = 0

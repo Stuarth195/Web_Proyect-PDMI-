@@ -5,6 +5,9 @@ class revUsuarios:
     def RevisarUsuarioExistente(self,nombreUsuario, contrasenaUsuario):
         Exite = False
         for Usuario in self.listaUsuarios:
-            if Usuario[0] == nombreUsuario and Usuario[1] == contrasenaUsuario:
-                Exite = True
+            if not Usuario:
+                Exite = False
+            else:
+                if Usuario[0] == nombreUsuario and Usuario[1] == contrasenaUsuario:
+                    Exite = True
         return Exite
