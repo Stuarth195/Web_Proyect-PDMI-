@@ -1,3 +1,5 @@
+import re
+
 
 class Writer():
     def write(self, Filepath, mensaje):
@@ -66,34 +68,87 @@ class Writer():
 
     def rebajar_Lote(self, nombre_archivo, cantidad, producto):
         try:
+            # Abre el archivo para leer las líneas
             with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
                 lineas = archivo.readlines()
 
-            for linea in lineas:
+            cantidad_restante = cantidad  # La cantidad que aún necesitamos rebajar
+            print(f"Cantidad total a rebajar: {cantidad_restante}")
+
+            # Itera sobre las líneas para encontrar las entradas del producto
+            for i, linea in enumerate(lineas):
                 linea = linea.strip()
                 ProductoTemp = ""
                 Tipo_producto = False
 
+                # Busca el producto en la línea
                 for letra in linea:
                     if letra == "(":
-                        ProductoTemp = ""
+                        ProductoTemp = ""  # Comienza a capturar el nombre del producto
                         Tipo_producto = True
                     elif Tipo_producto:
                         if letra == ")":
                             if ProductoTemp == producto:
-                                print(ProductoTemp)
+                                Tipo_producto = False
                         ProductoTemp += letra
+                    elif Tipo_producto == False and ProductoTemp != "":
+                        # Verifica si el producto encontrado es el correcto
+                        ProductoTemp = ProductoTemp.strip()
+                        if producto in ProductoTemp:  # Usa 'in' para coincidencias parciales
 
+                            # Busca el número al final de la línea (cantidad)
+                            match = re.search(r'(\d+)$', linea.strip())
+                            if match:
+                                cantidad_actual = int(match.group(1))
 
+                                if cantidad_restante <= cantidad_actual:
+                                    # Si hay suficiente cantidad en esta línea, rebaja y termina
+                                    nueva_cantidad = cantidad_actual - cantidad_restante
+                                    lineas[i] = re.sub(r'(\d+)$', str(nueva_cantidad), linea.strip())
+                                    cantidad_restante = 0  # Ya se ha rebajado todo lo necesario
+                                    break  # Ya se ha rebajado la cantidad, terminamos
+                                else:
+                                    # Si no hay suficiente cantidad, rebaja todo lo que pueda y pasa a la siguiente línea
+                                    cantidad_restante -= cantidad_actual
+                                    lineas[i] = re.sub(r'(\d+)$', '0', linea.strip())
 
+                            else:
+                                print(f"No se encontró una cantidad válida en la línea: {linea}")
 
-        except FileNotFoundError:
-            print(f"Error: El archivo '{nombre_archivo}' no se encontró.")
+                # Si hemos rebajado toda la cantidad necesaria, ya no necesitamos seguir buscando
+                if cantidad_restante == 0:
+                    break
+
+            # Si la cantidad restante es mayor a 0 después de recorrer todas las líneas, significa que no había suficiente stock
+            if cantidad_restante > 0:
+                print(
+                    f"Error: No hay suficiente cantidad de {producto} en el archivo para rebajar la cantidad solicitada.")
+            else:
+                # Reescribe el archivo con las nuevas cantidades
+                with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+                    for linea in lineas:
+                        if linea.split() != "":
+                            archivo.write(linea + '\n')
+
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Se produjo un error: {e}")
+        try:
+            # Abre el archivo para leer las líneas
+            with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+                lineas = archivo.readlines()
+
+            # Elimina las líneas vacías o que solo tienen espacios en blanco
+            lineas_sin_vacias = [linea for linea in lineas if linea.strip() != ""]
+
+            # Reescribe el archivo sin las líneas vacías
+            with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+                archivo.writelines(lineas_sin_vacias)
+
+        except Exception as e:
+            print(f"Se produjo un error: {e}")
 
 
+    # Ejecución
 if __name__ == "__main__":
     Escritor = Writer()
-
-    Escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/Lotes.txt", 10, "Botella_500ml")
+    Escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/Lotes.txt", 9, "Paquete_de_200g")

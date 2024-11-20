@@ -122,9 +122,9 @@ def Interfaz():
     while i < 12:
         i += 1
         PrecioR = random.randrange(1, 100)
-        P1.mostrarImagen(producto_img, "Papa", str(PrecioR), xP, yP, frame, canvas_count, str(32), "PA0000", "asdadsa", p1)
+        P1.mostrarImagen(producto_img, "Paquete_de_200g", str(PrecioR), xP, yP, frame, canvas_count, str(32), "PA0000", "asdadsa", p1)
         canvas_count += 1
-        if canvas_count == 7:
+        if canvas_count == 5:
             canvas_count = 0
 
 

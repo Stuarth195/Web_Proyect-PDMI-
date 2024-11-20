@@ -97,6 +97,7 @@ class Reb:
         i = 0
 
         while i < len(self.Productos):
+            self.escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/Lotes.txt", int(self.Unidades[i]), self.Productos[i])
             StrProductos += " [" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
             StrEmail += "     " +self.Productos[i] + " / " + self.Unidades[i] + " / " + self.Precios[i] + " / " + str(int(self.Unidades[i]) * int(self.Precios[i])) + f"\n"
             i+=1

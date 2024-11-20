@@ -30,11 +30,11 @@ class Product:
         - productopath: ruta para obtener más información del producto al hacer clic.
         """
         
-        TempP = tk.Canvas(self.canva, width=self.margenx * 5, height=self.margeny * 10, bg="white")
+        TempP = tk.Canvas(self.canva, width=self.margenx * 8, height=self.margeny * 10, bg="white")
         Inf = InfProducto(self.vetana)  # Instancia de la clase InfProducto para mostrar más información
 
         # Verifica si el contador de canvas está en cero o en siete para crear una nueva fila
-        if canvas_count == 0 or canvas_count == 7:
+        if canvas_count == 0 or canvas_count == 5:
             self.current_row = tk.Frame(fila)  # Crea un nuevo contenedor de fila
             self.current_row.pack(anchor='w')  # Empaqueta la fila
             canvas_count = 0  # Resetea el contador de canvas
