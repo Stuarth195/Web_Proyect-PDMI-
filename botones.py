@@ -158,20 +158,21 @@ class Botones:
 
 #-___________________________________________________________________________________________________-
 
-    def verifica_codigo(self,codigo, fecha_str, cantidad, proveedor):
+    def verifica_codigo(self,codigo):
         # Convertir la fecha a formato datetime
         self.matriz_ac =LectorTXT.leerTxtFile(self.archivo_cosecha)
         self.matrizMA = LectorTXT.leerTxtFile(self.archivo_MA)
         self.matrizPE = LectorTXT.leerTxtFile(self.archivo_PE)
+        if codigo:
+            for linea in self.matriz_ac:
+                if linea[0] == codigo:
+                    print(linea[0])
+            for linea in self.matrizMA:
+                if linea[0] == codigo:
+                    print(linea[0])
+            for linea in self.matrizPE:
+                if linea[0] == codigo:
+                    print(linea[0])
 
-        for linea in self.matriz_ac:
-            if linea[0] == codigo:
-                print("hola")
-        for linea in self.matrizMA:
-            if linea[0] == codigo:
-                print("hola")
-        for linea in self.matrizPE:
-            if linea[0] == codigo:
-                print("hola")
-
-    #def escribe_lote(rutatxt ,codigo, fecha, cantidad, provedor):
+    def Verifca_todo(self, fecha, cofigo, cantidad, unidad, provedor):
+        print("HOLA")

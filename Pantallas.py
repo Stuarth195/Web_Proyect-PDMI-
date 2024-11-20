@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 from botones import Botones 
+from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 class Pantalla_add:
     def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
         self. usuario_log = usuario_log
@@ -27,6 +28,13 @@ class Pantalla_add:
         self.almacen_open = False
         self.sv_open = False
         self.SV = None
+        self.veriFCH = None
+        self.verCOD=None
+        self.verCNT = None
+        self.verePRV = None
+
+        
+        
         
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
@@ -136,6 +144,7 @@ class Pantalla_add:
                     boton.pack(fill=tk.X, pady=5, padx=5)
         else:
             pass
+    
     def extraer_historial(self, linea):
         # Busca las sublistas delimitadas por [ y ]
         historial = []
@@ -343,7 +352,7 @@ class Pantalla_add:
             # Crear los botones y almacenarlos en una lista para referencia
             self.botones = []
 
-            self.agregarlotes = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Agregar Lotes", command=lambda: self.agrega_lotes("LOTES", 500, 500))
+            self.agregarlotes = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Agregar Lotes", command=lambda: self.agrega_lotes())
             self.agregarlotes.grid(row=0, column=0, padx=pad_x, pady=pad_y)
             self.botones.append(self.agregarlotes)
 
@@ -389,54 +398,46 @@ class Pantalla_add:
             self.SV.destroy()
             self.SV = None
             self.sv_open = False
-
-    def agrega_lotes(self, nombre=None, alto=None, ancho=None):
+            self.veriFCH = None
+            self.verCOD=None
+            self.verCNT = None
+            self.verePRV = None
+                
+    
+    def agrega_lotes(self, nombre="Lotes", alto=700, ancho=700):
         if not self.sv_open:
             self.subV_crear(nombre, alto, ancho)
-            
+
             # Obtener dimensiones de la ventana
             self.SV.update_idletasks()
             width = self.SV.winfo_width()
             height = self.SV.winfo_height()
 
-            # Margenes y espaciado
-            margin_top = 20
-            margin_left = 20
-            spacing = 40
+            # Crear un marco (frame) para contener los widgets
+            frame = tk.Frame(self.SV)
+            frame.pack(padx=20, pady=20)  # Se establece un margen general
             
-            # Campos para el formulario
-            tk.Label(self.SV, text="Nombre del producto:").place(
-                x=margin_left, y=margin_top)
-            Entry_nombre = tk.Entry(self.SV)
-            Entry_nombre.place(
-                x=margin_left + 200, y=margin_top)
-            
-            tk.Label(self.SV, text="Cantidad:").place(
-                x=margin_left, y=margin_top + spacing)
-            Entry_cantidad = tk.Entry(self.SV)
-            Entry_cantidad.place(
-                x=margin_left + 200, y=margin_top + spacing)
-            
-            tk.Label(self.SV, text="Fecha de caducidad (YYYY-MM-DD):").place(
-                x=margin_left, y=margin_top + spacing * 2)
-            Entry_fecha_caducidad = tk.Entry(self.SV)
-            Entry_fecha_caducidad.place(
-                x=margin_left + 250, y=margin_top + spacing * 2)
-            
-            tk.Label(self.SV, text="Proveedor:").place(
-                x=margin_left, y=margin_top + spacing * 3)
-            Entry_proveedor = tk.Entry(self.SV)
-            Entry_proveedor.place(
-                x=margin_left + 200, y=margin_top + spacing * 3)
-            
-            # Botón de "Listo"
-            tk.Button(self.SV, text="Listo").place(
-                x=(width // 2) - 40, y=margin_top + spacing * 4)
+            self.veriFCH = FechaEntradaApp(self.SV)
+            self.verCOD=CodigoApp(self.SV)
+            self.verCNT = CantidadApp(self.SV)
+            self.verePRV = ProvedorApp(self.SV)
 
+            
+            # Botón de "Listo", en la parte inferior
+            tk.Button(self.SV, text="Crear", command=self.verificacion_de_verificaciones).pack(pady=10)  # Un pequeño margen solo en el botón
 
 
         else:
             self.subV_destruir()
+
+    def verificacion_de_verificaciones(self,):
+        if self.veriFCH.fecha_guardada != None and self.verCOD.codigo_guardado!=None and self.verCNT.cantidad_guardada != None and self.verCNT.unidad != None and self.verePRV.nombre_guardado != None:
+            instancia_comando = Botones()
+            instancia_comando.Verifca_todo(self.veriFCH.fecha_guardada, self.verCOD.codigo_guardado, self.verCNT.cantidad_guardada , self.verCNT.unidad, self.verePRV.nombre_guardado)
+        else:
+            messagebox.showerror("Error", "Completa y Guarda todos los espacios para continuar")
+        self.SV.focus()
+
 
     def MA_vista(self,nombre=None, alto=None, ancho = None):
         if self.sv_open ==  False:
