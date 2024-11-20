@@ -4,3 +4,5 @@ SAL-001 Salsa_de_tomate_envasada_(Botella_500ml) Botella_(500ml) 500 Unidad 2
 SAL-002 Salsa_de_tomate_envasada_(Botella_1L) Botella_(1L) 1000 Unidad 2
 SLT-001 Salsa_de_tomate_enlatada_(Lata_400g) Lata_(400g) 2000 Unidad 2
 SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) Lata_(1kg) 4000 Unidad 2
+PG-000 Papa_a_Granel malla(Granel) 2500 Kg 3
+TG-000 Tomate_a_Granel malla(Granel) 100 Kg 5
