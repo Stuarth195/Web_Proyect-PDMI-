@@ -14,3 +14,4 @@ pp
 asdd
 Raul [2024-11-21;Botella_1L;12;1.6;19.200000000000003]
 Esteban [2024-11-21;Paquete_de_500g;1;1.6;1.6]
+pepegrillo [2024-11-21;Botella_1L;123;1.6;196.8] [2024-11-21;Paquete_de_200g;123;1.6;196.8]

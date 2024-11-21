@@ -15,3 +15,5 @@ EMP-008_20241120_001 EMP-008 Lata_para_salsa_de_tomate_(1kg) 2024_11_20 Proveedo
 AGU-001_20241120_001 AGU-001 Agua 2024_11_20 Proveedor_I Litros 100.0 
 TOM-001_20241203_020 TOM-001 Tomate_fresco 2024_12_18 Stuarth_SA Kilogramos 100.0
 TOM-001_20240802_001 TOM-001 Tomate_fresco 2024_08_17 yO_sa Kilogramos 12.0
+TOM-001_20241003_001 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0
+TOM-001_20241003_002 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0

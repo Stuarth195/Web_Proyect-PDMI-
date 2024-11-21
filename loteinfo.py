@@ -6,18 +6,36 @@ class LoteInfo:
     def __init__(self, root, file_path=os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt")):
         self.root = root
         self.file_path = file_path
-        self.load_data()
+        self.buttons = []  # Lista para almacenar los botones creados
+        self.buttons_created = False  # Controla si los botones han sido creados o no
+
+    def toggle_buttons(self):
+        if not self.buttons_created:
+            # Si los botones no han sido creados, los creamos
+            self.load_data()
+            self.buttons_created = True  # Marcar que los botones han sido creados
+        else:
+            # Si los botones ya han sido creados, los eliminamos
+            self.remove_buttons()
+            self.buttons_created = False  # Marcar que los botones ya han sido eliminados
 
     def load_data(self):
         # Leer los datos del archivo cada vez que se carguen los botones
         data = self.read_file(self.file_path)
 
-        # Crear un ScrollFrame
-        scroll_frame = self.create_scroll_frame()
+        # Crear un Frame donde se colocarán los botones
+        button_frame = tk.Frame(self.root)
+        button_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")  # Usar grid para colocar el frame
+        self.root.grid_rowconfigure(0, weight=1)  # Asegurarse de que el frame sea expansible
+        self.root.grid_columnconfigure(0, weight=1)  # Asegurarse de que la columna sea expansible
 
-        # Crear un botón por cada fila de la matriz de datos
-        for row in data:
+        # Cambiar el índice inicial de las filas para comenzar en una fila más abajo
+        row_index = 5  # Comienza desde la fila 5 en lugar de la 0
+
+        # Crear botones en una estructura dinámica
+        for i, row in enumerate(data):
             if len(row) >= 7:
+                # Cada fila de datos tiene la información que será usada en los botones
                 id_lote = row[0]  # ID_LOTE
                 codigo_producto = row[1]  # CÓDIGO PRODUCTO
                 descripcion = row[2]  # DESCRIPCIÓN
@@ -26,34 +44,13 @@ class LoteInfo:
                 unidad_medida = row[5]  # UNIDAD DE MEDIDA
                 cantidad = row[6]  # CANTIDAD
 
-                # Crear el botón con el ID_LOTE en el ScrollFrame
-                button = tk.Button(scroll_frame, text=f"{id_lote} - {codigo_producto}", command=lambda p=row: self.show_description(p))
-                button.pack(fill=tk.X, pady=2)
+                # Crear el botón con el ID_LOTE en el Frame
+                button = tk.Button(button_frame, text=f"{id_lote} - {codigo_producto}", command=lambda p=row: self.show_description(p))
+                button.grid(row=row_index, column=0, sticky="ew", pady=2, padx=5)  # Usar grid con sticky para expandir horizontalmente
+                self.buttons.append(button)  # Agregar el botón a la lista
+                row_index += 1  # Incrementar el índice de fila
             else:
                 print(f"Linea incompleta o malformada: {row}")  # Para depurar líneas mal formadas
-
-    def create_scroll_frame(self):
-        # Crear un frame con canvas y scrollbar
-        scroll_frame = tk.Frame(self.root)
-        scroll_frame.pack(fill=tk.BOTH, expand=True)
-
-        canvas = tk.Canvas(scroll_frame)
-        scrollbar = tk.Scrollbar(scroll_frame, orient=tk.VERTICAL, command=canvas.yview)
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        # Crear un Frame dentro del Canvas que contendrá los botones
-        button_frame = tk.Frame(canvas)
-        canvas.create_window((0, 0), window=button_frame, anchor=tk.NW)
-
-        # Empaquetar el scrollbar y el canvas
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        canvas.pack(fill=tk.BOTH, expand=True)
-
-        # Actualizar la barra de desplazamiento y la ventana del Canvas
-        button_frame.update_idletasks()  # Actualiza el tamaño del frame para que funcione el scroll
-        canvas.config(scrollregion=canvas.bbox("all"))  # Actualiza el área del scroll
-
-        return button_frame
 
     def read_file(self, file_path):
         # Leer el archivo y devolver los datos como una lista de listas
@@ -68,7 +65,7 @@ class LoteInfo:
     def show_description(self, product_data):
         # Crear una nueva ventana Toplevel
         description_window = tk.Toplevel(self.root)
-        description_window.resizable(0,0)
+        description_window.resizable(0, 0)
         description_window.title(f"Descripción de {product_data[0]}")
 
         # Crear el texto con los detalles del lote
@@ -86,11 +83,8 @@ class LoteInfo:
         label = tk.Label(description_window, text=description_text, justify=tk.LEFT, padx=10, pady=10)
         label.pack()
 
-    def refresh_data(self):
-        # Elimina todos los botones y recarga los datos
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
-        # Recargar y mostrar los datos nuevamente
-        self.load_data()
-
+    def remove_buttons(self):
+        # Elimina todos los botones de la lista
+        for button in self.buttons:
+            button.destroy()  # Destruir el botón
+        self.buttons.clear()  # Limpiar la lista de botones

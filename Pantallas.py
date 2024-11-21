@@ -39,6 +39,7 @@ class Pantalla_add:
         self.Descuentos_open = False
         self.facturacion_open = False
         self.VRC_open = False
+        self.VTL_open = False
 
         
         
@@ -62,15 +63,25 @@ class Pantalla_add:
         # Submenú Administrativo dentro de Opciones de Admin
         administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
         administrativo_menu.add_command(label="Historiales" , command=self.crear_botones_historial)  # Solo "Historiales" en Administrativo
-        administrativo_menu.add_command(label="Almacén", command=lambda:self.almacen(self.admin.frame_scroll, 10, 50,))
         administrativo_menu.add_command(label="Facturas", command=self.HDF)
         administrativo_menu.add_command(label="Generar recibo Cosecha ", command=self.GRC)
         administrativo_menu.add_command(label="Ver recibo Cosecha ", command=self.VRC)
 
+
+    #menue almacen
+        menu_almacen =tk.Menu(self.menu_bar, tearoff=0)
+        menu_almacen.add_command(label="Agregar Lotes", command=lambda: self.agrega_lotes())
+        menu_almacen.add_command(label="Maestro de Artículos",command= self.MA_vista)
+        menu_almacen.add_command(label="Productos Comprados", command= self.IPC)
+        menu_almacen.add_command(label="Registro de Producción", command= self.RDP)
+        menu_almacen.add_command(label="ver Lotes", command= self.verlotes)
+        menu_almacen.add_command(label="Productos  de Cosechas", command= self.PPO)
+
         # Crear el menú "Opciones de Admin" y añadir los submenús
         opciones_admin_menu = tk.Menu(self.menu_bar, tearoff=0)
         opciones_admin_menu.add_cascade(label="Ventas", menu=ventas_menu)  # Agregar "Ventas"
-        opciones_admin_menu.add_cascade(label="Administrativo", menu=administrativo_menu)  # Agregar "Administrativo"
+        opciones_admin_menu.add_cascade(label="Administrativo", menu=administrativo_menu)
+        opciones_admin_menu.add_cascade(label="Almacen",menu=menu_almacen)  # Agregar "Administrativo"
 
         # Añadir "Opciones de Admin" al menú principal
         self.menu_bar.add_cascade(label="Opciones de Admin", menu=opciones_admin_menu)
@@ -385,49 +396,6 @@ class Pantalla_add:
         # Reconfigurar la ventana sin menú
         self.ventana.config(menu=None)
     
-    def almacen(self, donde, pad_x, pad_y):
-        if  self.almacen_open == False and self.someopen == False:
-            # Crear los botones y almacenarlos en una lista para referencia
-            self.botones = []
-
-            self.agregarlotes = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Agregar Lotes", command=lambda: self.agrega_lotes())
-            self.agregarlotes.grid(row=0, column=0, padx=pad_x, pady=pad_y)
-            self.botones.append(self.agregarlotes)
-
-            self.crearMA = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Maestro de Artículos",command= self.MA_vista)
-            self.crearMA.grid(row=0, column=1, padx=pad_x, pady=pad_y)
-            self.botones.append(self.crearMA)
-
-            self.craerIPC = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Productos Comprados", command= self.IPC)
-            self.craerIPC.grid(row=0, column=2, padx=pad_x, pady=pad_y)
-            self.botones.append(self.craerIPC)
-
-            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Registro de Producción", command= self.RDP)
-            self.creaRP.grid(row=0, column=3, padx=pad_x, pady=pad_y)
-            self.botones.append(self.creaRP)
-
-            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="ver Lotes", command= self.verlotes)
-            self.creaRP.grid(row=0, column=4, padx=pad_x, pady=pad_y)
-            self.botones.append(self.creaRP)
-
-            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Productos  de Cosechas", command= self.PPO)
-            self.creaRP.grid(row=0, column=5, padx=pad_x, pady=pad_y)
-            self.botones.append(self.creaRP)
-
-            self.almacen_open = True  # Marcar que el almacén está abierto
-            self.someopen = True
-
-        elif self.almacen_open ==  True:
-            # Eliminar los botones almacenados
-            for boton in self.botones:
-                boton.destroy()
-                boton = None
-            
-            self.botones = []  # Vaciar la lista de botones
-            self.almacen_open = False  # Marcar que el almacén está cerrado
-            self.someopen = False
-        else:
-             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     
     def subV_crear(self, nombre="ventana", alto=500, ancho=500):
@@ -502,12 +470,20 @@ class Pantalla_add:
         else:
             self.subV_destruir()
 
-    def verlotes(self,):
-        if not self.sv_open:
-            self.subV_crear()
-            inst= LoteInfo(self.SV)
-        else:
-            self.subV_destruir()
+    def verlotes(self):
+        if self.someopen==False and self.VTL_open == False:  # Si los botones no están abiertos
+            self.someopen = True
+            self.VTL_open =True  # Marcar como abiertos
+            # Crear los botones que deseas mostrar
+            self.lote_info_instance = LoteInfo(self.admin.frame_scroll)
+            self.lote_info_instance.toggle_buttons()
+        elif self.VTL_open == True:
+            self.VTL_open = False
+            self.someopen = False
+            self.limpiar_frame_scroll()  # Crear los botones dentro de LoteInfo
+        else:  # Si los botones ya están abiertos
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
 
     def limpiar_frame_scroll(self):
         # Eliminar todos los widgets dentro de frame_scroll
