@@ -11,7 +11,7 @@ from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
 class Pantalla_add:
-    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
+    def __init__(self, ventana=None, notebook=None, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
         self. usuario_log = usuario_log
         self.ventana = ventana
         self.notebook = notebook

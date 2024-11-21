@@ -27,6 +27,7 @@ class Emergente:
 
         self.Math_admin = self.Lector.leerTxtFile("admins.txt")
         self.Revisor_ad = revUsuarios(self.Math_admin)
+        self.archivo_compras_path = os.path.join("RegistroCompras.txt")
 
         
         # Cargar las imágenes de los botones
@@ -109,7 +110,6 @@ class Emergente:
 
         self.Escritor.limpiartxt("Carrito.txt")
 
-        self.archivo_compras_path = os.path.join("RegistroCompras.txt")
         if self.Revisor_ad.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
             self.username = username
@@ -123,8 +123,8 @@ class Emergente:
             
         elif self.Revisor.RevisarUsuarioExistente(username, password)==True:
             self.win = 1
-            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
             self.username = username
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()
@@ -138,10 +138,13 @@ class Emergente:
         if password == confirm_password:
             self.win = 1
             self.username = username
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()
             self.Escritor.write("Usuarios.txt", username + " " + password + "\n")
+            self.Escritor.write("RegistroCompras.txt", f"{username}\n")
+            self.admin_win.crear_boton_historial_usuario(self.canva,self.xMargen*47, self.yMargen*6)
             self.Etiqueta_Logado.config(text=username)
         else:
             messagebox.showerror("Error", "Las contraseñas no coinciden")
@@ -159,6 +162,7 @@ class Emergente:
     def logout(self, ventana):
         self.Etiqueta_Logado.config(text="User0000")
         self.username = "User0000"
+        self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
         ventana.destroy()
         self.win = 0
         self.registro()
