@@ -288,7 +288,7 @@ class BotonesPE:
 
     def actualizar_cantidades(self):
         """Actualiza las cantidades en el archivo PE.txt según los datos de Lotes.txt."""
-        cantidades_totales = self.leer_lotes()
+        cantidades_totales = self.leer_lotes
         matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
 
         # Actualizar las cantidades en PE
