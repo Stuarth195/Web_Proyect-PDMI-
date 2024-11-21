@@ -9,7 +9,7 @@ import random
 class Pagos:
     def __init__(self, root):
         self.lector = LectorTXT()
-        self.total = 0
+        self.total = 0.0
         self.metodoPago = "No seleccionado"
         self.escritor = Writer()
         self.root = root
@@ -66,7 +66,7 @@ class Pagos:
         Carrito = self.lector.leerTxtFile("Carrito.txt")
         for compra in Carrito:
             if len(compra) > 2:
-                self.total = self.total + int(compra[1]) * int(compra[2])
+                self.total = self.total + float(compra[1]) * float(compra[2])
 
         self.Recivos = Reb(user, self.total)
 
@@ -184,6 +184,7 @@ class Pagos:
                     self.timer = TimerApp(self.root)
                     self.timer.start_timer(self.tiempoEntrega)
                     Email = EmailE.get().strip()
+
                     if Tipo == 2:
                         Dir = DireccionUser.get()  # Usamos .get() para obtener la dirección del Entry
                         self.Recivos.deliverReb(Dir, self.tiempoEntrega, self.metodoPago, "Entrega Domicilio", Email, self.metodoPago, "Delivery")

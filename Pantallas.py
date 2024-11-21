@@ -23,6 +23,7 @@ class Pantalla_add:
         self.historial_open = False
         self.lista_productos_open =False
         self.lector =  LectorTXT()
+        self.escritor = Writer()
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.someopen = False
         self.frame_interno= None
@@ -34,6 +35,7 @@ class Pantalla_add:
         self.verCNT = None
         self.verePRV = None
         self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS","Lotes.txt")
+        self.Descuentos_open = False
 
         
         
@@ -48,7 +50,7 @@ class Pantalla_add:
         productos_menu.add_command(label="Crear Producto",)
         productos_menu.add_command(label="Quitar Producto")
         productos_menu.add_command(label="Modificar Producto")
-        productos_menu.add_command(label="crear descueto")
+        productos_menu.add_command(label="crear descueto", command=lambda:self.Botones_Desc(500,self.admin.frame_scroll, 0,0))
 
         # Submenú Ventas
         ventas_menu = tk.Menu(self.menu_bar, tearoff=0)
@@ -80,7 +82,7 @@ class Pantalla_add:
 
 
 
-    def crear_vista_Historial(self, lado, lugar, padx=0, pady=0): 
+    def crear_vista_Historial(self, lado, lugar, padx=0, pady=0):
         self.lado_hiostorial = lado
         if self.historial_open == False and self.someopen == False:
             # Crear el canvas y configurarlo para llenarse dentro del lugar especificado
@@ -488,3 +490,39 @@ class Pantalla_add:
             self.subV_crear()
         else:
             self.subV_destruir()
+
+
+    def Botones_Desc(self, lado, lugar, padx=0, pady=0):
+        if self.someopen == False and self.Descuentos_open == False:
+            self.someopen = True
+            self.Descuentos_open = True
+
+            self.canvas = tk.Canvas(lugar, bg="yellow", width=lado, height=lado)
+            self.canvas.pack(fill=tk.BOTH, expand=True, side=tk.LEFT, padx=padx, pady=pady)
+
+            self.label = tk.Label(self.canvas, text="Ingrese el descuento deseado", bg="yellow", fg="Black", font=("Helvetica", 20, "bold"))
+            self.label.place(x=10, y=5)
+
+            self.descuento = tk.Entry(self.canvas)
+            self.descuento.place(x=10, y=50, width=lado-20)
+
+            self.guardarDesc = tk.Button(self.canvas, text="Confirmar Descuento", bg="yellow", fg="black", font=("Helvetica"), command=lambda: self.Crear_Descuento(self.descuento.get()))
+            self.guardarDesc.place(x=10, y=95)
+
+        else:
+            self.someopen = False
+            self.Descuentos_open = False
+
+            self.label.destroy()
+            self.descuento.destroy()
+
+
+            self.canvas.destroy()
+            self.canvas = None
+
+
+
+    def Crear_Descuento(self, Porcentaje_Descuento):
+        self.descuento.delete(0, tk.END)
+        self.escritor.limpiartxt("Descuento.txt")
+        self.escritor.write("Descuento.txt", Porcentaje_Descuento)
