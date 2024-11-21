@@ -147,6 +147,10 @@ class Pagos:
         EmailE = tk.Entry(ventana_Compra, width=50, font=("Verdana", 16))
         EmailE.place(x=600, y=250)
 
+        Nota = tk.Label(ventana_Compra, text=f"* en caso de no ingresar un correo @gmail.com valido no le\nllegara la confirmacion de compra", font=("Verdana", 10), fg="black",
+                                 bg="white")
+        Nota.place(x=600, y=420)
+
         if user != "User0000":
             Direccion = tk.Label(ventana_Compra, text="Ingrese la direccion", font=("Verdana", 16), fg="black",
                                  bg="white")

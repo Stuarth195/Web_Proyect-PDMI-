@@ -90,7 +90,7 @@ class Reb:
             print(f"Error al cargar la imagen: {e}")
 
         StrProductos = ""
-        StrEmail = self.user + f"\n \n \n" + "Producto / Unidades / PrecioU / PrecioT"
+        StrEmail = self.user + f"\n \n \n" + "Producto / Unidades / PrecioU / PrecioT" + f"\n"
         fecha_actual = datetime.date.today()
         fecha = fecha_actual.strftime('%Y-%m-%d')
         StrFacturacion = self.user + " " + metodo_Pago + " " + str(self.total) + " " + metodo_Entrega + " " + fecha
