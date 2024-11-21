@@ -541,17 +541,14 @@ class Pantalla_add:
             self.canvas = None
 
     def HDF(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False and self.someopen == False:
+        if self.sv_open ==  False:
             self.someopen = True
             self.subV_crear()
             archivo_principal = os.path.join("HistorialFacturacion.txt")
             columnas=["Cliente", "Estado", "Metodfo de Pago", "total", "lugar de envio", "Fecha"]
             interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
-        elif self.someopen == True and self.sv_open == False:
-            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
         else:
             self.subV_destruir()
-            self.someopen = False
 
 
     def Crear_Descuento(self, Porcentaje_Descuento):
@@ -567,15 +564,12 @@ class Pantalla_add:
             self.subV_destruir()
 
     def VRC(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False and self.someopen == False:
-            self.someopen = True
+        if self.sv_open ==  False:
             self.subV_crear()
             archivo_principal = os.path.join("recibos_cosecha.txt")
             columnas=["Fcecha",  "Provedor", "Producto", "cantidad"]
             interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
-        elif self.someopen == True and self.sv_open == False:
-            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
         else:
             self.subV_destruir()
-            self.someopen = False
+       
 
