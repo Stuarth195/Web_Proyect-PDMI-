@@ -6,7 +6,7 @@ from logic import Instacia_B
 import tkinter as tk
 from tkinter import messagebox
 import os
-from botones import Botones 
+from botones import Botones, BotonesPE
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 class Pantalla_add:
@@ -471,9 +471,15 @@ class Pantalla_add:
         
 
 
-    def IPC(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False:
-            self.subV_crear()
+    def IPC(self, nombre=None, alto=None, ancho=None):
+        if self.sv_open == False:
+            self.subV_crear()  # Abre la ventana (subventana)
+            
+            # Crea una instancia de BotonesPE
+            instancia_comando_pe = BotonesPE()
+            
+            # Llama a visualizar_productos para mostrar los productos de PE.txt
+            instancia_comando_pe.visualizar_productos(self.SV)
         else:
             self.subV_destruir()
 

@@ -1,2 +1,14 @@
 TOM-001_20241203_019 TOM-001 Tomate_fresco 2024_12_03 sa Kilogramos 20.0
 CHP-001_20241010_001 CHP-001 Chips_de_papa_(Paquete_de_200g) 2024_10_25 Stuarth_SA Unidad 21
+SAL-003_20241120_001 SAL-003 Sal 2024_11_20 Proveedor_X Gramos 100.0
+OLI-001_20241120_001 OLI-001 Aceite_vegetal 2024_11_20 Proveedor_Y Litros 50.0
+PRE-001_20241120_001 PRE-001 Preservantes 2024_11_20 Proveedor_Z Gramos 80.0
+EMP-001_20241120_001 EMP-001 Empaque_para_chips_(200g) 2024_11_20 Proveedor_A Unidad 100
+EMP-002_20241120_001 EMP-002 Empaque_para_chips_(500g) 2024_11_20 Proveedor_B Unidad 200
+EMP-003_20241120_001 EMP-003 Botella_plástica_para_salsa_(500ml) 2024_11_20 Proveedor_C Unidad 300
+EMP-004_20241120_001 EMP-004 Tapa_para_botella_plástica_(500ml) 2024_11_20 Proveedor_D Unidad 250
+EMP-005_20241120_001 EMP-005 Botella_plástica_para_salsa_(1L) 2024_11_20 Proveedor_E Unidad 180
+EMP-006_20241120_001 EMP-006 Tapa_para_botella_plástica_(1L) 2024_11_20 Proveedor_F Unidad 160
+EMP-007_20241120_001 EMP-007 Lata_para_salsa_de_tomate_(400g) 2024_11_20 Proveedor_G Unidad 500
+EMP-008_20241120_001 EMP-008 Lata_para_salsa_de_tomate_(1kg) 2024_11_20 Proveedor_H Unidad 450
+AGU-001_20241120_001 AGU-001 Agua 2024_11_20 Proveedor_I Litros 100.0
