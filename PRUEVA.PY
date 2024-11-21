@@ -1,41 +1,26 @@
-from admin import Seccion
-from TXTReader import LectorTXT
-from WriterEnDocumento import Writer
-from Producto import Product
-from logic import Instacia_B
-import tkinter as tk
-from tkinter import messagebox
-import os
-from botones import Botones, BotonesPE, ReciboCosecha
-from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
-from loteinfo import LoteInfo
-from InterfazGenerica import InterfazGenerica
+def eliminar_lineas_blanco(ruta_archivo):
+    """
+    Elimina las líneas en blanco de un archivo de texto y sobrescribe el archivo original.
+    
+    Parámetros:
+    ruta_archivo (str): Ruta del archivo que se va a procesar.
+    """
+    try:
+        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+            lineas = archivo.readlines()
 
+        # Filtrar líneas que no están vacías o no son espacios en blanco
+        lineas_no_vacias = [linea for linea in lineas if linea.strip()]
 
+        # Sobrescribir el archivo original con las líneas filtradas
+        with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
+            archivo.writelines(lineas_no_vacias)
 
-if __name__ == "__main__":
-    import tkinter as tk
+        print(f"Líneas en blanco eliminadas. El archivo '{ruta_archivo}' ha sido actualizado.")
+    except FileNotFoundError:
+        print(f"Error: El archivo '{ruta_archivo}' no existe.")
+    except Exception as e:
+        print(f"Se produjo un error: {e}")
 
-    class App:
-        def __init__(self, root):
-            self.root = root
-            self.frame_scroll = tk.Frame(root)
-            self.frame_scroll.pack(fill="both", expand=True)
-            self.someopen = False
-
-        def GRC(self):
-            if not self.someopen:
-                self.recibo = ReciboCosecha(self.frame_scroll, "recibos_cosecha.txt")
-                self.recibo.on_form_closed = self.formulario_terminado
-                self.someopen = True
-            else:
-                messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
-
-        def formulario_terminado(self):
-            self.someopen = False
-            messagebox.showinfo("Proceso Finalizado", "Formulario cerrado con éxito.")
-
-    root = tk.Tk()
-    app = App(root)
-    tk.Button(root, text="Crear Formulario", command=app.GRC).pack(pady=10)
-    root.mainloop()
+# Ejemplo de uso
+eliminar_lineas_blanco("RegistroCompras.txt")

@@ -4,16 +4,25 @@ import re
 
 class LectorTXT:
     def leerTxtFile(self, txtFilePath):
+        self.eliminar_lineas_blanco(txtFilePath)
+        """
+        Lee un archivo TXT y devuelve una matriz de palabras por línea,
+        eliminando previamente las líneas en blanco.
+        """
         matriz = []
-        with open(txtFilePath, 'r', encoding='utf-8') as archivo:
-            lineas = archivo.readlines()
-            for linea in lineas:
-                lista = []
-                palabras = linea.split()  # Se separan las palabras por espacios
-                for palabra in palabras:
-                    lista.append(palabra)
-                matriz.append(lista)
+        try:
+            with open(txtFilePath, 'r', encoding='utf-8') as archivo:
+                # Filtrar y procesar solo las líneas que no estén vacías
+                lineas = [linea.strip() for linea in archivo if linea.strip()]
+                for linea in lineas:
+                    palabras = linea.split()  # Dividir la línea en palabras
+                    matriz.append(palabras)
+        except FileNotFoundError:
+            print(f"El archivo '{txtFilePath}' no fue encontrado.")
+        except Exception as e:
+            print(f"Error al leer el archivo: {e}")
         return matriz
+
 
     def leerTxtFilenUM(self, txtFilePath):
         matriz = []
@@ -79,3 +88,28 @@ class LectorTXT:
                 if columnas:  # Evita agregar filas vacías
                     matriz.append(columnas)
         return matriz
+
+    def eliminar_lineas_blanco(self, ruta_archivo):
+        """
+        Elimina las líneas en blanco de un archivo de texto y sobrescribe el archivo original.
+        
+        Parámetros:
+        ruta_archivo (str): Ruta del archivo que se va a procesar.
+        """
+        try:
+            with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+                lineas = archivo.readlines()
+
+            # Filtrar líneas que no están vacías o no son espacios en blanco
+            lineas_no_vacias = [linea for linea in lineas if linea.strip()]
+
+            # Sobrescribir el archivo original con las líneas filtradas
+            with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
+                archivo.writelines(lineas_no_vacias)
+
+            print(f"Líneas en blanco eliminadas. El archivo '{ruta_archivo}' ha sido actualizado.")
+        except FileNotFoundError:
+            print(f"Error: El archivo '{ruta_archivo}' no existe.")
+        except Exception as e:
+            print(f"Se produjo un error: {e}")
+

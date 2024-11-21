@@ -143,7 +143,7 @@ class Emergente:
             self.register = None
             self.mostrar_menu_logout()
             self.Escritor.write("Usuarios.txt", username + " " + password + "\n")
-            self.Escritor.write("RegistroCompras.txt", f"{username}\n")
+            self.Escritor.write("RegistroCompras.txt", f"{username}")
             self.admin_win.crear_boton_historial_usuario(self.canva,self.xMargen*47, self.yMargen*6)
             self.Etiqueta_Logado.config(text=username)
         else:
@@ -161,8 +161,8 @@ class Emergente:
 
     def logout(self, ventana):
         self.Etiqueta_Logado.config(text="User0000")
-        self.username = "User0000"
         self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
+        self.username = "User0000"
         ventana.destroy()
         self.win = 0
         self.registro()

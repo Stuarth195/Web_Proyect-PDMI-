@@ -153,6 +153,7 @@ class Pantalla_add:
             pass
     
     def extraer_historial(self, linea):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Busca las sublistas delimitadas por [ y ]
         historial = []
         contenido = ''.join(linea)  # Convierte la línea en una cadena única para simplificar la búsqueda
@@ -173,6 +174,7 @@ class Pantalla_add:
         return historial
 
     def comando_botones_historial(self, nombre):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         alto = 800
         ancho = 1000
         # Crear la subventana
@@ -213,6 +215,7 @@ class Pantalla_add:
 
         # Verifica si hay datos en Us_math
         if self.Us_math:
+            self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
             for linea in self.Us_math:
                 if linea[0] == nombre:
                     # Extrae las sublistas del historial
@@ -276,6 +279,7 @@ class Pantalla_add:
 
         # Verifica si hay datos en Us_math
         if self.Us_math:
+            self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
             for linea in self.Us_math:
                 # Filtrar el historial del usuario logueado
                 if linea[0] == self.usuario_log:
@@ -309,6 +313,7 @@ class Pantalla_add:
 # Dentro de la clase Pantalla_add, en algún método de configuración o en el __init__
 
     def crear_boton_historial_usuario(self, donde, valx , valy):
+        self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Crear el botón en la ventana principal o en un frame específico
         self.boton_historial_usuario = tk.Button(donde, text="Ver mi Historial", command=self.mostrar_historial_usuario)
