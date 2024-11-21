@@ -18,3 +18,4 @@ TOM-001_20240802_001 TOM-001 Tomate_fresco 2024_08_17 yO_sa Kilogramos 12.0
 TOM-001_20241003_001 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0
 TOM-001_20241003_002 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0
 EMP-001_20241103_001 EMP-001 Empaque_para_chips_(200g) 2024_11_18 Raulitos_SA Unidad 50
+TOM-001_20240101_001 TOM-001 Tomate_fresco 2024_01_16 AA Kilogramos 200.0

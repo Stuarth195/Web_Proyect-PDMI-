@@ -232,15 +232,22 @@ class Botones:
         # Formatear la línea del lote
         linea_lote = f"{identificador_lote} {codigo} {descripcion} {fecha_formateada} {proveedor} {unidad} {cantidad}\n"
 
-        # Escribir la línea en el archivo de lotes en la ruta proporcionada
-        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+        # Abrir el archivo y asegurarse de que no haya una línea vacía al final antes de escribir
+        with open(ruta_archivo, "a+", encoding="utf-8") as archivo:
+            # Mover el cursor al final del archivo
+            archivo.seek(0, 2)
+            # Si la última línea está vacía, eliminarla
+            archivo.seek(archivo.tell() - 1, 0)
+            if archivo.read(1) == "\n":
+                archivo.truncate()
+            
+            # Escribir la línea del lote
             archivo.write(linea_lote)
 
         # Mostrar mensaje de éxito
         messagebox.showinfo("Éxito", f"Lote registrado en: {ruta_archivo}\n{linea_lote.strip()}")
 
         print(f"Lote registrado: {linea_lote.strip()} en {ruta_archivo}")  # Para depuración
-
 
 import os
 import tkinter as tk
