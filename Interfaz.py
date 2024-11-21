@@ -16,7 +16,7 @@ def Interfaz():
     instancia_base = Instacia_B()
     #rutas de descarga
     ruta_defecto= os.path.join("Web_Proyect-PDMI-")
-    #ids de los archivos
+    #ids de los archivosb
     id_usuarios= "1VC7trYLyHziTpeFfH5K8gsSW3k8xKSLh"
     id_admins= "1j--oyLkPszHwCyUqV4H-ySb_XNxzP2Dz"
     id_carrito="1D-Vm_10a2UtLsARG0ZA5sLi7Q2KXMFnn"
