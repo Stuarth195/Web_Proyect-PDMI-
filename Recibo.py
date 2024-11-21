@@ -90,19 +90,19 @@ class Reb:
             print(f"Error al cargar la imagen: {e}")
 
         StrProductos = ""
-        StrEmail = self.user + f"\n"
+        StrEmail = self.user + f"\n \n \n" + "Producto / Unidades / PrecioU / PrecioT"
         fecha_actual = datetime.date.today()
         fecha = fecha_actual.strftime('%Y-%m-%d')
         StrFacturacion = self.user + " " + metodo_Pago + " " + str(self.total) + " " + metodo_Entrega + " " + fecha
         i = 0
 
         while i < len(self.Productos):
-            self.escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/Lotes.txt", int(self.Unidades[i]), self.Productos[i])
-            StrProductos += " [" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(int(self.Unidades[i]) * int(self.Precios[i])) + "]"
-            StrEmail += "     " +self.Productos[i] + " / " + self.Unidades[i] + " / " + self.Precios[i] + " / " + str(int(self.Unidades[i]) * int(self.Precios[i])) + f"\n"
+            self.escritor.rebajar_Lote("LISTA PRODUCTO Y RECETAS/M_A.txt", float(self.Unidades[i]), self.Productos[i])
+            StrProductos += " [" + fecha + ";" + self.Productos[i] + ";" + self.Unidades[i] + ";" + self.Precios[i] + ";" + str(float(self.Unidades[i]) * float(self.Precios[i])) + "]"
+            StrEmail += "     " +self.Productos[i] + " / " + self.Unidades[i] + " / " + self.Precios[i] + "$ / " + str(float(self.Unidades[i]) * float(self.Precios[i])) + f"$ \n"
             i+=1
 
-        StrEmail = StrEmail + f"\n" + fecha + " " + f"\n \n \n Total: " + str(self.total)
+        StrEmail = StrEmail + f"\n" + fecha + " " + f"\n \n \n Total: " + str(self.total) + "$"
 
         self.EmSender.send_email(email, "Factura AU", StrEmail)
 

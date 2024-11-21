@@ -29,7 +29,7 @@ class Product:
         - descripcion: descripción del producto.
         - productopath: ruta para obtener más información del producto al hacer clic.
         """
-        
+
         TempP = tk.Canvas(self.canva, width=self.margenx * 8, height=self.margeny * 10, bg="white")
         Inf = InfProducto(self.vetana)  # Instancia de la clase InfProducto para mostrar más información
 

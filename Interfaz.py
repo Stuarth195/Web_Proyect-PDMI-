@@ -113,7 +113,7 @@ def Interfaz():
 
     # Crear productos en el frame de scroll
     P1 = Product(App, feed.frame_scroll, margen_anchoP, margen_altoP)
-    i = 0
+    Des = 1
     xP = margen_anchoP
     yP = margen_altoP
     canvas_count = 0
@@ -121,17 +121,29 @@ def Interfaz():
     frame.pack(padx=margen_anchoP//2, pady=margen_altoP*12)
 
     prod = Lector.leerTxtFile("LISTA PRODUCTO Y RECETAS/M_A.txt")
+    desc = Lector.leerTxtFile("Descuento.txt")
+    for fila in desc:
+        for i in fila:
+            if i != "":
+                try:
+                    Des = (100-int(i))/100
+                except ValueError:
+                    print("No es un numero")
+    print(Des)
     for produ in prod:
-        nombreProd = re.findall(r'\((.*?)\)', produ[1])
-        if nombreProd == []:
-            P1.mostrarImagen(producto_img, produ[1], produ[5], xP, yP, frame, canvas_count, produ[3], produ[0],
-                             produ[2], p1)
-        else:
-            P1.mostrarImagen(producto_img, nombreProd[0], produ[5], xP, yP, frame, canvas_count, produ[3], produ[0],
-                            produ[2], p1)
-        canvas_count += 1
-        if canvas_count == 5:
-            canvas_count = 0
+        if produ != []:
+            nombreProd = re.findall(r'\((.*?)\)', produ[1])
+            if nombreProd == []:
+                precio = round(int(produ[5])*Des, 2)
+                P1.mostrarImagen(producto_img, produ[1], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
+                                 produ[2], p1)
+            else:
+                precio = round(int(produ[5]) * Des, 2)
+                P1.mostrarImagen(producto_img, nombreProd[0], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
+                                produ[2], p1)
+            canvas_count += 1
+            if canvas_count == 5:
+                canvas_count = 0
 
 
 

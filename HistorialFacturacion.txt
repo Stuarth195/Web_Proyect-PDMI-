@@ -11,3 +11,7 @@ User0000 Pago Efectivo 458.0 Local 2024-11-20
 User0000 Pago Efectivo 345.0 Local 2024-11-20
 User0000 Pago Efectivo 165.0 Local 2024-11-20
 a Pago Efectivo 41.0 Local 2024-11-20
+User0000 Pago Efectivo 2.0 Local 2024-11-20
+User0000 Pago Efectivo 11.0 Local 2024-11-20
+User0000 Pago Efectivo 10.0 Local 2024-11-20
+User0000 Pago Tarjeta 47.0 Local 2024-11-20
