@@ -8,8 +8,9 @@ from tkinter import messagebox
 import os
 from botones import Botones 
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
+from loteinfo import LoteInfo
 class Pantalla_add:
-    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes=None, usuario_log= None):
+    def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
         self. usuario_log = usuario_log
         self.ventana = ventana
         self.notebook = notebook
@@ -369,6 +370,10 @@ class Pantalla_add:
             self.creaRP.grid(row=0, column=3, padx=pad_x, pady=pad_y)
             self.botones.append(self.creaRP)
 
+            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="ver Lotes", command= self.verlotes)
+            self.creaRP.grid(row=0, column=4, padx=pad_x, pady=pad_y)
+            self.botones.append(self.creaRP)
+
             self.almacen_open = True  # Marcar que el almacén está abierto
             self.someopen = True
 
@@ -456,6 +461,14 @@ class Pantalla_add:
             instancia_comando.visualizar_productos(self.SV)
         else:
             self.subV_destruir()
+
+    def verlotes(self,):
+        if not self.sv_open:
+            self.subV_crear()
+            inst= LoteInfo(self.SV)
+        else:
+            self.subV_destruir()
+        
 
 
     def IPC(self,nombre= None, alto=None, ancho = None):
