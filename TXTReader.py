@@ -65,3 +65,17 @@ class LectorTXT:
         # Expresión regular para verificar si la fecha tiene el formato año-mes-día
         patron = r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
         return bool(re.match(patron, fecha))
+    
+    def leerTxtFilenUMII(self, txtFilePath):
+        """
+        Lee un archivo TXT y retorna una matriz con cada fila como lista de cadenas,
+        limpiando espacios adicionales en los elementos.
+        """
+        matriz = []
+        with open(txtFilePath, 'r', encoding='utf-8') as archivo:
+            lineas = archivo.readlines()
+            for linea in lineas:
+                columnas = [col.strip() for col in linea.split()]  # Limpia espacios en cada columna
+                if columnas:  # Evita agregar filas vacías
+                    matriz.append(columnas)
+        return matriz
