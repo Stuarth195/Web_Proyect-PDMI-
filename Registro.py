@@ -161,7 +161,6 @@ class Emergente:
 
     def logout(self, ventana):
         self.Etiqueta_Logado.config(text="User0000")
-        self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
         self.username = "User0000"
         ventana.destroy()
         self.win = 0

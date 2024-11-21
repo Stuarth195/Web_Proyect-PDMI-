@@ -1,8 +1,7 @@
-
 CHP-001 Chips_de_papa_(Paquete_de_200g) Paquete_(200g) 1970.0 Unidad 2 
 CHP-002 Chips_de_papa_(Paquete_de_500g) Paquete_(500g) 5874.0 Unidad 2 
 SAL-001 Salsa_de_tomate_envasada_(Botella_500ml) Botella_(500ml) 4987.0 Unidad 2 
-SAL-002 Salsa_de_tomate_envasada_(Botella_1L) Botella_(1L) 2936.0 Unidad 2 
+SAL-002 Salsa_de_tomate_envasada_(Botella_1L) Botella_(1L) 2924.0 Unidad 2 
 SLT-001 Salsa_de_tomate_enlatada_(Lata_400g) Lata_(400g) 1996.0 Unidad 2 
 SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) Lata_(1kg) 3994.0 Unidad 2 
 PG-000 Papa_a_Granel malla(Granel) 2498.0 Kg 3 
