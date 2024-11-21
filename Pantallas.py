@@ -37,6 +37,7 @@ class Pantalla_add:
         self.verePRV = None
         self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS","Lotes.txt")
         self.Descuentos_open = False
+        self.facturacion_open = False
 
         
         
@@ -506,7 +507,12 @@ class Pantalla_add:
             inst= LoteInfo(self.SV)
         else:
             self.subV_destruir()
-        
+
+    def limpiar_frame_scroll(self):
+        # Eliminar todos los widgets dentro de frame_scroll
+        for widget in self.admin.frame_scroll.winfo_children():
+            widget.destroy()
+
 
 
     def IPC(self, nombre=None, alto=None, ancho=None):
@@ -565,14 +571,18 @@ class Pantalla_add:
             self.canvas = None
 
     def HDF(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False:
+        if self.someopen ==  False and self.facturacion_open== False:
             self.someopen = True
-            self.subV_crear()
+            self.facturacion_open = True
             archivo_principal = os.path.join("HistorialFacturacion.txt")
             columnas=["Cliente", "Estado", "Metodfo de Pago", "total", "lugar de envio", "Fecha"]
-            interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
+            interfaz = InterfazGenerica(self.admin.frame_scroll,archivo_principal,columnas)
+        elif self.facturacion_open ==True:
+            self.limpiar_frame_scroll()
+            self.someopen=False
+            self.facturacion_open = False
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
 
     def Crear_Descuento(self, Porcentaje_Descuento):
