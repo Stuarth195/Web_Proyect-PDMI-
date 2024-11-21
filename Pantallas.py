@@ -61,7 +61,7 @@ class Pantalla_add:
         administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
         administrativo_menu.add_command(label="Historiales" , command=lambda:self.crear_vista_Historial(500,self.admin.frame_scroll, 0,0))  # Solo "Historiales" en Administrativo
         administrativo_menu.add_command(label="Almacén", command=lambda:self.almacen(self.admin.frame_scroll, 10, 50,))
-        administrativo_menu.add_command(label="Facturas")
+        administrativo_menu.add_command(label="Facturas", command=self.HDF)
 
         # Crear el menú "Opciones de Admin" y añadir los submenús
         opciones_admin_menu = tk.Menu(self.menu_bar, tearoff=0)
@@ -533,6 +533,18 @@ class Pantalla_add:
             self.canvas.destroy()
             self.canvas = None
 
+    def HDF(self,nombre= None, alto=None, ancho = None):
+        if self.sv_open ==  False and self.someopen == False:
+            self.someopen = True
+            self.subV_crear()
+            archivo_principal = os.path.join("HistorialFacturacion.txt")
+            columnas=["Cliente", "Estado", "Metodfo de Pago", "total", "lugar de envio", "Fecha"]
+            interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
+        elif self.someopen == True and self.sv_open == False:
+             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+        else:
+            self.subV_destruir()
+            self.someopen = False
 
 
     def Crear_Descuento(self, Porcentaje_Descuento):
