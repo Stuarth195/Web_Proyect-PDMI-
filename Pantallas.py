@@ -512,7 +512,7 @@ class Pantalla_add:
             # Llama a visualizar_productos para mostrar los productos de PE.txt
             instancia_comando_pe.visualizar_productos(self.admin.frame_scroll)
         elif self.IP_open ==True:
-            self.someopen
+            self.someopen= False
             self.IP_open =False
             self.limpiar_frame_scroll()
         else:

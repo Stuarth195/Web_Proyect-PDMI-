@@ -10,4 +10,3 @@ EMP-006 Tapa_para_botella_plástica_(1L) 25 Unidad 160
 EMP-007 Lata_para_salsa_de_tomate_(400g) 25 Unidad 500
 EMP-008 Lata_para_salsa_de_tomate_(1kg) 25 Unidad 450
 AGU-001 Agua 25 Litros 100
-ADC-001 AGUA_DE_CHAYOTE 1000 Litros 10
