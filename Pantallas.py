@@ -38,6 +38,7 @@ class Pantalla_add:
         self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS","Lotes.txt")
         self.Descuentos_open = False
         self.facturacion_open = False
+        self.VRC_open = False
 
         
         
@@ -597,13 +598,16 @@ class Pantalla_add:
         else:
             self.subV_destruir()
 
-    def VRC(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False:
-            self.subV_crear()
-            archivo_principal = os.path.join("recibos_cosecha.txt")
-            columnas=["Fcecha",  "Provedor", "Producto", "cantidad"]
-            interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
+    def VRC(self):
+        if self.someopen == False and self.VRC_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
+            self.someopen = True
+            self.VRC_open = True
+            archivo_recibo = os.path.join("recibos_cosecha.txt")
+            columnas = ["Fcecha", "Provedor", "Producto", "cantidad"]  # Se mantienen las columnas de VRC
+            interfaz = InterfazGenerica(self.admin.frame_scroll, archivo_recibo, columnas)
+        elif self.VRC_open == True:
+            self.limpiar_frame_scroll()
+            self.someopen = False
+            self.VRC_open = False
         else:
-            self.subV_destruir()
-       
-
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
