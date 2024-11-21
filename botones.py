@@ -4,6 +4,7 @@ from tkinter import Label, Button, Toplevel, messagebox
 from PIL import Image, ImageTk  # Manejo de imágenes
 from TXTReader import LectorTXT
 import verify as vr
+from InterfazGenerica import InterfazGenerica
 class Botones:
     def __init__(self, base_dir="LISTA PRODUCTO Y RECETAS"):
         """

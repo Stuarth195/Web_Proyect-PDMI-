@@ -9,6 +9,7 @@ import os
 from botones import Botones, BotonesPE
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
+from InterfazGenerica import InterfazGenerica
 class Pantalla_add:
     def __init__(self, ventana, notebook, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
         self. usuario_log = usuario_log
@@ -376,6 +377,10 @@ class Pantalla_add:
             self.creaRP.grid(row=0, column=4, padx=pad_x, pady=pad_y)
             self.botones.append(self.creaRP)
 
+            self.creaRP = tk.Button(donde, width=self.ancho // 70, height=self.alto // 70, text="Productos  de Cosechas", command= self.PPO)
+            self.creaRP.grid(row=0, column=5, padx=pad_x, pady=pad_y)
+            self.botones.append(self.creaRP)
+
             self.almacen_open = True  # Marcar que el almacén está abierto
             self.someopen = True
 
@@ -491,6 +496,14 @@ class Pantalla_add:
         else:
             self.subV_destruir()
 
+    def PPO(self,nombre= None, alto=None, ancho = None):
+        if self.sv_open ==  False:
+            self.subV_crear()
+            archivo_principal = os.path.join("LISTA PRODUCTO Y RECETAS", "COSECHA.txt")
+            columnas=["Código", "Descripción", "Unidad", "Cantidad"]
+            interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
+        else:
+            self.subV_destruir()
 
     def Botones_Desc(self, lado, lugar, padx=0, pady=0):
         if self.someopen == False and self.Descuentos_open == False:
