@@ -378,3 +378,144 @@ class BotonesPE:
         # Botón cerrar
         boton_cerrar = Button(ventana_detalle, text="Cerrar", command=ventana_detalle.destroy)
         boton_cerrar.pack(pady=10)
+#_________________________________________________________________________________________
+
+import tkinter as tk
+from tkinter import messagebox
+import re
+from datetime import datetime
+
+class ReciboCosecha:
+    def __init__(self, contenedor, ruta_txt):
+        self.contenedor = contenedor
+        self.ruta_txt = ruta_txt
+        self.crear_interfaz()
+
+    def guardar_datos(self, fecha, finca, productos):
+        with open(self.ruta_txt, "a") as file:
+            for producto, cantidad in productos:
+                line = f"{fecha} {finca} {producto} {cantidad}\n"
+                file.write(line)
+        messagebox.showinfo("Éxito", "Datos guardados correctamente.")
+
+    def obtener_datos(self):
+        fecha = self.entry_fecha.get()
+        if not self.validar_fecha(fecha):
+            messagebox.showwarning("Advertencia", "La fecha debe estar en formato YYYY-MM-DD.")
+            return
+
+        finca = self.entry_finca.get()
+        if not finca or " " in finca:
+            messagebox.showwarning("Advertencia", "El campo 'Finca' no puede estar vacío ni contener espacios.")
+            return
+
+        productos = []
+        if self.var_papas.get():
+            cantidad_papas = self.cantidad_papas_entry.get()
+            if cantidad_papas.isdigit():
+                productos.append(("Papas", cantidad_papas))
+            else:
+                messagebox.showwarning("Advertencia", "La cantidad de Papas debe ser un número válido.")
+                return
+        if self.var_tomates.get():
+            cantidad_tomates = self.cantidad_tomates_entry.get()
+            if cantidad_tomates.isdigit():
+                productos.append(("Tomates", cantidad_tomates))
+            else:
+                messagebox.showwarning("Advertencia", "La cantidad de Tomates debe ser un número válido.")
+                return
+        if self.var_otros.get():
+            cantidad_otros = self.cantidad_otros_entry.get()
+            descripcion = self.descripcion_otros_entry.get()
+            if cantidad_otros.isdigit() and descripcion and re.match("^[A-Za-z_]+$", descripcion):
+                productos.append((descripcion, cantidad_otros))
+            else:
+                messagebox.showwarning("Advertencia", "La cantidad y descripción de 'Otros' deben ser válidas.")
+                return
+
+        if not productos:
+            messagebox.showwarning("Advertencia", "Debe seleccionar al menos un producto.")
+            return
+
+        self.guardar_datos(fecha, finca, productos)
+
+    def validar_fecha(self, fecha):
+        try:
+            datetime.strptime(fecha, "%Y-%m-%d")
+            return True
+        except ValueError:
+            return False
+
+    def validar_sin_espacios(self, texto):
+        return " " not in texto
+
+    def crear_interfaz(self):
+        frame = tk.Frame(self.contenedor)
+        frame.pack(padx=10, pady=10)
+
+        validate_entry = self.contenedor.register(self.validar_sin_espacios)
+
+        # Fecha de Cosecha
+        tk.Label(frame, text="Fecha de Cosecha (YYYY-MM-DD)").grid(row=0, column=0, padx=10, pady=5)
+        self.entry_fecha = tk.Entry(frame, validate="key", validatecommand=(validate_entry, "%P"))
+        self.entry_fecha.grid(row=0, column=1, padx=10, pady=5)
+
+        # Finca
+        tk.Label(frame, text="Finca o Proveedor").grid(row=1, column=0, padx=10, pady=5)
+        self.entry_finca = tk.Entry(frame, validate="key", validatecommand=(validate_entry, "%P"))
+        self.entry_finca.grid(row=1, column=1, padx=10, pady=5)
+
+        # Selección de productos
+        tk.Label(frame, text="Selecciona Productos").grid(row=2, column=0, padx=10, pady=5)
+
+        # Papas
+        self.var_papas = tk.BooleanVar()
+        tk.Checkbutton(frame, text="Papas", variable=self.var_papas, command=self.toggle_papas).grid(row=3, column=0, padx=10, pady=5)
+        self.cantidad_papas_entry = tk.Entry(frame, state="disabled", validate="key", validatecommand=(validate_entry, "%P"))
+        tk.Label(frame, text="Cantidad").grid(row=3, column=1, padx=5, pady=5)
+        self.cantidad_papas_entry.grid(row=3, column=2, padx=10, pady=5)
+
+        # Tomates
+        self.var_tomates = tk.BooleanVar()
+        tk.Checkbutton(frame, text="Tomates", variable=self.var_tomates, command=self.toggle_tomates).grid(row=4, column=0, padx=10, pady=5)
+        self.cantidad_tomates_entry = tk.Entry(frame, state="disabled", validate="key", validatecommand=(validate_entry, "%P"))
+        tk.Label(frame, text="Cantidad").grid(row=4, column=1, padx=5, pady=5)
+        self.cantidad_tomates_entry.grid(row=4, column=2, padx=10, pady=5)
+
+        # Otros
+        self.var_otros = tk.BooleanVar()
+        tk.Checkbutton(frame, text="Otros", variable=self.var_otros, command=self.toggle_otros).grid(row=5, column=0, padx=10, pady=5)
+        self.cantidad_otros_entry = tk.Entry(frame, state="disabled", validate="key", validatecommand=(validate_entry, "%P"))
+        tk.Label(frame, text="Cantidad").grid(row=5, column=1, padx=5, pady=5)
+        self.cantidad_otros_entry.grid(row=5, column=2, padx=10, pady=5)
+        tk.Label(frame, text="Descripción").grid(row=6, column=0, padx=10, pady=5)
+        self.descripcion_otros_entry = tk.Entry(frame, state="disabled", validate="key", validatecommand=(validate_entry, "%P"))
+        self.descripcion_otros_entry.grid(row=6, column=1, columnspan=2, padx=10, pady=5)
+
+        # Botón para guardar
+        tk.Button(frame, text="Guardar", command=self.obtener_datos).grid(row=7, column=0, columnspan=3, pady=10)
+
+    def toggle_papas(self):
+        self.cantidad_papas_entry.config(state="normal" if self.var_papas.get() else "disabled")
+
+    def toggle_tomates(self):
+        self.cantidad_tomates_entry.config(state="normal" if self.var_tomates.get() else "disabled")
+
+    def toggle_otros(self):
+        estado = "normal" if self.var_otros.get() else "disabled"
+        self.cantidad_otros_entry.config(state=estado)
+        self.descripcion_otros_entry.config(state=estado)
+
+    def limpiar_interfaz(self):
+        for widget in self.contenedor.winfo_children():
+            widget.destroy()
+
+    
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Recibo de Cosecha")
+    recibo = ReciboCosecha(root, "recibos_cosecha.txt")
+
+    BOTON = tk.Button(root, text="hashdhasdasda", command=recibo.limpiar_interfaz)
+    BOTON.pack()
+    root.mainloop()
