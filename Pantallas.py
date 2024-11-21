@@ -59,7 +59,7 @@ class Pantalla_add:
 
         # Submenú Administrativo dentro de Opciones de Admin
         administrativo_menu = tk.Menu(self.menu_bar, tearoff=0)
-        administrativo_menu.add_command(label="Historiales" , command=lambda:self.crear_vista_Historial(500,self.admin.frame_scroll, 0,0))  # Solo "Historiales" en Administrativo
+        administrativo_menu.add_command(label="Historiales" , command=self.crear_botones_historial)  # Solo "Historiales" en Administrativo
         administrativo_menu.add_command(label="Almacén", command=lambda:self.almacen(self.admin.frame_scroll, 10, 50,))
         administrativo_menu.add_command(label="Facturas", command=self.HDF)
         administrativo_menu.add_command(label="Generar recibo Cosecha ", command=self.GRC)
@@ -130,28 +130,52 @@ class Pantalla_add:
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
-
     def crear_botones_historial(self):
-        # Asegúrate de que la matriz está cargada y no está vacía
-        if self.Us_math:
-            nombres_agregados = set()  # Conjunto para almacenar nombres únicos
+        if not self.someopen and not self.historial_open:  # Verifica que no esté abierto
+            self.someopen = True
+            self.historial_open = True  # Establece el historial como abierto
 
-            # Recorrer cada línea en la matriz
-            for linea in self.Us_math:
-                # Verificar si el nombre (primer elemento) ya fue agregado
-                nombre = linea[0]  # Asumimos que el nombre está en la posición 0
-                if nombre not in nombres_agregados:
-                    # Agregar el nombre al conjunto para evitar duplicados
-                    nombres_agregados.add(nombre)
-                    
-                    # Crear el botón con el nombre único
-                    # Cambia esta línea en la función crear_botones_historial
-                    boton = tk.Button(self.frame_interno, text=f"{nombre}", width=self.lado_hiostorial // 10, command=lambda nombre=nombre: self.comando_botones_historial(nombre))
+            self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
+            # Verifica que la lista generada no esté vacía
+            if self.Us_math:
+                nombres_agregados = set()  # Conjunto para evitar nombres duplicados
 
-                    boton.pack(fill=tk.X, pady=5, padx=5)
+                # Escalar el ancho de los botones en función del ancho de la pantalla
+                ancho_boton = self.ancho // 10  # Ajusta el divisor según cómo quieras que se escale
+
+                # Primero, elimina todos los widgets existentes en frame_scroll
+                for widget in self.admin.frame_scroll.winfo_children():
+                    widget.destroy()  # Elimina todos los widgets (botones) del frame_scroll
+
+                # Iterar sobre cada línea en la lista generada
+                for linea in self.Us_math:
+                    nombre = linea[0]  # El nombre está en la posición 0
+                    if nombre not in nombres_agregados:
+                        nombres_agregados.add(nombre)  # Registrar el nombre como agregado
+
+                        # Crear el botón y asociarlo a un comando con `lambda`
+                        boton = tk.Button(
+                            self.admin.frame_scroll,
+                            text=nombre,
+                            width=ancho_boton,
+                            command=lambda nombre=nombre: self.comando_botones_historial(nombre)
+                        )
+
+                        # Empaquetar el botón dentro del contenedor
+                        boton.pack(fill=tk.X, pady=5, padx=5)
+
+        elif self.historial_open:  # Si el historial está abierto, se procede a limpiarlo
+            # Eliminar todos los widgets existentes en frame_scroll
+            for widget in self.admin.frame_scroll.winfo_children():
+                widget.destroy()  # Elimina todos los widgets (botones) del frame_scroll
+
+            # No es necesario destruir el frame_scroll ni otros componentes
+            self.historial_open = False
+            self.someopen = False
+
         else:
-            pass
-    
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
     def extraer_historial(self, linea):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Busca las sublistas delimitadas por [ y ]

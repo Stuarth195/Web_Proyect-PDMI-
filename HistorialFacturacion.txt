@@ -22,3 +22,5 @@ yope Pago Tarjeta 1.0 Delivery 2024-11-21
 jam Pago Simpe 1.0 Local 2024-11-21
 zxc Pago Tarjeta 19.0 Delivery 2024-11-21
 asd Pago Simpe 19.0 Delivery 2024-11-21
+Raul Pago Efectivo 19.0 Delivery 2024-11-21
+Esteban Pago Simpe 1.0 Delivery 2024-11-21
