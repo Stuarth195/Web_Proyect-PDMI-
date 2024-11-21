@@ -72,8 +72,7 @@ class Botones:
 
     def visualizar_productos(self, ventana):
         """Muestra botones de productos en la ventana principal."""
-        # Actualizar las cantidades antes de visualizar
-        self.actualizar_cantidades()
+        # Leer los productos desde M_A.txt
         matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
 
         # Crear un marco de desplazamiento
@@ -96,15 +95,16 @@ class Botones:
 
         # Crear botones para cada producto
         for producto in matriz_MA:
-            nombre = producto[1]
-            boton = Button(scrollable_frame, text=f"{nombre}", command=lambda p=producto: self.mostrar_detalle_producto(p))
-            boton.pack(pady=5, padx=10, fill="x")
+            # Verificar si la fila tiene suficientes elementos
+            if len(producto) > 1:
+                nombre = producto[1]
+                boton = Button(scrollable_frame, text=f"{nombre}", command=lambda p=producto: self.mostrar_detalle_producto(p))
+                boton.pack(pady=5, padx=10, fill="x")
+            else:
+                print(f"Advertencia: la fila {producto} no tiene suficientes elementos.")
 
     def mostrar_detalle_producto(self, producto):
         """Actualiza los datos y muestra una ventana con los detalles del producto."""
-        # Actualizar las cantidades en tiempo real
-        self.actualizar_cantidades()
-
         # Leer los datos actualizados de M_A.txt
         matriz_MA = self.Lector.leerTxtFilenUM(self.archivo_MA)
 
@@ -112,7 +112,8 @@ class Botones:
         codigo_producto = producto[0]
         producto_actualizado = None
         for fila in matriz_MA:
-            if fila[0] == codigo_producto:
+            # Verificar si la fila tiene suficientes elementos antes de acceder a ella
+            if len(fila) > 0 and fila[0] == codigo_producto:
                 producto_actualizado = fila
                 break
 
@@ -142,11 +143,11 @@ class Botones:
             label_imagen = Label(ventana_detalle, text="Imagen no disponible", bg="gray", width=50, height=20)
             label_imagen.pack(pady=10)
 
-        # Mostrar información del producto
+        # Mostrar la información del producto
         label_info = Label(
             ventana_detalle,
             text=f"Código: {codigo}\nNombre: {nombre}\nDescripción: {descripcion}\nCantidad: {cantidad}\n"
-                 f"Unidad de Medida: {unidad_medida}\nPrecio: ${precio}",
+                f"Unidad de Medida: {unidad_medida}\nPrecio: ${precio}",
             justify="left",
             anchor="w"
         )
@@ -313,7 +314,6 @@ class BotonesPE:
 
     def visualizar_productos(self, ventana):
         """Muestra botones de productos de PE.txt en la ventana principal."""
-        self.actualizar_cantidades()
         self.matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
 
         # Crear un marco de desplazamiento
@@ -348,7 +348,7 @@ class BotonesPE:
     def mostrar_detalle_producto(self, producto):
         """Muestra una ventana con los detalles del producto de PE.txt."""
         # Actualizar las cantidades en tiempo real
-        self.actualizar_cantidades()
+
 
         matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
         codigo_producto = producto[0]
