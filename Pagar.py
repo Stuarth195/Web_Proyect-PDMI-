@@ -149,7 +149,7 @@ class Pagos:
 
         Nota = tk.Label(ventana_Compra, text=f"* en caso de no ingresar un correo @gmail.com valido no le\nllegara la confirmacion de compra", font=("Verdana", 10), fg="black",
                                  bg="white")
-        Nota.place(x=600, y=420)
+        Nota.place(x=600, y=290)
 
         if user != "User0000":
             Direccion = tk.Label(ventana_Compra, text="Ingrese la direccion", font=("Verdana", 16), fg="black",
