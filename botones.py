@@ -240,9 +240,10 @@ class Botones:
 
         print(f"Lote registrado: {linea_lote.strip()} en {ruta_archivo}")  # Para depuración
 
+
 import os
 import tkinter as tk
-from tkinter import Button, Toplevel, Label, messagebox
+from tkinter import Button, Label, Entry, Toplevel, messagebox
 from PIL import Image, ImageTk  # Manejo de imágenes
 from TXTReader import LectorTXT
 import verify as vr
@@ -293,10 +294,9 @@ class BotonesPE:
         # Actualizar las cantidades en PE
         for fila in matriz_PE:
             if len(fila) < 5:
-                # Si la fila no tiene 5 elementos, mostramos un error y la ignoramos
                 print(f"Error: la fila {fila} no tiene suficiente longitud.")
                 continue
-            
+
             codigo_producto = fila[0]  # Código de producto en primera posición
             if codigo_producto in cantidades_totales:
                 fila[4] = str(cantidades_totales[codigo_producto])  # Actualizar cantidad
@@ -314,34 +314,40 @@ class BotonesPE:
     def visualizar_productos(self, ventana):
         """Muestra botones de productos de PE.txt en la ventana principal."""
         self.actualizar_cantidades()
-        matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
+        self.matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
 
         # Crear un marco de desplazamiento
         frame = tk.Frame(ventana)
         frame.pack(fill=tk.BOTH, expand=True)
         canvas = tk.Canvas(frame)
         scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas)
+        self.scrollable_frame = tk.Frame(canvas)
 
-        scrollable_frame.bind(
+        self.scrollable_frame.bind(
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
 
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        # Crear botones para cada producto
-        for producto in matriz_PE:
-            nombre = producto[1]
-            boton = Button(scrollable_frame, text=f"{nombre}", command=lambda p=producto: self.mostrar_detalle_producto(p))
+        # Crear los botones de productos
+        self.crear_botones_productos()
+
+    def crear_botones_productos(self):
+        """Crea los botones para cada producto en la lista PE."""
+        for producto in self.matriz_PE:
+            codigo, nombre, descripcion = producto[0], producto[1], producto[2]
+            boton = Button(self.scrollable_frame, text=f"{nombre} ({codigo})", 
+                           command=lambda p=producto: self.mostrar_detalle_producto(p))
             boton.pack(pady=5, padx=10, fill="x")
 
     def mostrar_detalle_producto(self, producto):
         """Muestra una ventana con los detalles del producto de PE.txt."""
+        # Actualizar las cantidades en tiempo real
         self.actualizar_cantidades()
 
         matriz_PE = self.Lector.leerTxtFilenUM(self.archivo_PE)
@@ -372,38 +378,3 @@ class BotonesPE:
         # Botón cerrar
         boton_cerrar = Button(ventana_detalle, text="Cerrar", command=ventana_detalle.destroy)
         boton_cerrar.pack(pady=10)
-
-    def verifica_codigo(self, codigo):
-        """Verifica si el código existe en PE.txt."""
-        matriz_PE = self.Lector.leerTxtFile(self.archivo_PE)
-
-        for linea in matriz_PE:
-            if linea and linea[0] == codigo:
-                self.descripcion = linea[1]
-                return True
-        return False
-
-    def escribe_lote(self, ventana_form, fecha, codigo, cantidad, unidad, proveedor, ruta_archivo):
-        """Escribe un lote en el archivo Lotes.txt, ajustando las cantidades según PE.txt."""
-        if not self.verifica_codigo(codigo):
-            messagebox.showerror("Error", f"El código '{codigo}' no existe en PE.txt.")
-            return False
-
-        cantidad = int(cantidad) if unidad in ["Unidad", "Lata", "Botella", "Paquete"] else float(cantidad)
-
-        instvr = vr.FechaContador()
-        instvr.procesar_fecha(fecha, codigo)
-        contador = instvr.obtener_contador(fecha, codigo)
-
-        fecha_formateada = instvr.formatear_fecha(fecha)
-        identificador_lote = f"{codigo}_{fecha}_{contador}"
-        descripcion = self.descripcion
-
-        linea_lote = f"{identificador_lote} {codigo} {descripcion} {fecha_formateada} {proveedor} {unidad} {cantidad}\n"
-
-        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
-            archivo.write(linea_lote)
-
-        messagebox.showinfo("Éxito", f"Lote registrado en: {ruta_archivo}\n{linea_lote.strip()}")
-
-        print(f"Lote registrado: {linea_lote.strip()} en {ruta_archivo}")
