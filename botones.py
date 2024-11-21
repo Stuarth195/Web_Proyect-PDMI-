@@ -511,11 +511,3 @@ class ReciboCosecha:
             widget.destroy()
 
     
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Recibo de Cosecha")
-    recibo = ReciboCosecha(root, "recibos_cosecha.txt")
-
-    BOTON = tk.Button(root, text="hashdhasdasda", command=recibo.limpiar_interfaz)
-    BOTON.pack()
-    root.mainloop()

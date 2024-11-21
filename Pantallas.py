@@ -10,6 +10,7 @@ from botones import Botones, BotonesPE, ReciboCosecha
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
+
 class Pantalla_add:
     def __init__(self, ventana=None, notebook=None, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
         self. usuario_log = usuario_log
@@ -40,6 +41,11 @@ class Pantalla_add:
         self.facturacion_open = False
         self.VRC_open = False
         self.VTL_open = False
+        self.GRC_open = False
+        self.PPO_open =False
+        self.RDP_open = False
+        self.IP_open =False
+        self.MA_open = False
 
         
         
@@ -463,12 +469,17 @@ class Pantalla_add:
 
 
     def MA_vista(self,nombre=None, alto=None, ancho = None):
-        if self.sv_open ==  False:
-            self.subV_crear()
+        if self.someopen == False and self.MA_open == False:
+            self.someopen =True
+            self.MA_open = True
             instancia_comando = Botones()
-            instancia_comando.visualizar_productos(self.SV)
+            instancia_comando.visualizar_productos(self.admin.frame_scroll)
+        elif self.MA_open == True:
+            self.MA_open = False
+            self.someopen =False
+            self.limpiar_frame_scroll()
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def verlotes(self):
         if self.someopen==False and self.VTL_open == False:  # Si los botones no están abiertos
@@ -493,31 +504,44 @@ class Pantalla_add:
 
 
     def IPC(self, nombre=None, alto=None, ancho=None):
-        if self.sv_open == False:
-            self.subV_crear()  # Abre la ventana (subventana)
-            
+        if self.someopen == False and self.IP_open ==False:
+            self.someopen =True
+            self.IP_open = True
             # Crea una instancia de BotonesPE
             instancia_comando_pe = BotonesPE()
-            
             # Llama a visualizar_productos para mostrar los productos de PE.txt
-            instancia_comando_pe.visualizar_productos(self.SV)
+            instancia_comando_pe.visualizar_productos(self.admin.frame_scroll)
+        elif self.IP_open ==True:
+            self.someopen
+            self.IP_open =False
+            self.limpiar_frame_scroll()
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def RDP(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False:
-            self.subV_crear()
+        if self.someopen == False and self.RDP_open == False:
+            self.RDP_open=True
+            self.someopen=True
+        elif self.RDP_open == True:
+            self.someopen= False
+            self.RDP_open =False
+            self.limpiar_frame_scroll()
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def PPO(self,nombre= None, alto=None, ancho = None):
-        if self.sv_open ==  False:
-            self.subV_crear()
+        if self.someopen ==  False and self.PPO_open == False:
+            self.someopen = True 
+            self.PPO_open =True
             archivo_principal = os.path.join("LISTA PRODUCTO Y RECETAS", "COSECHA.txt")
             columnas=["Código", "Descripción", "Unidad", "Cantidad"]
-            interfaz = InterfazGenerica(self.SV,archivo_principal,columnas)
+            interfaz = InterfazGenerica(self.admin.frame_scroll,archivo_principal,columnas)
+        elif self.PPO_open == True:
+            self.someopen = False
+            self.PPO_open = False
+            self.limpiar_frame_scroll()
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def Botones_Desc(self, lado, lugar, padx=0, pady=0):
         if self.someopen == False and self.Descuentos_open == False:
@@ -568,11 +592,16 @@ class Pantalla_add:
         self.escritor.write("Descuento.txt", Porcentaje_Descuento)
 
     def GRC(self):
-        if self.sv_open ==  False:
-            self.subV_crear()
-            recibo = ReciboCosecha(self.SV, "recibos_cosecha.txt")
+        if self.someopen == False and self.GRC_open == False:
+            self.someopen = True
+            self.GRC_open = True
+            recibo = ReciboCosecha(self.admin.frame_scroll, "recibos_cosecha.txt")
+        elif self.GRC_open == True:
+            self.someopen = False
+            self.GRC_open = False
+            self.limpiar_frame_scroll()
         else:
-            self.subV_destruir()
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def VRC(self):
         if self.someopen == False and self.VRC_open == False:  # Si no están abiertas las ventanas someopen y GRC_open

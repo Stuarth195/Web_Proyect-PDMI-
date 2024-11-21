@@ -23,12 +23,6 @@ class LoteInfo:
         # Leer los datos del archivo cada vez que se carguen los botones
         data = self.read_file(self.file_path)
 
-        # Crear un Frame donde se colocarán los botones
-        button_frame = tk.Frame(self.root)
-        button_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")  # Usar grid para colocar el frame
-        self.root.grid_rowconfigure(0, weight=1)  # Asegurarse de que el frame sea expansible
-        self.root.grid_columnconfigure(0, weight=1)  # Asegurarse de que la columna sea expansible
-
         # Cambiar el índice inicial de las filas para comenzar en una fila más abajo
         row_index = 5  # Comienza desde la fila 5 en lugar de la 0
 
@@ -45,7 +39,7 @@ class LoteInfo:
                 cantidad = row[6]  # CANTIDAD
 
                 # Crear el botón con el ID_LOTE en el Frame
-                button = tk.Button(button_frame, text=f"{id_lote} - {codigo_producto}", command=lambda p=row: self.show_description(p))
+                button = tk.Button(self.root, text=f"{id_lote} - {codigo_producto}", command=lambda p=row: self.show_description(p))
                 button.grid(row=row_index, column=0, sticky="ew", pady=2, padx=5)  # Usar grid con sticky para expandir horizontalmente
                 self.buttons.append(button)  # Agregar el botón a la lista
                 row_index += 1  # Incrementar el índice de fila
