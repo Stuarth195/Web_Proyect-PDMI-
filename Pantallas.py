@@ -10,6 +10,7 @@ from botones import Botones, BotonesPE, ReciboCosecha
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
+from creaelimina import ProductManager
 
 class Pantalla_add:
     def __init__(self, ventana=None, notebook=None, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
@@ -45,7 +46,10 @@ class Pantalla_add:
         self.PPO_open =False
         self.RDP_open = False
         self.IP_open =False
-        self.MA_open = False
+        self.MA_open = False 
+        self.elimina_open =False
+        self.adminpath = os.path.join("admins.txt")
+        self.pathM_a = os.path.join("LISTA PRODUCTO Y RECETAS", "M_A.txt")
 
         
         
@@ -58,7 +62,7 @@ class Pantalla_add:
         # Submenú para los productos (solo dentro de "Ventas")
         productos_menu = tk.Menu(self.menu_bar, tearoff=0)
         productos_menu.add_command(label="Crear Producto",)
-        productos_menu.add_command(label="Quitar Producto")
+        productos_menu.add_command(label="Quitar Producto", command=self.eliminaP)
         productos_menu.add_command(label="Modificar Producto")
         productos_menu.add_command(label="crear descueto", command=lambda:self.Botones_Desc(500,self.admin.frame_scroll, 0,0))
 
@@ -614,5 +618,17 @@ class Pantalla_add:
             self.limpiar_frame_scroll()
             self.someopen = False
             self.VRC_open = False
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
+    def eliminaP(self):
+        if self.someopen == False and self.elimina_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
+            self.someopen = True
+            self.elimina_open = True
+            Intancia_elimina=ProductManager(self.admin.frame_scroll,self.pathM_a, self.adminpath)
+        elif self.elimina_open == True:
+            self.limpiar_frame_scroll()
+            self.someopen = False
+            self.elimina_open = False
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
