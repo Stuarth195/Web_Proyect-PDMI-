@@ -1,6 +1,6 @@
-CHP-001 Chips_de_papa_(Paquete_de_200g) PAP-001, 0.5 SAL-003, 5 OLI-001, 0.1 EMP-001, 1
-CHP-002 Chips_de_papa_(Paquete_de_500g) PAP-001, 1.2 SAL-003, 10 OLI-001, 0.2 EMP-002, 1
-SAL-001 Salsa_de_tomate_envasada_(Botella_500ml) TOM-002, 1 SAL-003, 10 AGU-001, 0.1 PRE-001, 2 EMP-003, 1 EMP-004, 1
-SAL-002 Salsa_de_tomate_envasada_(Botella_1L) TOM-002, 2 SAL-003, 20 AGU-001, 0.2 PRE-001, 4 EMP-005, 1 EMP-006, 1
-SLT-001 Salsa_de_tomate_enlatada_(Lata_400g) TOM-003, 0.8 SAL-003, 8 AGU-001, 0.08 PRE-001, 1.6 EMP-007, 1
-SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) TOM-003, 2 SAL-003, 20 AGU-001, 0.2 PRE-001, 4 EMP-008, 1
+CHP-001 Chips_de_papa_(Paquete_de_200g) PAP-001 0.5 SAL-003 5 OLI-001 0.1 EMP-001 1 SAL-003 1 SAL-003 20
+CHP-002 Chips_de_papa_(Paquete_de_500g) PAP-001 1.2 SAL-003 10 OLI-001 0.2 EMP-002 1
+SAL-001 Salsa_de_tomate_envasada_(Botella_500ml) TOM-002 1 SAL-003 10 AGU-001 0.1 PRE-001 2 EMP-003 1 EMP-004 1
+SAL-002 Salsa_de_tomate_envasada_(Botella_1L) TOM-002 2 SAL-003 20 AGU-001 0.2 PRE-001 4 EMP-005 1 EMP-006 1
+SLT-001 Salsa_de_tomate_enlatada_(Lata_400g) TOM-003 0.8 SAL-003 8 AGU-001 0.08 PRE-001 1.6 EMP-007 1
+SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) TOM-003 2 SAL-003 20 AGU-001 0.2 PRE-001 4 EMP-008 1

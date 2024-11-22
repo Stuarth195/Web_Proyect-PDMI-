@@ -632,3 +632,15 @@ class Pantalla_add:
             self.elimina_open = False
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
+    def creaP(self):
+        if self.someopen == False and self.elimina_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
+            self.someopen = True
+            self.elimina_open = True
+            Intancia_elimina=ProductManager(self.admin.frame_scroll,self.pathM_a, self.adminpath)
+        elif self.elimina_open == True:
+            self.limpiar_frame_scroll()
+            self.someopen = False
+            self.elimina_open = False
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")

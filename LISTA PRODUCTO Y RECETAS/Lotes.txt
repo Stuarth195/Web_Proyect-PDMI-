@@ -1,4 +1,3 @@
-
 TOM-001_20241203_019 TOM-001 Tomate_fresco 2024_12_03 sa Kilogramos 20.0 
 CHP-001_20241010_001 CHP-001 Chips_de_papa_(Paquete_de_200g) 2024_10_25 Stuarth_SA Unidad 12.0 
 SAL-003_20241120_001 SAL-003 Sal 2024_11_20 Proveedor_X Gramos 100.0 
@@ -19,3 +18,5 @@ TOM-001_20241003_001 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0
 TOM-001_20241003_002 TOM-001 Tomate_fresco 2024_10_18 YO Kilogramos 100.0
 EMP-001_20241103_001 EMP-001 Empaque_para_chips_(200g) 2024_11_18 Raulitos_SA Unidad 50
 TOM-001_20240101_001 TOM-001 Tomate_fresco 2024_01_16 AA Kilogramos 200.0
+CHP-003_00000000_000 CHP-003 NEW_CHIPS_ 2024_12_06 Propio Gramos 0
+TOM-005_00000000_000 TOM-005 Tomate(verde)_entero 2024_12_06 Propio Unidad 2

@@ -1,5 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
+import tkinter as tk
+from tkinter import messagebox, simpledialog, filedialog
+import re
+import shutil
+import os
 
 class ProductManager:
     def __init__(self, parent, file_path, admins_path):
@@ -99,9 +104,409 @@ class ProductManager:
         self.create_interface()
 
 
-# Ejemplo de uso:
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Gestor de Productos")
-    app = ProductManager(root, "productos.txt", "admins.txt")
-    root.mainloop()
+
+import tkinter as tk
+from tkinter import messagebox, simpledialog, filedialog
+import re
+import shutil
+from datetime import datetime, timedelta
+
+
+class ProductCreator:
+    def __init__(self, parent, output_path, admins_path, image_folder, batch_file):
+        self.parent = parent
+        self.output_path = output_path
+        self.admins_path = admins_path
+        self.image_folder = image_folder
+        self.batch_file = batch_file
+        self.selected_unit = tk.StringVar(value="")
+        self.include_image = tk.BooleanVar(value=False)
+        self.selected_image_path = None
+
+        # Crear interfaz
+        self.create_interface()
+
+    def create_interface(self):
+        """Crea los elementos de la interfaz."""
+        # Código
+        tk.Label(self.parent, text="Código (LLL-###):").grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.code_entry = tk.Entry(self.parent)
+        self.code_entry.grid(row=0, column=1, sticky="w", padx=10, pady=5)
+
+        # Descripción
+        tk.Label(self.parent, text="Descripción:").grid(row=1, column=0, sticky="w", padx=10, pady=5)
+        self.description_entry = tk.Entry(self.parent)
+        self.description_entry.grid(row=1, column=1, sticky="w", padx=10, pady=5)
+
+        # Presentación
+        tk.Label(self.parent, text="Presentación:").grid(row=2, column=0, sticky="w", padx=10, pady=5)
+        self.presentation_entry = tk.Entry(self.parent)
+        self.presentation_entry.grid(row=2, column=1, sticky="w", padx=10, pady=5)
+
+        # Unidad de medida
+        tk.Label(self.parent, text="Unidad de Medida:").grid(row=3, column=0, sticky="w", padx=10, pady=5)
+        units = ["Litros", "Mililitros", "Gramos", "Kilogramos", "Lata", "Botella", "Unidad"]
+        for i, unit in enumerate(units):
+            tk.Radiobutton(
+                self.parent, text=unit, variable=self.selected_unit, value=unit
+            ).grid(row=3 + i, column=1, sticky="w", padx=10, pady=2)
+
+        # Precio
+        tk.Label(self.parent, text="Precio (entero):").grid(row=10, column=0, sticky="w", padx=10, pady=5)
+        self.price_entry = tk.Entry(self.parent)
+        self.price_entry.grid(row=10, column=1, sticky="w", padx=10, pady=5)
+
+        # Cantidad (opcional)
+        tk.Label(self.parent, text="Cantidad (opcional):").grid(row=11, column=0, sticky="w", padx=10, pady=5)
+        self.quantity_entry = tk.Entry(self.parent)
+        self.quantity_entry.grid(row=11, column=1, sticky="w", padx=10, pady=5)
+
+        # Agregar Imagen
+        tk.Checkbutton(
+            self.parent, text="Incluir Imagen", variable=self.include_image, command=self.toggle_image_selection
+        ).grid(row=12, column=0, sticky="w", padx=10, pady=5)
+        self.image_button = tk.Button(self.parent, text="Seleccionar Imagen", state="disabled", command=self.select_image)
+        self.image_button.grid(row=12, column=1, sticky="w", padx=10, pady=5)
+
+        # Botón Crear Producto
+        tk.Button(self.parent, text="Crear Producto", command=self.create_product).grid(row=13, column=0, columnspan=2, pady=10)
+
+    def toggle_image_selection(self):
+        """Habilita o deshabilita la selección de imágenes."""
+        if self.include_image.get():
+            self.image_button.config(state="normal")
+        else:
+            self.image_button.config(state="disabled")
+            self.selected_image_path = None
+
+    def select_image(self):
+        """Abre el explorador de archivos para seleccionar una imagen PNG."""
+        file_path = filedialog.askopenfilename(
+            title="Seleccionar Imagen",
+            filetypes=[("Archivo PNG", "*.png")]
+        )
+        if file_path:
+            if file_path.lower().endswith(".png"):
+                self.selected_image_path = file_path
+            else:
+                messagebox.showerror("Error", "Formato de imagen inválido. Seleccione un archivo PNG.")
+                self.selected_image_path = None
+
+    def validate_inputs(self):
+        """Valida los datos ingresados."""
+        # Validar código
+        code = self.code_entry.get().strip()
+        if not re.match(r"^[A-Z]{3}-\d{3}$", code):
+            messagebox.showerror("Error", "Formato de código incorrecto. Use el formato LLL-###.")
+            return False
+
+        # Verificar si el código ya existe
+        if self.is_code_exists(code):
+            messagebox.showerror("Error", "Código ya existente.")
+            return False
+
+        # Validar descripción (al menos dos letras, sin espacios)
+        description = self.description_entry.get().strip()
+        if not re.match(r"^(?=.*[A-Za-z])[A-Za-z0-9_()-]+$", description):
+            messagebox.showerror("Error", "Descripción inválida. Debe contener al menos dos letras y no puede tener espacios.")
+            return False
+        if len(description) < 2:
+            messagebox.showerror("Error", "La descripción debe tener al menos dos caracteres.")
+            return False
+        if not messagebox.askyesno("Confirmar", f"Tu descripción es: {description}. ¿Es correcto?"):
+            return False
+
+        # Validar presentación
+        presentation = self.presentation_entry.get().strip()
+        if not re.match(r"^[A-Za-z_]+$", presentation):
+            messagebox.showerror("Error", "Presentación inválida. Use solo letras y guiones bajos.")
+            return False
+        if not messagebox.askyesno("Confirmar", f"Tu presentación es: {presentation}. ¿Es correcto?"):
+            return False
+
+        # Validar unidad de medida
+        unit = self.selected_unit.get()
+        if not unit:
+            messagebox.showerror("Error", "Debe seleccionar una unidad de medida.")
+            return False
+
+        # Validar precio
+        try:
+            price = int(self.price_entry.get().strip())
+            if price <= 0:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror("Error", "El precio debe ser un número entero positivo.")
+            return False
+
+        # Validar cantidad
+        quantity = self.quantity_entry.get().strip()
+        if quantity:
+            try:
+                if unit in ["Lata", "Botella", "Unidad"]:
+                    quantity = int(quantity)
+                else:
+                    quantity = float(quantity)
+            except ValueError:
+                messagebox.showerror("Error", "La cantidad debe ser un número válido.")
+                return False
+        else:
+            quantity = 0
+
+        # Validar imagen
+        if self.include_image.get():
+            if not self.selected_image_path:
+                messagebox.showerror("Error", "Error 404: Imagen no encontrada.")
+                return False
+
+        self.valid_data = {
+            "code": code,
+            "description": description,
+            "presentation": presentation,
+            "unit": unit,
+            "price": price,
+            "quantity": quantity,
+        }
+        return True
+
+    
+    def is_code_exists(self, code):
+        """Verifica si el código ya existe en el archivo de productos."""
+        try:
+            with open(self.output_path, 'r') as file:
+                for line in file:
+                    if line.startswith(code):
+                        return True
+        except FileNotFoundError:
+            pass
+        return False
+
+    def save_batch(self):
+        """Guarda el lote inicial en el archivo correspondiente."""
+        data = self.valid_data
+        batch_identifier = f"{data['code']}_00000000_000"
+        expiration_date = (datetime.now() + timedelta(days=15)).strftime("%Y_%m_%d")
+        with open(self.batch_file, "a") as file:
+            file.write(f"{batch_identifier} {data['code']} {data['description']} {expiration_date} Propio {data['unit']} {data['quantity']}\n")
+
+    def save_product(self):
+        """Guarda el producto en el archivo y renombra la imagen."""
+        data = self.valid_data
+        with open(self.output_path, "a") as file:
+            file.write(f"{data['code']} {data['description']} {data['presentation']} {data['quantity']} {data['unit']} {data['price']}\n")
+
+        if self.include_image.get():
+            image_name = f"{data['code']}.png"
+            shutil.copy(self.selected_image_path, f"{self.image_folder}/{image_name}")
+
+    def create_product(self):
+        """Crea el producto después de validar los datos."""
+        if not self.validate_inputs():
+            return
+
+        # Validar contraseña
+        admins = self.load_admins()
+        admin_code = simpledialog.askstring("Validación", "Ingrese código de administrador:")
+        if admin_code not in [admin[1] for admin in admins]:
+            messagebox.showerror("Error", "Código de administrador no válido.")
+            return
+
+        # Guardar datos
+        self.save_product()
+        self.save_batch()
+        messagebox.showinfo("Éxito", f"Producto {self.valid_data['code']} creado exitosamente.")
+
+    def load_admins(self):
+        """Carga los administradores desde el archivo."""
+        try:
+            with open(self.admins_path, 'r') as file:
+                return [line.strip().split() for line in file.readlines()]
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.admins_path}.")
+            return []
+
+import tkinter as tk
+from tkinter import messagebox
+import re
+import os
+
+
+import tkinter as tk
+from tkinter import messagebox
+
+import tkinter as tk
+from tkinter import messagebox
+
+class RecipeManager:
+    def __init__(self,ventana_receta, parent, product_file, pe_file, cosecha_file, recipe_file, code=None, description=None):
+        self.ventana_receta=ventana_receta
+        self.parent = parent
+        self.product_file = product_file
+        self.pe_file = pe_file
+        self.cosecha_file = cosecha_file
+        self.recipe_file = recipe_file
+        self.code = code
+        self.description = description
+        self.ingredients = {}
+        self.create_interface()
+
+    def create_interface(self):
+        """Crea la interfaz para gestionar recetas."""
+        row = 0
+
+        # Si no se pasa código, se crea un campo de entrada para código
+        if self.code is None:
+            tk.Label(self.parent, text="Código del Producto:").grid(row=row, column=0, sticky="w", padx=10, pady=5)
+            self.code_entry = tk.Entry(self.parent)
+            self.code_entry.grid(row=row, column=1, padx=10, pady=5)
+            row += 1
+        else:
+            # Si se pasa un código, solo lo mostramos en la interfaz
+            tk.Label(self.parent, text=f"Código del Producto: {self.code}").grid(row=row, column=0, sticky="w", padx=10, pady=5)
+            row += 1
+
+        # Botones de selección múltiple para ingredientes de PE.txt y COSECHA.txt
+        tk.Label(self.parent, text="Ingredientes:").grid(row=row, column=0, sticky="w", padx=10, pady=5)
+        self.ingredient_frame = tk.Frame(self.parent)
+        self.ingredient_frame.grid(row=row + 1, column=0, columnspan=2, padx=10, pady=5)
+
+        self.load_ingredients()
+
+        # Botón para guardar receta
+        tk.Button(self.parent, text="Guardar Receta", command=self.save_recipe).grid(row=row + len(self.ingredients) + 2, column=0, columnspan=2, pady=10)
+
+    def load_ingredients(self):
+        """Carga los ingredientes desde los archivos PE.txt y COSECHA.txt."""
+        def add_ingredient(code, description):
+            """Añade un ingrediente a la interfaz con su cantidad."""
+            var = tk.BooleanVar(value=False)
+            cb = tk.Checkbutton(
+                self.ingredient_frame,
+                text=f"{description} ({code})",
+                variable=var,
+                command=lambda: self.toggle_quantity_entry(var, code)
+            )
+            cb.grid(row=len(self.ingredients), column=0, sticky="w", pady=2)
+            entry = tk.Entry(self.ingredient_frame, state="disabled")
+            entry.grid(row=len(self.ingredients), column=1, padx=10, pady=2)
+            self.ingredients[code] = {"var": var, "entry": entry}
+
+        # Leer ingredientes de PE.txt
+        try:
+            with open(self.pe_file, 'r') as file:
+                for line in file:
+                    parts = line.strip().split()
+                    if len(parts) == 5:
+                        code, description = parts[0], parts[1]
+                        add_ingredient(code, description)
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.pe_file}.")
+
+        # Leer ingredientes de COSECHA.txt
+        try:
+            with open(self.cosecha_file, 'r') as file:
+                for line in file:
+                    parts = line.strip().split()
+                    if len(parts) == 4:
+                        code, description = parts[0], parts[1]
+                        add_ingredient(code, description)
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.cosecha_file}.")
+
+    def toggle_quantity_entry(self, var, code):
+        """Activa o desactiva la entrada de cantidad para un ingrediente."""
+        entry = self.ingredients[code]["entry"]
+        if var.get():
+            entry.config(state="normal")
+        else:
+            entry.delete(0, tk.END)
+            entry.config(state="disabled")
+
+    def save_recipe(self):
+        """Guarda la receta en el archivo."""
+
+        # Validar el código si no se pasó directamente
+        if self.code is None:
+            code = self.code_entry.get().strip()
+            if not self.validate_code(code):
+                return
+        else:
+            code = self.code
+
+        # Crear receta solo con código y cantidad de ingredientes seleccionados
+        recipe_line = f"{code} {self.description if self.description else code}"  # Sin descripción de M_A.txt
+
+        ingredients_data = []
+        for ingredient_code, data in self.ingredients.items():
+            if data["var"].get():
+                quantity = data["entry"].get().strip() if data["entry"] else None
+                if not quantity or not self.validate_quantity(quantity):
+                    messagebox.showerror("Error", f"Cantidad inválida para {ingredient_code}.")
+                    return
+                ingredients_data.append(f"{ingredient_code} {quantity}")
+
+        # Agregar los ingredientes seleccionados
+        recipe_line += " " + " ".join(ingredients_data)
+
+        # Editar o agregar receta
+        if self.code is None:
+            self.edit_recipe_in_file(code, recipe_line)
+        else:
+            self.append_recipe_to_file(recipe_line)
+
+        messagebox.showinfo("Éxito", f"Receta para {code} guardada correctamente.")
+
+    def validate_quantity(self, quantity):
+        """Valida la cantidad ingresada como número flotante o entero."""
+        try:
+            float(quantity)
+            return True
+        except ValueError:
+            return False
+
+    def validate_code(self, code):
+        """Valida que el código exista en el archivo M_A.txt (solo verificación)."""
+        try:
+            with open(self.product_file, 'r') as file:
+                for line in file:
+                    if line.startswith(code):
+                        return True
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.product_file}.")
+        messagebox.showerror("Error", "El código del producto no existe.")
+        return False
+
+    def edit_recipe_in_file(self, code, new_line):
+        """Edita la receta existente en el archivo, manteniendo el código intacto."""
+        try:
+            with open(self.recipe_file, 'r') as file:
+                lines = file.readlines()
+            with open(self.recipe_file, 'w') as file:
+                for line in lines:
+                    if line.startswith(code):
+                        file.write(new_line + "\n")
+                    else:
+                        file.write(line)
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.recipe_file}.")
+
+    def append_recipe_to_file(self, line):
+        """Agrega una nueva receta al archivo."""
+        try:
+            with open(self.recipe_file, 'a') as file:
+                file.write(line + "\n")
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.recipe_file}.")
+
+
+root = tk.Toplevel()
+parent=root
+carpeta = "LISTA PRODUCTO Y RECETAS"
+product_file= os.path.join(carpeta, "M_A.txt")
+pe_file=os.path.join(carpeta,"PE.txt")
+cosecha_file=os.path.join(carpeta,"COSECHA.txt")
+recipe_file=os.path.join(carpeta,"Receta.txt")
+code="CHP-011"  # O None si es para editar
+description= "ASD"  # Solo si es para una nueva receta
+recipe_manager = RecipeManager(parent , product_file,pe_file, cosecha_file, recipe_file,code, description)
+root.mainloop()
