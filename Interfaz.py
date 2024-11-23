@@ -123,10 +123,6 @@ class Visual:
 
         p1 = os.path.join("Imagenes", "productos", "papas_dibujo.png")
 
-        producto1 = Image.open(os.path.join("Imagenes", "productos", "papas_dibujo.png"))
-        producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
-        producto_img = ImageTk.PhotoImage(producto1)
-
         # Crear el notebook donde se agregarán las pestañas
         Visual_feed = ttk.Notebook(App)
         Visual_feed.pack(fill="both", expand=True)
@@ -185,6 +181,13 @@ class Visual:
                         print("No es un numero")
         print(Des)
         for produ in prod:
+            try:
+                producto1 = Image.open(os.path.join("Imagenes", "productos", produ[0]+".png"))
+                producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
+                producto_img = ImageTk.PhotoImage(producto1)
+                print(os.path.join("Imagenes", "productos", produ[0]+".png"))
+            except:
+                print("error")
             if produ != []:
                 nombreProd = re.findall(r'\((.*?)\)', produ[1])
                 if nombreProd == []:
