@@ -41,9 +41,13 @@ class Data_Base:
         except Exception as e:
             print(f"Error al descargar el archivo: {e}")
 
-    def subir_archivo(self, ruta_archivo, nombre_archivo):
+    def subir_archivo(self, ruta_archivo, nombre_archivo, id_carpeta_padre=None):
+        """Subir un archivo a Google Drive."""
         try:
-            archivo_drive = self.drive.CreateFile({'title': nombre_archivo})
+            archivo_drive = self.drive.CreateFile({
+                'title': nombre_archivo,
+                'parents': [{'id': id_carpeta_padre}] if id_carpeta_padre else []  # Especificar carpeta destino
+            })
             archivo_drive.SetContentFile(ruta_archivo)
             archivo_drive.Upload()
             print(f"Archivo '{nombre_archivo}' subido exitosamente.")
