@@ -30,14 +30,38 @@ class Visual:
         self.RutaVarios =os.path.join("LISTA PRODUCTO Y RECETAS")
         
 
-
-    def subamos(self):
+    def descargar_todo(self):
         try:
-            # Subir archivos con extensión especificada desde el directorio actual
-            self.instancia_base.subir_por_extension(os.getcwd(), ".txt")  # Cambia ".txt" por la extensión que necesites
-            print("Archivos con extensión '.txt' subidos exitosamente.")
+            # Descargar la carpeta "Imagenes" y su contenido
+            self.instancia_base.descargar_carpeta(self.Imagenes)
+            print("Carpeta 'Imagenes' descargada exitosamente.")
+
+            # Descargar la carpeta "LISTA PRODUCTO Y RECETAS" y su contenido
+            self.instancia_base.descargar_carpeta(self.lista_producto_y_recetas)
+            print("Carpeta 'LISTA PRODUCTO Y RECETAS' descargada exitosamente.")
         except Exception as e:
-            print(f"Error al subir archivos con extensión '.txt': {e}")
+            # Manejar errores globales
+            messagebox.showerror("Error", f"Error al descargar carpetas: {e}")
+            raise e  # Para detener cualquier flujo adicional si es necesario
+        
+    def descargar_txt(self):
+        try:
+            # Descargar los archivos .txt desde el directorio actual
+            self.instancia_base.descargar_archivo(self.usuarios_txt)
+            self.instancia_base.descargar_archivo(self.registro_compras_txt)
+            self.instancia_base.descargar_archivo(self.recibos_cosecha_txt)
+            self.instancia_base.descargar_archivo(self.p_ty_txt)
+            self.instancia_base.descargar_archivo(self.p_txt)
+            self.instancia_base.descargar_archivo(self.historial_facturacion_txt)
+            self.instancia_base.descargar_archivo(self.descuento_txt)
+            self.instancia_base.descargar_archivo(self.carrito_txt)
+            self.instancia_base.descargar_archivo(self.admins_txt)
+            self.instancia_base.descargar_archivo(self.lista_producto_y_recetas)
+            print("Archivos .txt descargados exitosamente.")
+        except Exception as e:
+            print(f"Error al descargar archivos .txt: {e}")
+            raise e
+
 
     def actualiza(self):
         # Actualizar carpeta 'Imagenes' con el contenido de la ruta local
@@ -178,7 +202,8 @@ class Visual:
         App.mainloop()
 
 Aplicacion = Visual()
-Aplicacion.actualiza()
+Aplicacion.Interfaz()
+
 
 
 
