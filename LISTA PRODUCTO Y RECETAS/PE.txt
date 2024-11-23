@@ -1,4 +1,4 @@
-SAL-003 Sal 25 Gramos 100
+SAL-003 Sal 25 Gramos 200.0
 OLI-001 Aceite_vegetal 25 Litros 50
 PRE-001 Preservantes 25 Gramos 80
 EMP-001 Empaque_para_chips_(200g) 25 Unidad 100

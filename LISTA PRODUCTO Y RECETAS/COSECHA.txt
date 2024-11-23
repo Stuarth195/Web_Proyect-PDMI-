@@ -2,4 +2,3 @@ PAP-001 Papa_fresca Kilogramos 1
 TOM-001 Tomate_fresco Kilogramos 2100.0
 TOM-002 Tomate_fresco_grande Kilogramos 1
 TOM-003 Tomate_fresco_pequeño Kilogramos 1
-LISTA PRODUCTO Y RECETAS\receta.txt LISTA PRODUCTO Y RECETAS\receta.txt 

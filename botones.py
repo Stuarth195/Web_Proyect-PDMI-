@@ -246,8 +246,51 @@ class Botones:
 
         # Mostrar mensaje de éxito
         messagebox.showinfo("Éxito", f"Lote registrado en: {ruta_archivo}\n{linea_lote.strip()}")
+        cantidad_numerica = int(cantidad) if unidad in ["Unidad", "Lata", "Botella", "Paquete"] else float(cantidad)
+        self.buscar_y_actualizar_lote(codigo, cantidad_numerica)
 
         print(f"Lote registrado: {linea_lote.strip()} en {ruta_archivo}")  # Para depuración
+
+    def buscar_y_actualizar_lote(self, codigo, cantidad_a_sumar):
+        """
+        Busca un código en los archivos M_A.txt, PE.txt y COSECHA.txt y actualiza la cantidad correspondiente.
+        
+        Args:
+            codigo (str): El código del producto a buscar.
+            cantidad_a_sumar (int o float): La cantidad que se debe sumar al campo correspondiente.
+        """
+        archivos = {
+            "M_A": {"ruta": self.archivo_MA, "indice_cantidad": 3},  # La cantidad está en el cuarto elemento.
+            "PE": {"ruta": self.archivo_PE, "indice_cantidad": -1},  # La cantidad está en el último elemento.
+            "COSECHA": {"ruta": self.archivo_cosecha, "indice_cantidad": -1}  # Igual que en PE.
+        }
+        
+        for nombre, datos in archivos.items():
+            ruta = datos["ruta"]
+            indice_cantidad = datos["indice_cantidad"]
+            
+            # Leer el archivo
+            matriz = self.Lector.leerTxtFilenUM(ruta)
+            codigo_encontrado = False
+
+            for fila in matriz:
+                if fila[0] == codigo:  # Si el código coincide
+                    try:
+                        fila[indice_cantidad] = str(float(fila[indice_cantidad]) + cantidad_a_sumar)
+                        codigo_encontrado = True
+                    except ValueError:
+                        print(f"Error al convertir la cantidad en el archivo {nombre}. Verifica los datos.")
+                    break
+            
+            if codigo_encontrado:
+                # Guardar los cambios en el archivo
+                with open(ruta, "w", encoding="utf-8") as archivo:
+                    for fila in matriz:
+                        archivo.write(" ".join(map(str, fila)) + "\n")
+                print(f"Código '{codigo}' actualizado exitosamente en {nombre}.")
+                return
+        
+        print(f"Código '{codigo}' no encontrado en ninguno de los archivos.")
 
 import os
 import tkinter as tk
