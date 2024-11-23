@@ -681,3 +681,17 @@ class Pantalla_add:
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
             self.subV_destruir()
+
+
+    def ver_PE(self,):
+        if self.someopen ==  False and self.pe_open== False:
+            self.someopen = True
+            self.pe_open = True
+            columnas=["Cliente", "Estado", "Metodfo de Pago", "total", "lugar de envio", "Fecha"]
+            interfaz = InterfazGenerica(self.admin.frame_scroll,self.pe_file,columnas)
+        elif self.pe_open ==True:
+            self.limpiar_frame_scroll()
+            self.someopen=False
+            self.pe_open = False
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")

@@ -82,20 +82,40 @@ class Produccion:
 
     def guardar_cambios(self):
         """Guarda los cambios realizados en los archivos PE.txt, Cosecha.txt y M_A.txt."""
-        # Guardar PE
+        
+        # Leer las líneas de PE.txt y Cosecha.txt antes de escribir
+        with open(self.pe_file, 'r') as f:
+            self.pe_lines = f.readlines()  # Guardar las líneas de PE.txt en self.pe_lines
+
+        with open(self.cosecha_file, 'r') as f:
+            self.cosecha_lines = f.readlines()  # Guardar las líneas de Cosecha.txt en self.cosecha_lines
+        
+        # Guardar PE con las cantidades actualizadas
         with open(self.pe_file, 'w') as f:
-            for codigo, cantidad in self.pe_data.items():
-                f.write(f"{codigo} {cantidad}\n")
+            for line in self.pe_lines:
+                parts = line.strip().split()
+                codigo = parts[0]
+                # Si el código está en self.pe_data, actualizamos la cantidad
+                if codigo in self.pe_data:
+                    parts[-1] = str(self.pe_data[codigo])  # Modificar solo la cantidad
+                f.write(" ".join(parts) + "\n")  # Escribir la línea (con la cantidad modificada o sin cambios)
 
-        # Guardar Cosecha
+        # Guardar Cosecha con las cantidades actualizadas
         with open(self.cosecha_file, 'w') as f:
-            for codigo, cantidad in self.cosecha_data.items():
-                f.write(f"{codigo} {cantidad}\n")
+            for line in self.cosecha_lines:
+                parts = line.strip().split()
+                codigo = parts[0]
+                # Si el código está en self.cosecha_data, actualizamos la cantidad
+                if codigo in self.cosecha_data:
+                    parts[-1] = str(self.cosecha_data[codigo])  # Modificar solo la cantidad
+                f.write(" ".join(parts) + "\n")  # Escribir la línea (con la cantidad modificada o sin cambios)
 
-        # Guardar M_A
+        # Guardar M_A (actualiza las líneas de M_A)
         with open(self.ma_file, 'w') as f:
             for codigo, data in self.ma_data.items():
                 f.write(" ".join(data["linea"]) + "\n")
+
+
 
     def check_umbrales(self):
         """Valida los umbrales en PE y Cosecha y genera alertas si es necesario."""
