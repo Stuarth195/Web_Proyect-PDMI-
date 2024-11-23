@@ -20,8 +20,13 @@ class Produccion:
 
         self.load_files()
         self.check_umbrales()
+        
+    def llamada(self):
         if not self.alerts:
             self.create_interface()
+        else:
+            print(self.alerts)
+
 
     def load_files(self):
         """Carga los archivos necesarios en estructuras de datos."""
@@ -236,3 +241,89 @@ class Produccion:
                     return False
 
         return True
+
+
+    def modificar_umbrales(self, admins, toplevel):
+
+        self.admis_path=admins
+        self.Top =toplevel
+        """Permite modificar los umbrales después de validar una contraseña de administrador."""
+        
+        # Leer las contraseñas del archivo admins.txt
+        if not Path(admins).exists():
+            messagebox.showerror("Error", "El archivo admins.txt no se encuentra.")
+            return
+        
+        with open(admins, 'r') as f:
+            admins_data = f.readlines()
+        
+        passwords = [line.strip().split()[1] for line in admins_data if len(line.split()) > 1]
+
+        # Etiqueta para pedir contraseña
+        Label(toplevel, text="Ingrese la contraseña de administrador:").grid(row=0, column=0, padx=10, pady=10)
+        
+        password_entry = Entry(toplevel, show="*")
+        password_entry.grid(row=0, column=1, padx=10, pady=10)
+
+        def validar_contraseña():
+            """Valida la contraseña y permite modificar los umbrales si es correcta."""
+            password = password_entry.get()
+
+            if password not in passwords:
+                messagebox.showerror("Error", "Contraseña incorrecta.")
+                return
+
+            # Si la contraseña es correcta, mostrar los umbrales
+            self.mostrar_umbrales(toplevel)
+
+        password_button = Button(toplevel, text="Validar", command=validar_contraseña)
+        password_button.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+    def mostrar_umbrales(self, toplevel):
+        """Muestra los umbrales en un Toplevel y permite modificarlos."""
+        # Limpiar la ventana
+        for widget in toplevel.winfo_children():
+            widget.destroy()
+
+        row = 0
+        umbral_entries = {}  # Diccionario para almacenar los entries de los umbrales
+
+        # Crear las etiquetas y entradas para cada umbral
+        for codigo, umbral in self.umbral_data.items():
+            # Buscar la descripción en PE o Cosecha
+            descripcion = self.pe_data.get(codigo, self.cosecha_data.get(codigo, "Descripción no encontrada"))
+
+            Label(toplevel, text=f"{codigo} - {descripcion}:").grid(row=row, column=0, padx=10, pady=5, sticky="w")
+            umbral_entry = Entry(toplevel)
+            umbral_entry.grid(row=row, column=1, padx=10, pady=5)
+            umbral_entry.insert(0, str(umbral))  # Mostrar el valor actual del umbral
+            umbral_entries[codigo] = umbral_entry
+            row += 1
+
+        def guardar_umbrales():
+            """Guarda los umbrales modificados en el archivo Umbral.txt."""
+            # Modificar los umbrales con los valores ingresados
+            for codigo, entry in umbral_entries.items():
+                try:
+                    nuevo_umbral = float(entry.get())
+                    self.umbral_data[codigo] = nuevo_umbral
+                except ValueError:
+                    messagebox.showerror("Error", f"Valor inválido para el umbral de {codigo}.")
+                    return
+
+            # Guardar los cambios en el archivo Umbral.txt
+            self.guardar_cambios_umbral()
+
+            # Actualizar las etiquetas en la ventana principal
+            messagebox.showinfo("Éxito", "Los umbrales han sido actualizados correctamente.")
+            self.Top.focus()
+
+        # Botón para guardar los umbrales modificados
+        save_button = Button(toplevel, text="Guardar Cambios", command=guardar_umbrales)
+        save_button.grid(row=row, column=0, columnspan=2, padx=10, pady=10)
+
+    def guardar_cambios_umbral(self):
+        """Guarda los cambios en el archivo Umbral.txt."""
+        with open(self.umbral_file, 'w') as f:
+            for codigo, umbral in self.umbral_data.items():
+                f.write(f"{codigo} {umbral}\n")

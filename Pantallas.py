@@ -72,6 +72,7 @@ class Pantalla_add:
         self.lotes_file = lotes_file
         self.admins_path = admins_path
         self.Umbral = Umbral
+        
     
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
@@ -105,6 +106,7 @@ class Pantalla_add:
         menu_almacen.add_command(label="Registro de Producción", command= self.creaProduccion)
         menu_almacen.add_command(label="ver Lotes", command= self.verlotes)
         menu_almacen.add_command(label="Productos  de Cosechas", command= self.PPO)
+        administrativo_menu.add_command(label="Modificar Umbrales de productos", command=self.MUB)
 
         # Crear el menú "Opciones de Admin" y añadir los submenús
         opciones_admin_menu = tk.Menu(self.menu_bar, tearoff=0)
@@ -464,6 +466,7 @@ class Pantalla_add:
 
 
         else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
             self.subV_destruir()
 
     def verificacion_de_verificaciones(self):
@@ -649,18 +652,32 @@ class Pantalla_add:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def RecetaE(self,):
-        self.subV_crear("EDITORE DE PRODUCTOS", 1000, 1000)
-        self.sntedit = RecipeManager(self.SV, self.Archivo_MA,self.pe_file, self.cosecha_file,self.recipe_file)
+        if not self.sv_open:
+            self.subV_crear("EDITORE DE PRODUCTOS", 1000, 1000)
+            self.sntedit = RecipeManager(self.SV, self.Archivo_MA,self.pe_file, self.cosecha_file,self.recipe_file)
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+            self.subV_destruir()
 
     def creaProduccion(self):
         if self.someopen == False and self.creap_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
             self.someopen = True
             self.creap_open = True
             self.ventana.focus()
-            instanciaP= Produccion(self.admin.frame_scroll,self.Umbral, self.pe_file, self.cosecha_file,self.recipe_file,self.Archivo_MA)           
+            self.instanciaP= Produccion(self.admin.frame_scroll,self.Umbral, self.pe_file, self.cosecha_file,self.recipe_file,self.Archivo_MA) 
+            self.instanciaP.llamada()        
         elif self.creap_open == True:
             self.someopen = False
             self.creap_open = False
             self.limpiar_frame_scroll()
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
+    def MUB(self):
+        if not self.sv_open:
+            self.instanciaP= Produccion(self.admin.frame_scroll,self.Umbral, self.pe_file, self.cosecha_file,self.recipe_file,self.Archivo_MA)
+            self.subV_crear()
+            self.instanciaP.modificar_umbrales(self.admins_path, self. SV)
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+            self.subV_destruir()
