@@ -11,6 +11,7 @@ from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
 from creaelimina import ProductManager, ProductCreator, RecipeManager
+from Produccion import Produccion
 
 
 class Pantalla_add:
@@ -25,7 +26,8 @@ class Pantalla_add:
                 cosecha_file=os.path.join("LISTA PRODUCTO Y RECETAS", "COSECHA.txt"),
                 recipe_file=os.path.join("LISTA PRODUCTO Y RECETAS", "Receta.txt"), 
                 lotes_file=os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"),
-                admins_path=os.path.join("admins.txt")):
+                admins_path=os.path.join("admins.txt"),
+                Umbral=os.path.join("LISTA PRODUCTO Y RECETAS", "Umbral.txt")):
         self.usuario_log = usuario_log
         self.ventana = ventana
         self.notebook = notebook
@@ -55,6 +57,7 @@ class Pantalla_add:
         self.facturacion_open = False
         self.VRC_open = False
         self.VTL_open = False
+        self.creap_open = False
         self.GRC_open = False
         self.PPO_open = False
         self.RDP_open = False
@@ -68,6 +71,7 @@ class Pantalla_add:
         self.recipe_file = recipe_file
         self.lotes_file = lotes_file
         self.admins_path = admins_path
+        self.Umbral = Umbral
     
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
@@ -98,7 +102,7 @@ class Pantalla_add:
         menu_almacen.add_command(label="Agregar Lotes", command=lambda: self.agrega_lotes())
         menu_almacen.add_command(label="Maestro de Artículos",command= self.MA_vista)
         menu_almacen.add_command(label="Productos Comprados", command= self.IPC)
-        menu_almacen.add_command(label="Registro de Producción", command= self.RDP)
+        menu_almacen.add_command(label="Registro de Producción", command= self.creaProduccion)
         menu_almacen.add_command(label="ver Lotes", command= self.verlotes)
         menu_almacen.add_command(label="Productos  de Cosechas", command= self.PPO)
 
@@ -530,17 +534,6 @@ class Pantalla_add:
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
-    def RDP(self,nombre= None, alto=None, ancho = None):
-        if self.someopen == False and self.RDP_open == False:
-            self.RDP_open=True
-            self.someopen=True
-        elif self.RDP_open == True:
-            self.someopen= False
-            self.RDP_open =False
-            self.limpiar_frame_scroll()
-        else:
-            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
-
     def PPO(self,nombre= None, alto=None, ancho = None):
         if self.someopen ==  False and self.PPO_open == False:
             self.someopen = True 
@@ -658,3 +651,16 @@ class Pantalla_add:
     def RecetaE(self,):
         self.subV_crear("EDITORE DE PRODUCTOS", 1000, 1000)
         self.sntedit = RecipeManager(self.SV, self.Archivo_MA,self.pe_file, self.cosecha_file,self.recipe_file)
+
+    def creaProduccion(self):
+        if self.someopen == False and self.creap_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
+            self.someopen = True
+            self.creap_open = True
+            self.ventana.focus()
+            instanciaP= Produccion(self.admin.frame_scroll,self.Umbral, self.pe_file, self.cosecha_file,self.recipe_file,self.Archivo_MA)           
+        elif self.creap_open == True:
+            self.someopen = False
+            self.creap_open = False
+            self.limpiar_frame_scroll()
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
