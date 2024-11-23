@@ -117,7 +117,7 @@ class Emergente:
             self.register = None
             self.mostrar_menu_logout()
             self.Etiqueta_Logado.config(text=username)
-            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path,self.username)
             self.admin_win.pantalla_oculta("pantalla")
             self.admin_win.crear_boton_historial_usuario(self.canva,self.xMargen*47, self.yMargen*6)
             
@@ -138,7 +138,7 @@ class Emergente:
         if password == confirm_password:
             self.win = 1
             self.username = username
-            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path, None,None,self.username)
+            self.admin_win = Pantalla_add(self.vtkinter, self.notebook, self.archivo_compras_path,self.username)
             self.register.destroy()
             self.register = None
             self.mostrar_menu_logout()

@@ -10,50 +10,65 @@ from botones import Botones, BotonesPE, ReciboCosecha
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
-from creaelimina import ProductManager
+from creaelimina import ProductManager, ProductCreator, RecipeManager
+
 
 class Pantalla_add:
-    def __init__(self, ventana=None, notebook=None, archivo_usuarios= os.path.join("RegistroCompras.txt"), archivo_recetas=None, archivo_lotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"), usuario_log= None):
-        self. usuario_log = usuario_log
+    def __init__(self, ventana=None, 
+                 notebook=None, 
+                archivo_usuarios=os.path.join("RegistroCompras.txt"),
+                usuario_log=None, 
+                archivo_MA=os.path.join("LISTA PRODUCTO Y RECETAS", "M_A.txt"), 
+                archivo_lotes=os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"),  
+                image_folder=os.path.join("Imagenes", "productos"),  # Carpeta para las imágenes
+                pe_file=os.path.join("LISTA PRODUCTO Y RECETAS", "PE.txt"),
+                cosecha_file=os.path.join("LISTA PRODUCTO Y RECETAS", "COSECHA.txt"),
+                recipe_file=os.path.join("LISTA PRODUCTO Y RECETAS", "Receta.txt"), 
+                lotes_file=os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt"),
+                admins_path=os.path.join("admins.txt")):
+        self.usuario_log = usuario_log
         self.ventana = ventana
         self.notebook = notebook
         self.archivo_usuarios = archivo_usuarios
-        self.archivo_recetas = archivo_recetas
+        self.Archivo_MA = archivo_MA
         self.archivo_lotes = archivo_lotes
         self.admin = None
         self.ancho = self.ventana.winfo_screenwidth()
         self.alto = self.ventana.winfo_screenheight()
         self.historial_open = False
-        self.lista_productos_open =False
-        self.lector =  LectorTXT()
+        self.lista_productos_open = False
+        self.lector = LectorTXT()
         self.escritor = Writer()
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.someopen = False
-        self.frame_interno= None
+        self.frame_interno = None
         self.almacen_open = False
         self.sv_open = False
         self.SV = None
         self.veriFCH = None
-        self.verCOD=None
+        self.sntedit= None
+        self.verCOD = None
         self.verCNT = None
         self.verePRV = None
-        self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS","Lotes.txt")
+        self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt")
         self.Descuentos_open = False
         self.facturacion_open = False
         self.VRC_open = False
         self.VTL_open = False
         self.GRC_open = False
-        self.PPO_open =False
+        self.PPO_open = False
         self.RDP_open = False
-        self.IP_open =False
-        self.MA_open = False 
-        self.elimina_open =False
-        self.adminpath = os.path.join("admins.txt")
-        self.pathM_a = os.path.join("LISTA PRODUCTO Y RECETAS", "M_A.txt")
-
-        
-        
-        
+        self.IP_open = False
+        self.MA_open = False
+        self.elimina_open = False
+        self.crea_open = False
+        self.image_folder = image_folder
+        self.pe_file = pe_file
+        self.cosecha_file = cosecha_file
+        self.recipe_file = recipe_file
+        self.lotes_file = lotes_file
+        self.admins_path = admins_path
+    
     def crear_menu(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         # Crear el menú principal en la ventana
@@ -61,9 +76,9 @@ class Pantalla_add:
 
         # Submenú para los productos (solo dentro de "Ventas")
         productos_menu = tk.Menu(self.menu_bar, tearoff=0)
-        productos_menu.add_command(label="Crear Producto",)
+        productos_menu.add_command(label="Crear Producto",command= self.creaP)
         productos_menu.add_command(label="Quitar Producto", command=self.eliminaP)
-        productos_menu.add_command(label="Modificar Producto")
+        productos_menu.add_command(label="Modificar Receta", command= self.RecetaE)
         productos_menu.add_command(label="crear descueto", command=lambda:self.Botones_Desc(500,self.admin.frame_scroll, 0,0))
 
         # Submenú Ventas
@@ -99,14 +114,11 @@ class Pantalla_add:
         # Configurar el menú en la ventana principal
         self.ventana.config(menu=self.menu_bar)
 
-
     def pantalla_oculta(self, nombre):
         self.crear_menu()
         # Crear una sección y su contenido en la pantalla oculta
         self.admin = Seccion(self.notebook, self.alto, self.ancho, "black")
         self.admin.crear(nombre)
-
-
 
     def crear_vista_Historial(self, lado, lugar, padx=0, pady=0):
         self.lado_hiostorial = lado
@@ -356,7 +368,6 @@ class Pantalla_add:
             label = tk.Label(frame_contenedor, text="No hay historial disponible para el usuario.")
             label.pack(fill=tk.X, pady=5, padx=5)
 
-
 # Dentro de la clase Pantalla_add, en algún método de configuración o en el __init__
 
     def crear_boton_historial_usuario(self, donde, valx , valy):
@@ -377,8 +388,6 @@ class Pantalla_add:
         else:
             pass
 
-
-
     def reiniciar_pantalla(self):
         self.Us_math = self.lector.leerTxtFile(self.archivo_usuarios)
         self.eliminar_menu()
@@ -397,7 +406,6 @@ class Pantalla_add:
         # Restablecer el historial si es necesario
         self.historial_open = False
         
-
     def eliminar_menu(self):
         # Destruir el objeto del menú si ya existe
         if self.menu_bar:
@@ -406,16 +414,16 @@ class Pantalla_add:
         # Reconfigurar la ventana sin menú
         self.ventana.config(menu=None)
     
-
     
     def subV_crear(self, nombre="ventana", alto=500, ancho=500):
         self.SV = tk.Toplevel(self.ventana)
         self.SV.geometry(f'{alto}x{ancho}')
         self.SV.title(nombre)
-        self.SV.resizable(0, 0)
         self.sv_open = True
         # Vincular el cierre de la ventana al cambio de estado de sv_open
         self.SV.protocol("WM_DELETE_WINDOW", self.subV_destruir)
+
+
 
     def subV_destruir(self):
         if self.SV:
@@ -625,7 +633,7 @@ class Pantalla_add:
         if self.someopen == False and self.elimina_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
             self.someopen = True
             self.elimina_open = True
-            Intancia_elimina=ProductManager(self.admin.frame_scroll,self.pathM_a, self.adminpath)
+            Intancia_elimina=ProductManager(self.admin.frame_scroll,self.Archivo_MA, self.admins_path)
         elif self.elimina_open == True:
             self.limpiar_frame_scroll()
             self.someopen = False
@@ -634,13 +642,19 @@ class Pantalla_add:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
 
     def creaP(self):
-        if self.someopen == False and self.elimina_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
+        if self.someopen == False and self.crea_open == False:  # Si no están abiertas las ventanas someopen y GRC_open
             self.someopen = True
-            self.elimina_open = True
-            Intancia_elimina=ProductManager(self.admin.frame_scroll,self.pathM_a, self.adminpath)
-        elif self.elimina_open == True:
-            self.limpiar_frame_scroll()
+            self.crea_open = True
+            self.subV_crear("Recetas (termine de rellenar el producto para el siguente paso)", 1000, 1000)
+            self.ventana.focus()
+            Intancia_crea= ProductCreator(self.SV,self.admin.frame_scroll,self.Archivo_MA,self.admins_path,self.image_folder,self.archivo_lotes)
+        elif self.crea_open == True:
             self.someopen = False
-            self.elimina_open = False
+            self.crea_open = False
+            self.limpiar_frame_scroll()
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
+    def RecetaE(self,):
+        self.subV_crear("EDITORE DE PRODUCTOS", 1000, 1000)
+        self.sntedit = RecipeManager(self.SV, self.Archivo_MA,self.pe_file, self.cosecha_file,self.recipe_file)
