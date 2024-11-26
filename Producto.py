@@ -30,11 +30,11 @@ class Product:
         - productopath: ruta para obtener más información del producto al hacer clic.
         """
 
-        TempP = tk.Canvas(self.canva, width=self.margenx * 8, height=self.margeny * 10, bg="white")
+        TempP = tk.Canvas(self.canva, width=self.margenx * 10, height=self.margeny * 25, bg="white")
         Inf = InfProducto(self.vetana)  # Instancia de la clase InfProducto para mostrar más información
 
         # Verifica si el contador de canvas está en cero o en siete para crear una nueva fila
-        if canvas_count == 0 or canvas_count == 5:
+        if canvas_count == 0 or canvas_count == 4:
             self.current_row = tk.Frame(fila)  # Crea un nuevo contenedor de fila
             self.current_row.pack(anchor='w')  # Empaqueta la fila
             canvas_count = 0  # Resetea el contador de canvas
@@ -43,16 +43,16 @@ class Product:
 
         # Crea un botón que muestra más detalles del producto al hacer clic
         bton = tk.Button(TempP, image=imagen, command=lambda: Inf.ventanaProducto(productopath, nombre, precio, unidades, codigo, descripcion))
-        bton.place(x=5, y=5)  # Ubica el botón en la esquina superior izquierda
+        bton.place(x=20, y=5)  # Ubica el botón en la esquina superior izquierda
 
         # Muestra el nombre del producto
         Nombre = tk.Label(TempP, text=nombre, bg="white", font=("Verdana", self.margenx // 2, "bold"))
-        Nombre.place(x=5, y=self.margeny * 6)  # Ubica el nombre en el canvas
+        Nombre.place(x=20, y=self.margeny * 20)  # Ubica el nombre en el canvas
 
         # Muestra el precio del producto
         Precio = tk.Label(TempP, text=precio + "$", bg="white", font=("Verdana", self.margenx // 2, "bold"))
-        Precio.place(x=5, y=self.margeny * 8)  # Ubica el precio en el canvas
+        Precio.place(x=20, y=self.margeny * 22)  # Ubica el precio en el canvas
 
         # Muestra las unidades disponibles del producto
-        Unidades = tk.Label(TempP, text="U: " + unidades, bg="white", font=("Verdana", self.margenx // 3, "bold"))
-        Unidades.place(x=self.margenx * 3, y=self.margeny // 2)  # Ubica la cantidad en el canvas
+        Unidades = tk.Label(TempP, text="Unidades disponibles: " + unidades, bg="white", font=("Verdana", self.margenx // 3, "bold"))
+        Unidades.place(x=20, y=self.margeny * 16)  # Ubica la cantidad en el canvas

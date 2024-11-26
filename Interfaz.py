@@ -166,10 +166,10 @@ class Visual:
         Des = 1
         Iimagen = 0
         xP = margen_anchoP
-        yP = margen_altoP
+        yP = margen_altoP *2
         canvas_count = 0
         frame = tk.Frame(feed.frame_scroll)
-        frame.pack(padx=margen_anchoP // 2, pady=margen_altoP * 12)
+        frame.pack(padx=margen_anchoP, pady=margen_altoP * 12)
         listaImagenes = []
         listaPathImagenes = []
 
@@ -186,7 +186,7 @@ class Visual:
         for produc in prod:
             producto1 = Image.open(os.path.join("Imagenes", "productos", produc[0] + ".png"))
             producto2 = AjustadorTam.ajustarIMG(producto1, 0.14)
-            producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
+            producto1 = AjustadorTam.ajustarIMG(producto1, 0.17)
             producto_img = ImageTk.PhotoImage(producto1)
             producto_img2 = ImageTk.PhotoImage(producto2)
             listaImagenes.append(producto_img)
@@ -196,7 +196,7 @@ class Visual:
         for produ in prod:
             if produ != []:
                 nombreProd = re.findall(r'\((.*?)\)', produ[1])
-                if nombreProd == []:
+                if nombreProd == [] or nombreProd[0] == "kg":
                     precio = round(int(produ[5]) * Des, 2)
                     P1.mostrarImagen(listaImagenes[Iimagen], produ[1], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
                                     produ[2], listaPathImagenes[Iimagen])
@@ -206,7 +206,7 @@ class Visual:
                                     produ[2], listaPathImagenes[Iimagen])
                 canvas_count += 1
                 Iimagen+=1
-                if canvas_count == 5:
+                if canvas_count == 4:
                     canvas_count = 0
 
         App.mainloop()
