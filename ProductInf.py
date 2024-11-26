@@ -10,7 +10,8 @@ class InfProducto:
         # Crear la ventana principal
         window = tk.Toplevel(self.ventana)
         window.title(f"{nombre}")
-
+        window.resizable(False, False)
+        window.resizable(False, False)
         escritor = Writer()
 
         # Crear el canvas con tamaño 350x450
