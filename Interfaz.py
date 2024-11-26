@@ -164,11 +164,14 @@ class Visual:
         # Crear productos en el frame de scroll
         P1 = Product(App, feed.frame_scroll, margen_anchoP, margen_altoP)
         Des = 1
+        Iimagen = 0
         xP = margen_anchoP
         yP = margen_altoP
         canvas_count = 0
         frame = tk.Frame(feed.frame_scroll)
         frame.pack(padx=margen_anchoP // 2, pady=margen_altoP * 12)
+        listaImagenes = []
+        listaPathImagenes = []
 
         prod = Lector.leerTxtFile("LISTA PRODUCTO Y RECETAS/M_A.txt")
         desc = Lector.leerTxtFile("Descuento.txt")
@@ -179,26 +182,30 @@ class Visual:
                         Des = (100 - int(i)) / 100
                     except ValueError:
                         print("No es un numero")
-        print(Des)
+
+        for produc in prod:
+            producto1 = Image.open(os.path.join("Imagenes", "productos", produc[0] + ".png"))
+            producto2 = AjustadorTam.ajustarIMG(producto1, 0.14)
+            producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
+            producto_img = ImageTk.PhotoImage(producto1)
+            producto_img2 = ImageTk.PhotoImage(producto2)
+            listaImagenes.append(producto_img)
+            listaPathImagenes.append(producto_img2)
+
+
         for produ in prod:
-            try:
-                producto1 = Image.open(os.path.join("Imagenes", "productos", produ[0]+".png"))
-                producto1 = AjustadorTam.ajustarIMG(producto1, 0.05)
-                producto_img = ImageTk.PhotoImage(producto1)
-                print(os.path.join("Imagenes", "productos", produ[0]+".png"))
-            except:
-                print("error")
             if produ != []:
                 nombreProd = re.findall(r'\((.*?)\)', produ[1])
                 if nombreProd == []:
                     precio = round(int(produ[5]) * Des, 2)
-                    P1.mostrarImagen(producto_img, produ[1], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
-                                    produ[2], p1)
+                    P1.mostrarImagen(listaImagenes[Iimagen], produ[1], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
+                                    produ[2], listaPathImagenes[Iimagen])
                 else:
                     precio = round(int(produ[5]) * Des, 2)
-                    P1.mostrarImagen(producto_img, nombreProd[0], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
-                                    produ[2], p1)
+                    P1.mostrarImagen(listaImagenes[Iimagen], nombreProd[0], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
+                                    produ[2], listaPathImagenes[Iimagen])
                 canvas_count += 1
+                Iimagen+=1
                 if canvas_count == 5:
                     canvas_count = 0
 
