@@ -26,3 +26,4 @@ Raul Pago Efectivo 19.0 Delivery 2024-11-21
 Esteban Pago Simpe 1.0 Delivery 2024-11-21
 beto Pago Tarjeta 41.0 Delivery 2024-11-22
 pepegrillo Pago Efectivo 405.0 Delivery 2024-11-21
+Stuarth195 Pago Tarjeta 6.0 Delivery 2024-11-26

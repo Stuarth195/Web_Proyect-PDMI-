@@ -20,9 +20,9 @@ class Instacia_B:
         try:
             nombre_archivo = os.path.basename(ruta_archivo)
             self.Base_Obj.subir_archivo(ruta_archivo, nombre_archivo)
-            messagebox.showinfo("Éxito", f"Archivo '{nombre_archivo}' subido exitosamente.")
+
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo subir el archivo: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     def descargar_archivo(self, id_archivo):
@@ -33,9 +33,8 @@ class Instacia_B:
             archivo.FetchMetadata()
             nombre_archivo = archivo['title']
             archivo.GetContentFile(os.path.join(ruta_destino, nombre_archivo))
-            messagebox.showinfo("Éxito", f"Archivo '{nombre_archivo}' descargado exitosamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo descargar el archivo: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     def actualizar_archivo(self, id_archivo, ruta_archivo):
@@ -44,9 +43,8 @@ class Instacia_B:
             if not os.path.exists(ruta_archivo):
                 raise FileNotFoundError(f"Archivo no encontrado en '{ruta_archivo}'.")
             self.Base_Obj.actualizar_archivo(ruta_archivo, id_archivo)
-            messagebox.showinfo("Éxito", f"Archivo actualizado exitosamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo actualizar el archivo: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     # ===== Métodos para carpetas =====
@@ -56,9 +54,8 @@ class Instacia_B:
             nombre_carpeta = os.path.basename(ruta_carpeta)
             id_carpeta_drive = self._crear_carpeta(nombre_carpeta, None)  # Crear carpeta en Drive
             self._subir_contenido_carpeta(ruta_carpeta, id_carpeta_drive)
-            messagebox.showinfo("Éxito", f"Carpeta '{nombre_carpeta}' subida exitosamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo subir la carpeta: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     def descargar_carpeta(self, id_carpeta):
@@ -71,9 +68,8 @@ class Instacia_B:
             ruta_carpeta_local = os.path.join(ruta_destino, nombre_carpeta)
             os.makedirs(ruta_carpeta_local, exist_ok=True)
             self._descargar_contenido_carpeta(id_carpeta, ruta_carpeta_local)
-            messagebox.showinfo("Éxito", f"Carpeta '{nombre_carpeta}' descargada exitosamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo descargar la carpeta: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     def actualizar_carpeta(self, id_carpeta, ruta_carpeta):
@@ -83,9 +79,8 @@ class Instacia_B:
                 raise FileNotFoundError(f"La carpeta local '{ruta_carpeta}' no existe.")
             self._limpiar_carpeta(id_carpeta)  # Limpiar el contenido de la carpeta en Drive
             self._subir_contenido_carpeta(ruta_carpeta, id_carpeta)  # Subir nuevo contenido
-            messagebox.showinfo("Éxito", f"Carpeta actualizada exitosamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo actualizar la carpeta: {e}")
+            messagebox.showerror("Error", f"404: Not found {e}")
             raise e
 
     # ===== Métodos auxiliares =====
@@ -145,7 +140,7 @@ class Instacia_B:
             # Buscar archivos con la extensión especificada
             archivos = [f for f in os.listdir(ruta_carpeta) if f.endswith(extension)]
             if not archivos:
-                print(f"No se encontraron archivos con la extensión '{extension}' en '{ruta_carpeta}'.")
+                print(f"404: Not found '{extension}' en '{ruta_carpeta}'.")
                 return
 
             # Subir cada archivo encontrado
@@ -154,7 +149,6 @@ class Instacia_B:
                 self.Base_Obj.subir_archivo(ruta_archivo, archivo, id_carpeta_padre)
                 print(f"Archivo '{archivo}' subido exitosamente.")
 
-            print(f"Todos los archivos con la extensión '{extension}' se han subido correctamente.")
         except Exception as e:
-            print(f"Error al subir archivos con la extensión '{extension}': {e}")
+            print(f"404: Not found '{extension}': {e}")
             raise e

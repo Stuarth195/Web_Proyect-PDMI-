@@ -28,71 +28,73 @@ class Visual:
         self.instancia_base = Instacia_B()
         self.RutaImagenes =os.path.join("Imagenes")
         self.RutaVarios =os.path.join("LISTA PRODUCTO Y RECETAS")
-        
 
-    def descargar_todo(self):
+
+
+    
+    def conectar_google_drive(self):
+        """Intenta conectar con Google Drive."""
         try:
-            # Descargar la carpeta "Imagenes" y su contenido
-            self.instancia_base.descargar_carpeta(self.Imagenes)
-            print("Carpeta 'Imagenes' descargada exitosamente.")
-
-            # Descargar la carpeta "LISTA PRODUCTO Y RECETAS" y su contenido
-            self.instancia_base.descargar_carpeta(self.lista_producto_y_recetas)
-            print("Carpeta 'LISTA PRODUCTO Y RECETAS' descargada exitosamente.")
+            self.instancia_base.conecting()
+            print("Conexión exitosa a Google Drive.")
         except Exception as e:
-            # Manejar errores globales
-            messagebox.showerror("Error", f"Error al descargar carpetas: {e}")
-            raise e  # Para detener cualquier flujo adicional si es necesario
-        
-    def descargar_txt(self):
+            messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
+            sys.exit()
+
+    def actualizar_archivos_individuales(self):
+        """Actualizar cada archivo .txt en Google Drive de forma individual."""
         try:
-            # Descargar los archivos .txt desde el directorio actual
-            self.instancia_base.descargar_archivo(self.usuarios_txt)
+            self.instancia_base.actualizar_archivo(self.usuarios_txt, "Usuarios.txt")
+            self.instancia_base.actualizar_archivo(self.registro_compras_txt, "RegistroCompras.txt")
+            self.instancia_base.actualizar_archivo(self.recibos_cosecha_txt, "recibos_cosecha.txt")
+            self.instancia_base.actualizar_archivo(self.historial_facturacion_txt, "HistorialFacturacion.txt")
+            self.instancia_base.actualizar_archivo(self.descuento_txt, "Descuento.txt")
+            self.instancia_base.actualizar_archivo(self.admins_txt, "admins.txt")
+            print("Todos los archivos fueron actualizados correctamente.")
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo actualizar algún archivo: {e}")
+            raise
+
+    def descargar_archivos_individuales(self):
+        """Descargar cada archivo .txt desde Google Drive de forma individual."""
+        try:
             self.instancia_base.descargar_archivo(self.registro_compras_txt)
             self.instancia_base.descargar_archivo(self.recibos_cosecha_txt)
-            self.instancia_base.descargar_archivo(self.p_ty_txt)
-            self.instancia_base.descargar_archivo(self.p_txt)
             self.instancia_base.descargar_archivo(self.historial_facturacion_txt)
             self.instancia_base.descargar_archivo(self.descuento_txt)
-            self.instancia_base.descargar_archivo(self.carrito_txt)
             self.instancia_base.descargar_archivo(self.admins_txt)
-            self.instancia_base.descargar_archivo(self.lista_producto_y_recetas)
-            print("Archivos .txt descargados exitosamente.")
+            self.instancia_base.descargar_archivo(self.usuarios_txt)
+            print("Todos los archivos fueron descargados correctamente.")
         except Exception as e:
-            print(f"Error al descargar archivos .txt: {e}")
-            raise e
+            messagebox.showerror("Error", f"No se pudo descargar algún archivo: {e}")
+            raise
 
+    def descargar_carpetas(self):
+        """Descargar carpetas específicas desde Google Drive."""
+        try:
+            self.instancia_base.descargar_carpeta(self.Imagenes)
+            self.instancia_base.descargar_carpeta(self.lista_producto_y_recetas)
+            print("Todas las carpetas fueron descargadas correctamente.")
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo descargar alguna carpeta: {e}")
+            raise
 
-    def actualiza(self):
-        # Actualizar carpeta 'Imagenes' con el contenido de la ruta local
-        self.instancia_base.actualizar_carpeta(self.Imagenes, self.RutaImagenes)
-
-        # Actualizar carpeta 'LISTA PRODUCTO Y RECETAS' con el contenido de la ruta local
-        self.instancia_base.actualizar_carpeta(self.lista_producto_y_recetas, self.RutaVarios)
+    def actualizar_carpetas(self):
+        """Actualizar carpetas específicas en Google Drive."""
+        try:
+            self.instancia_base.actualizar_carpeta(self.Imagenes, "Imagenes")
+            self.instancia_base.actualizar_carpeta(self.lista_producto_y_recetas, "LISTA PRODUCTO Y RECETAS")
+            print("Todas las carpetas fueron actualizadas correctamente.")
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo CONECTAR  {e}")
+            raise
 
 
     def Interfaz(self):
-        # Intentar conectar a Google Drive
-        try:
-            self.instancia_base.conecting()
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo conectar a Google Drive: {e}")
-            sys.exit()  # Detener la ejecución si no se puede conectar
 
-        # Descargar los archivos utilizando los métodos actualizados
-        try:
-            print("hola")
-            #instancia_base.descargar_archivo(id_admins)
-            #instancia_base.descargar_archivo(id_carrito)
-            #instancia_base.descargar_archivo(id_productos)
-            #instancia_base.descargar_archivo(id_usuarios)
-            #instancia_base.descargar_archivo(id_registroC)
-        except Exception as e:
-            messagebox.showerror("Error", f"Ocurrió un error al descargar los archivos: {e}")
-            sys.exit()  # Detener la ejecución si falla alguna descarga
-
-        
-
+        self.conectar_google_drive()
+        #self.descargar_carpetas()
+        self.descargar_archivos_individuales()
 
 
         icono_c = os.path.join("Imagenes", "Logo_AU.ico")
@@ -115,6 +117,7 @@ class Visual:
         App.geometry(f'{ancho_pantalla}x{alto_pantalla}')
         App.resizable(False, False)
         App.iconbitmap(icono_c)
+        App.focus()
 
         # Imagen de banner para la interfaz
         baner = Image.open(os.path.join("Imagenes", "Baner.png"))
