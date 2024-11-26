@@ -89,12 +89,17 @@ class Visual:
             messagebox.showerror("Error", f"No se pudo CONECTAR  {e}")
             raise
 
+    def cerrrer_antes(self, aplicacion):
+        aplicacion.destroy()
+        self.actualizar_archivos_individuales()
+        self.actualizar_carpetas()
+
 
     def Interfaz(self):
 
-        self.conectar_google_drive()
+        #self.conectar_google_drive()
         #self.descargar_carpetas()
-        self.descargar_archivos_individuales()
+        #self.descargar_archivos_individuales()
 
 
         icono_c = os.path.join("Imagenes", "Logo_AU.ico")
@@ -112,6 +117,10 @@ class Visual:
         margen_altoP = alto_pantalla // 50
         AjustadorTam = AJS(ancho_pantalla, alto_pantalla)
         Lector = LectorTXT()
+        def cerrrar():
+            self.cerrrer_antes(App)
+        App.protocol("WM_DELETE_WINDOW", cerrrar)
+
 
         App.title(titulo)
         App.geometry(f'{ancho_pantalla}x{alto_pantalla}')
