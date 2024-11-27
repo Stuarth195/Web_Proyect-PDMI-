@@ -269,6 +269,7 @@ class ProductCreator:
         """Guarda el producto en el archivo y renombra la imagen."""
         data = self.valid_data
         with open(self.output_path, "a") as file:
+            file.write("\n")
             file.write(f"{data['code']} {data['description']} {data['presentation']} {data['quantity']} {data['unit']} {data['price']}\n")
 
         if self.include_image.get():
@@ -316,6 +317,7 @@ class ProductCreator:
             batch_identifier = f"{data['code']}_00000000_000"  # Formato del identificador del lote
             expiration_date = (datetime.now() + timedelta(days=15)).strftime("%Y_%m_%d")  # Fecha de vencimiento a 15 días
             with open(self.batch_file, "a") as file:
+                file.write("\n")
                 file.write(
                     f"{batch_identifier} {data['code']} {data['description']} {expiration_date} Propio {data['unit']} {data['quantity']}\n"
                 )
@@ -445,6 +447,7 @@ class RecipeManager:
 
         try:
             with open(self.recipe_file, 'a') as file:
+                file.write("\n")
                 file.write(recipe_line + "\n")
             messagebox.showinfo("Éxito", f"Receta para {code} guardada correctamente.")
 
