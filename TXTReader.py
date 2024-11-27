@@ -4,7 +4,7 @@ import re
 
 class LectorTXT:
     def leerTxtFile(self, txtFilePath):
-        
+
 
         """
         Lee un archivo TXT y devuelve una matriz de palabras por línea,

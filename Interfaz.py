@@ -12,6 +12,7 @@ from Producto import Product
 import random
 import re
 import sys
+
 class Visual:
     def __init__(self):
         self.usuarios_txt = "1H_eK_sheQeS-F5BeJH0fBsr1sp_dPKVq"
@@ -97,10 +98,10 @@ class Visual:
 
     def Interfaz(self):
 
-#        self.conectar_google_drive()
- #       self.descargar_carpetas()
-  #      self.descargar_archivos_individuales()
-
+        self.conectar_google_drive()
+        self.descargar_carpetas()
+        self.descargar_archivos_individuales()
+        
 
         icono_c = os.path.join("Imagenes", "Logo_AU.ico")
         titulo = "AgroAPP"
@@ -110,7 +111,7 @@ class Visual:
         amarillo = "#FCC509"
         color_fondo = "#dcdcdc"
 
-        App = tk.Tk()
+        App = tk.Tk()   
         ancho_pantalla = App.winfo_screenwidth()
         alto_pantalla = App.winfo_screenheight()
         margen_anchoP = ancho_pantalla // 50
@@ -119,7 +120,7 @@ class Visual:
         Lector = LectorTXT()
         def cerrrar():
             self.cerrrer_antes(App)
-        #App.protocol("WM_DELETE_WINDOW", cerrrar)
+        App.protocol("WM_DELETE_WINDOW", cerrrar)
 
 
         App.title(titulo)
@@ -209,11 +210,11 @@ class Visual:
             if produ != []:
                 nombreProd = re.findall(r'\((.*?)\)', produ[1])
                 if nombreProd == [] or nombreProd[0] == "kg":
-                    precio = round(int(produ[5]) * Des, 2)
+                    precio = round(float(produ[5]) * Des, 2)
                     P1.mostrarImagen(listaImagenes[Iimagen], produ[1], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
                                     produ[2], listaPathImagenes[Iimagen])
                 else:
-                    precio = round(int(produ[5]) * Des, 2)
+                    precio = round(float(produ[5]) * Des, 2)
                     P1.mostrarImagen(listaImagenes[Iimagen], nombreProd[0], str(precio), xP, yP, frame, canvas_count, produ[3], produ[0],
                                     produ[2], listaPathImagenes[Iimagen])
                 canvas_count += 1

@@ -638,7 +638,7 @@ class RecipeEditor:
         with open(self.recipe_file, 'w') as file:
             for line in lines:
                 if line.startswith(self.code):
-                    file.write(new_recipe_line)
+                    file.write(new_recipe_line + "\n"   )
                     updated = True
                 else:
                     file.write(line)
