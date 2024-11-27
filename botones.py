@@ -234,6 +234,7 @@ class Botones:
 
         # Abrir el archivo y asegurarse de que no haya una línea vacía al final antes de escribir
         with open(ruta_archivo, "a+", encoding="utf-8") as archivo:
+            
             # Mover el cursor al final del archivo
             archivo.seek(0, 2)
             # Si la última línea está vacía, eliminarla
@@ -242,6 +243,7 @@ class Botones:
                 archivo.truncate()
             
             # Escribir la línea del lote
+            archivo.write("\n") 
             archivo.write(linea_lote)
 
         # Mostrar mensaje de éxito

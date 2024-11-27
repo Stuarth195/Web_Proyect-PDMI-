@@ -702,11 +702,11 @@ class Pantalla_add:
 
 
     def definir_Precio(self):
-        if not self.someopen and not self.pre_open:
+        if self.someopen == False and self.pre_open == False:
             self.someopen = True
             self.pre_open = True
             self.precio_interface = Precios(self.admin.frame_scroll, self.Archivo_MA, "admins.txt")
-        elif self.pre_open:
+        elif self.pre_open == True:
             self.limpiar_frame_scroll()
             self.someopen = False
             self.pre_open = False
