@@ -4,7 +4,7 @@ import re
 
 class LectorTXT:
     def leerTxtFile(self, txtFilePath):
-        self.eliminar_lineas_blanco(txtFilePath)
+
         """
         Lee un archivo TXT y devuelve una matriz de palabras por línea,
         eliminando previamente las líneas en blanco.

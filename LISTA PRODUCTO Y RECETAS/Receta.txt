@@ -6,4 +6,4 @@ SLT-001 Salsa_de_tomate_enlatada_(Lata_400g) TOM-003 0.8 SAL-003 8 AGU-001 0.08 
 SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) TOM-003 2 SAL-003 20 AGU-001 0.2 PRE-001 4 EMP-008 1
 TPG-001 Tomate_Granel_Venta(kg) TOM-004 1 
 PPG-002 Papa_Granel_Venta(kg) PAP-004 1
-PPG-002 Papa_Granel_Venta(kg) PAP-002 1
+PPG-002 Papa_Granel_Venta(kg) PAP-002 1COD-001 PEPINO SAL-003 12
