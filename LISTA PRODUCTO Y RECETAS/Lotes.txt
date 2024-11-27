@@ -23,4 +23,3 @@ EMP-002_00000000_001 EMP-002 Empaque_para_chips_(500g)_25_Unidad 2024_11_24 Empr
 EMP-003_00000000_001 EMP-003 Botella_plástica_para_salsa_(500ml)_25_Unidad 2024_11_24 Empresa_Ficticia Unidad 0
 EMP-004_00000000_001 EMP-004 Tapa_para_botella_plástica_(500ml)_25_Unidad 2024_11_24 Empresa_Ficticia Unidad 0
 EMP-005_00000000_001 EMP-005 Botella_plástica_para_salsa_(1L)_25_Unidad 2024_11_24 Empresa_Ficticia Unidad 0
-COD-001_00000000_000 COD-001 asdasd 2024_12_11 Propio Gramos 2.0

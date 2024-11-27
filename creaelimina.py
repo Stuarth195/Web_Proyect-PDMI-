@@ -269,7 +269,7 @@ class ProductCreator:
         """Guarda el producto en el archivo y renombra la imagen."""
         data = self.valid_data
         with open(self.output_path, "a") as file:
-            file.write("\n")
+            file.write("\n") 
             file.write(f"{data['code']} {data['description']} {data['presentation']} {data['quantity']} {data['unit']} {data['price']}\n")
 
         if self.include_image.get():
@@ -317,9 +317,9 @@ class ProductCreator:
             batch_identifier = f"{data['code']}_00000000_000"  # Formato del identificador del lote
             expiration_date = (datetime.now() + timedelta(days=15)).strftime("%Y_%m_%d")  # Fecha de vencimiento a 15 días
             with open(self.batch_file, "a") as file:
-                file.write("\n")
+                file.write("\n") 
                 file.write(
-                    f"{batch_identifier} {data['code']} {data['description']} {expiration_date} Propio {data['unit']} {data['quantity']}\n"
+                    f" {batch_identifier} {data['code']} {data['description']} {expiration_date} Propio {data['unit']} {data['quantity']}\n"
                 )
             print(f"Lote guardado: {batch_identifier}")  # Para depuración
         except Exception as e:
@@ -447,7 +447,7 @@ class RecipeManager:
 
         try:
             with open(self.recipe_file, 'a') as file:
-                file.write("\n")
+                file.write("\n") 
                 file.write(recipe_line + "\n")
             messagebox.showinfo("Éxito", f"Receta para {code} guardada correctamente.")
 
@@ -462,6 +462,191 @@ class RecipeManager:
 
     def validate_quantity(self, quantity):
         """Valida la cantidad ingresada como número flotante o entero."""
+        try:
+            float(quantity)
+            return True
+        except ValueError:
+            return False
+
+
+import tkinter as tk
+from tkinter import messagebox
+
+
+class RecipeEditor:
+    def __init__(self, parent, recipe_file, pe_file, cosecha_file):
+        """
+        Inicializa el editor de recetas.
+        :param parent: Ventana principal donde se mostrará la interfaz.
+        :param recipe_file: Ruta al archivo de recetas.
+        :param pe_file: Ruta al archivo de ingredientes PE.
+        :param cosecha_file: Ruta al archivo de ingredientes COSECHA.
+        """
+        self.parent = parent
+        self.recipe_file = recipe_file
+        self.pe_file = pe_file
+        self.cosecha_file = cosecha_file
+        self.code = None
+        self.description = None
+        self.ingredients = {}
+
+        # Crear la interfaz
+        self.create_interface()
+
+    def create_interface(self):
+        """Crea la interfaz gráfica para editar recetas."""
+        row = 0
+        # Campo para ingresar el código
+        tk.Label(self.parent, text="Código del Producto:").grid(row=row, column=0, sticky="w", padx=10, pady=5)
+        self.code_entry = tk.Entry(self.parent)
+        self.code_entry.grid(row=row, column=1, padx=10, pady=5)
+        row += 1
+
+        # Botón para buscar el código en el archivo
+        tk.Button(self.parent, text="Buscar Código", command=self.load_recipe).grid(row=row, column=0, columnspan=2, pady=10)
+        row += 1
+
+        # Mostrar ingredientes disponibles
+        tk.Label(self.parent, text="Ingredientes:").grid(row=row, column=0, columnspan=2, sticky="w", padx=10, pady=5)
+        row += 1
+
+        # Contenedor para los ingredientes
+        self.ingredient_frame = tk.Frame(self.parent)
+        self.ingredient_frame.grid(row=row, column=0, columnspan=2, sticky="w", padx=10, pady=5)
+        row += 1
+
+        # Botón para guardar la receta
+        tk.Button(self.parent, text="Guardar Receta", command=self.save_recipe).grid(row=row, column=0, columnspan=2, pady=10)
+
+    def load_recipe(self):
+        """Busca la receta en el archivo según el código ingresado."""
+        code = self.code_entry.get().strip()
+        if not code:
+            messagebox.showerror("Error", "Debe proporcionar un código.")
+            return
+
+        try:
+            with open(self.recipe_file, 'r') as file:
+                for line in file:
+                    parts = line.strip().split()
+                    if parts[0] == code:
+                        self.code = parts[0]
+                        self.description = parts[1]
+                        self.load_ingredients()
+                        messagebox.showinfo("Éxito", f"Receta encontrada: {self.description}")
+                        return
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {self.recipe_file}.")
+            return
+
+        messagebox.showerror("Error", f"No se encontró el código: {code}.")
+
+    def load_ingredients(self):
+        """Carga los ingredientes disponibles desde PE.txt y COSECHA.txt."""
+        self.ingredients = {}  # Reiniciar los ingredientes actuales
+        for widget in self.ingredient_frame.winfo_children():
+            widget.destroy()  # Limpiar la interfaz de ingredientes
+
+        def add_ingredient(code, description):
+            """Añade un ingrediente a la interfaz."""
+            row = len(self.ingredients)  # Determina la fila actual
+
+            # Checkbox para seleccionar el ingrediente
+            var = tk.BooleanVar(value=False)
+            tk.Checkbutton(
+                self.ingredient_frame,
+                text=f"{description} ({code})",
+                variable=var,
+                command=lambda: self.toggle_quantity_entry(var, code)
+            ).grid(row=row, column=0, sticky="w", padx=10, pady=2)
+
+            # Campo para la cantidad del ingrediente
+            entry = tk.Entry(self.ingredient_frame, state="disabled")
+            entry.grid(row=row, column=1, padx=10, pady=2)
+
+            # Registrar en el diccionario de ingredientes
+            self.ingredients[code] = {"var": var, "entry": entry}
+
+        # Cargar ingredientes de PE.txt
+        self.load_ingredient_file(self.pe_file, add_ingredient)
+
+        # Cargar ingredientes de COSECHA.txt
+        self.load_ingredient_file(self.cosecha_file, add_ingredient)
+
+    def load_ingredient_file(self, file_path, add_ingredient_callback):
+        """Carga ingredientes desde un archivo dado y los añade con el callback."""
+        try:
+            with open(file_path, 'r') as file:
+                for line in file:
+                    parts = line.strip().split()
+                    if len(parts) >= 2:
+                        add_ingredient_callback(parts[0], parts[1])
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"No se encontró el archivo {file_path}.")
+
+    def toggle_quantity_entry(self, var, code):
+        """Activa o desactiva el campo de cantidad para un ingrediente."""
+        entry = self.ingredients[code]["entry"]
+        if var.get():
+            entry.config(state="normal")
+        else:
+            entry.delete(0, tk.END)
+            entry.config(state="disabled")
+
+    def save_recipe(self):
+        """Guarda la receta en el archivo, sobrescribiendo si ya existe."""
+        if not self.code:
+            messagebox.showerror("Error", "Debe buscar y cargar un código antes de guardar.")
+            return
+
+        # Construir la línea de la receta
+        recipe_line = f"{self.code} {self.description}"
+        ingredients_data = []
+
+        for ingredient_code, data in self.ingredients.items():
+            if data["var"].get():
+                quantity = data["entry"].get().strip()
+                if not quantity or not self.validate_quantity(quantity):
+                    messagebox.showerror("Error", f"Cantidad inválida para {ingredient_code}.")
+                    return
+                ingredients_data.append(f"{ingredient_code} {quantity}")
+
+        if not ingredients_data:
+            messagebox.showerror("Error", "Debe seleccionar al menos un ingrediente.")
+            return
+
+        recipe_line += " " + " ".join(ingredients_data)
+
+        # Reemplazar la receta en el archivo
+        try:
+            self.replace_recipe_line(recipe_line)
+            messagebox.showinfo("Éxito", f"Receta para {self.code} guardada correctamente.")
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo guardar la receta: {e}")
+
+    def replace_recipe_line(self, new_recipe_line):
+        """Reemplaza una línea de receta en el archivo."""
+        updated = False
+        lines = []
+
+        try:
+            with open(self.recipe_file, 'r') as file:
+                lines = file.readlines()
+        except FileNotFoundError:
+            raise Exception(f"El archivo {self.recipe_file} no se encontró.")
+
+        with open(self.recipe_file, 'w') as file:
+            for line in lines:
+                if line.startswith(self.code):
+                    file.write(new_recipe_line)
+                    updated = True
+                else:
+                    file.write(line)
+            if not updated:
+                raise Exception("Error interno: No se encontró la receta para sobrescribir.")
+
+    def validate_quantity(self, quantity):
+        """Valida que la cantidad sea un número válido."""
         try:
             float(quantity)
             return True

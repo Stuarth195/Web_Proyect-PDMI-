@@ -7,4 +7,3 @@ SLT-002 Salsa_de_tomate_enlatada_(Lata_1kg) TOM-003 2 SAL-003 20 AGU-001 0.2 PRE
 TPG-001 Tomate_Granel_Venta(kg) TOM-004 1 
 PPG-002 Papa_Granel_Venta(kg) PAP-004 1
 PPG-002 Papa_Granel_Venta(kg) PAP-002 1
-COD-001 asdasd OLI-001 1 PRE-001 2 EMP-004 1

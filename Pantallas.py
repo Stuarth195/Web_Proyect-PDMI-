@@ -10,7 +10,7 @@ from botones import Botones, BotonesPE, ReciboCosecha
 from verify import FechaEntradaApp, CodigoApp, CantidadApp, ProvedorApp
 from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
-from creaelimina import ProductManager, ProductCreator, RecipeManager
+from creaelimina import ProductManager, ProductCreator, RecipeManager, RecipeEditor
 from Produccion import Produccion
 from Precio import Precios
 
@@ -657,7 +657,7 @@ class Pantalla_add:
     def RecetaE(self,):
         if not self.sv_open:
             self.subV_crear("EDITORE DE PRODUCTOS", 1000, 1000)
-            self.sntedit = RecipeManager(self.SV, self.Archivo_MA,self.pe_file, self.cosecha_file,self.recipe_file)
+            self.sntedit = RecipeEditor(self.SV,self.recipe_file,self.pe_file, self.cosecha_file)
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
             self.subV_destruir()

@@ -119,7 +119,7 @@ class Visual:
         Lector = LectorTXT()
         def cerrrar():
             self.cerrrer_antes(App)
-        App.protocol("WM_DELETE_WINDOW", cerrrar)
+   #     App.protocol("WM_DELETE_WINDOW", cerrrar)
 
 
         App.title(titulo)
