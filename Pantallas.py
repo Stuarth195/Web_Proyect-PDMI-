@@ -12,6 +12,7 @@ from loteinfo import LoteInfo
 from InterfazGenerica import InterfazGenerica
 from creaelimina import ProductManager, ProductCreator, RecipeManager
 from Produccion import Produccion
+from Precio import Precios
 
 
 class Pantalla_add:
@@ -55,6 +56,7 @@ class Pantalla_add:
         self.rutalotes = os.path.join("LISTA PRODUCTO Y RECETAS", "Lotes.txt")
         self.Descuentos_open = False
         self.facturacion_open = False
+        self.pre_open=False
         self.VRC_open = False
         self.VTL_open = False
         self.creap_open = False
@@ -84,6 +86,7 @@ class Pantalla_add:
         productos_menu.add_command(label="Crear Producto",command= self.creaP)
         productos_menu.add_command(label="Quitar Producto", command=self.eliminaP)
         productos_menu.add_command(label="Modificar Receta", command= self.RecetaE)
+        productos_menu.add_command(label="Modificar Precio", command= self.definir_Precio)
         productos_menu.add_command(label="crear descueto", command=lambda:self.Botones_Desc(500,self.admin.frame_scroll, 0,0))
 
         # Submenú Ventas
@@ -693,5 +696,19 @@ class Pantalla_add:
             self.limpiar_frame_scroll()
             self.someopen=False
             self.pe_open = False
+        else:
+            messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
+
+
+
+    def definir_Precio(self):
+        if not self.someopen and not self.pre_open:
+            self.someopen = True
+            self.pre_open = True
+            self.precio_interface = Precios(self.admin.frame_scroll, self.Archivo_MA, "admins.txt")
+        elif self.pre_open:
+            self.limpiar_frame_scroll()
+            self.someopen = False
+            self.pre_open = False
         else:
             messagebox.showwarning("Advertencia", "No puedes avanzar si tienes un proceso abierto")
