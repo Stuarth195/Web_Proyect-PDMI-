@@ -97,9 +97,9 @@ class Visual:
 
     def Interfaz(self):
 
-        self.conectar_google_drive()
-        self.descargar_carpetas()
-        self.descargar_archivos_individuales()
+    #    self.conectar_google_drive()
+     #   self.descargar_carpetas()
+      #  self.descargar_archivos_individuales()
 
 
         icono_c = os.path.join("Imagenes", "Logo_AU.ico")
@@ -119,7 +119,7 @@ class Visual:
         Lector = LectorTXT()
         def cerrrar():
             self.cerrrer_antes(App)
-        App.protocol("WM_DELETE_WINDOW", cerrrar)
+        #App.protocol("WM_DELETE_WINDOW", cerrrar)
 
 
         App.title(titulo)

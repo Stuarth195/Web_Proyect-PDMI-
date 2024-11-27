@@ -7,7 +7,7 @@ import datetime
 from EnviarCorreo import EmailSender
 
 class Reb:
-    def __init__(self, user, total):
+    def __init__(self, user, total, top):
         self.email = ""
         self.user = user
         self.total = total * 1.03 // 1 # Agregar un pequeño incremento al total (1%)
@@ -20,6 +20,7 @@ class Reb:
         self.Unidades = []
         self.Precios = []
         self.EmSender = EmailSender()
+        self.top = top
 
         try:
             for item in self.Carrito:
@@ -35,6 +36,7 @@ class Reb:
         Rev = tk.Tk()
         Rev.title("Recibo de Compra")
         Rev.resizable(False, False)
+        self.top.destroy()
 
         if direccion == "":
             direccion = "Fabrica Aguas Calientes"
